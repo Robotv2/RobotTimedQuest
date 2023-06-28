@@ -1,0 +1,4 @@
+name: RobotTimedQuest
+version: '${project.version}'
+main: fr.robotv2.bukkit.RTQBukkitPlugin
+api-version: '1.13'
