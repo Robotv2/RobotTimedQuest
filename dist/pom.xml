@@ -3,23 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <!-- Parent Information -->
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <!-- Artifact Information -->
-    <artifactId>robottimedquest-bungeecord</artifactId>
+    <artifactId>dist</artifactId>
     <version>${project.parent.version}</version>
     <packaging>jar</packaging>
 
-    <!-- Build Configuration -->
     <build>
+        <directory>../out</directory>
+        <finalName>RobotTimedQuest-${project.version}</finalName>
+        <defaultGoal>clean install</defaultGoal>
         <plugins>
-            <!-- Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -27,54 +25,49 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <directory>resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
     </build>
 
-    <!-- Repositories -->
-    <repositories>
-        <repository>
-            <id>bungeecord-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-    </repositories>
-
-    <!-- Dependencies -->
     <dependencies>
-        <!-- Bungeecord Dependency -->
         <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>provided</scope>
+            <groupId>fr.robotv2</groupId>
+            <artifactId>robottimedquest-bungeecord</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.md-5</groupId>
-            <artifactId>bungeecord-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
-            <type>javadoc</type>
-            <scope>provided</scope>
+            <groupId>fr.robotv2</groupId>
+            <artifactId>robottimedquest-bukkit</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
-        <!-- Common Module Dependency -->
         <dependency>
             <groupId>fr.robotv2</groupId>
             <artifactId>robottimedquest-common</artifactId>
             <version>${project.parent.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Add your specific platform module here -->
-        <dependency>
-            <groupId>com.github.Revxrsal.Lamp</groupId>
-            <artifactId>bungee</artifactId>
-            <version>3.1.5</version>
         </dependency>
     </dependencies>
 </project>
