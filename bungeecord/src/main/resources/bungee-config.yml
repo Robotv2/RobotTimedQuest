@@ -1,0 +1,9 @@
+#With bungeecord, MySQL is mandatory.
+storage:
+  mysql-credentials:
+    host: your-host
+    port: your-port
+    database: your-database
+    username: your-username
+    password: your-password
+    useSSL: false

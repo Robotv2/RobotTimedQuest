@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <!-- Artifact Information -->
@@ -69,6 +69,12 @@
             <artifactId>robottimedquest-common</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Add your specific platform module here -->
+        <dependency>
+            <groupId>com.github.Revxrsal.Lamp</groupId>
+            <artifactId>bungee</artifactId>
+            <version>3.1.5</version>
         </dependency>
     </dependencies>
 </project>

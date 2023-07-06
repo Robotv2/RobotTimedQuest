@@ -1,0 +1,113 @@
+package fr.robotv2.bukkit.quest.conditions.impl.player;
+
+import fr.robotv2.bukkit.quest.conditions.interfaces.PlayerCondition;
+import fr.robotv2.bukkit.util.NumberUtil;
+import fr.robotv2.bukkit.util.PlaceholderUtil;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.BiFunction;
+
+public class PlaceholdersCondition implements PlayerCondition {
+
+    private final List<PlaceholderCondition> placeholderConditions = new ArrayList<>();
+
+    public PlaceholdersCondition(ConfigurationSection parent, String key) {
+        final ConfigurationSection child = parent.getConfigurationSection(key);
+
+        if(child == null) {
+            return;
+        }
+
+        for(String placeholderKey : child.getKeys(false)) {
+            final ConfigurationSection placeholderSection = child.getConfigurationSection(placeholderKey);
+            if(placeholderSection == null) continue;
+            final PlaceholderCondition placeholderCondition = new PlaceholderCondition(placeholderSection);
+            placeholderConditions.add(placeholderCondition);
+        }
+    }
+
+    @Override
+    public boolean matchCondition(Player value) {
+
+        for(PlaceholderCondition condition : placeholderConditions) {
+
+            final String placeholder = PlaceholderUtil.parsePlaceholders(value, condition.placeholder);
+
+            if(condition.type == PlaceholderValueType.NUMERICAL && NumberUtil.isNumber(placeholder)) {
+                final PlaceholderValueComparator comparator = condition.comparator == null ? PlaceholderValueComparator.EQUAL : condition.comparator;
+                final double playerValue = Double.parseDouble(placeholder);
+                if(!comparator.function.apply(playerValue, condition.matchValue)) {
+                    return false;
+                }
+            } else {
+                if(!condition.match.equals(placeholder)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    private enum PlaceholderValueType {
+        NUMERICAL,
+        STRING,
+        ;
+    }
+
+    private enum PlaceholderValueComparator {
+        MORE((playerValue, matchValue) -> playerValue > matchValue),
+        MORE_EQUAL((playerValue, matchValue) -> playerValue >= matchValue),
+        EQUAL(Objects::equals),
+        LESS_EQUAL((playerValue, matchValue) -> playerValue <= matchValue),
+        LESS(((playerValue, matchValue) -> playerValue < matchValue)),
+        ;
+
+        private final BiFunction<Double, Double, Boolean> function;
+        private final static PlaceholderValueComparator[] VALUES = values();
+
+        PlaceholderValueComparator(BiFunction<Double, Double, Boolean> function) {
+            this.function = function;
+        }
+
+        private static PlaceholderValueComparator fromName(String value) {
+            return Arrays.stream(VALUES)
+                    .filter(valueComparator -> valueComparator.name().equalsIgnoreCase(value))
+                    .findFirst().orElse(null);
+        }
+    }
+
+    // data class
+    private final static class PlaceholderCondition {
+
+        private final String placeholder;
+        private final PlaceholderValueComparator comparator;
+
+        private final String match;
+        private final double matchValue;
+
+        private final PlaceholderValueType type;
+
+        private PlaceholderCondition(ConfigurationSection child) {
+            this(
+                    child.getString("placeholder"),
+                    PlaceholderValueComparator.fromName(child.getString("comparator")),
+                    child.getString("match")
+            );
+        }
+
+        private PlaceholderCondition(String placeholder, PlaceholderValueComparator comparator, String match) {
+            this.placeholder = placeholder;
+            this.comparator = comparator;
+            this.match = match;
+
+            this.type = match != null && NumberUtil.isNumber(match) ? PlaceholderValueType.NUMERICAL : PlaceholderValueType.STRING;
+            this.matchValue = type == PlaceholderValueType.NUMERICAL ? Double.parseDouble(match) : 0;
+        }
+    }
+}
