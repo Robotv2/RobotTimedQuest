@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,12 +19,6 @@ public class PlayerEnchantItemListener extends QuestProgressionEnhancer<Material
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEnchant(EnchantItemEvent event) {
-
-        final Player player = event.getEnchanter();
-        final ItemStack stack = event.getItem();
-        final Block enchantBlock = event.getEnchantBlock();
-
-        final QuestActionData data = QuestActionData.of(player, enchantBlock, null, stack);
-        this.incrementProgression(event.getEnchanter(), QuestType.ENCHANT, event.getItem().getType(), data,1);
+        this.incrementProgression(event.getEnchanter(), QuestType.ENCHANT, event.getItem().getType(), event,1);
     }
 }

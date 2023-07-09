@@ -1,6 +1,5 @@
 package fr.robotv2.bukkit.util;
 
-
 import org.bukkit.ChatColor;
 
 public class ColorUtil {

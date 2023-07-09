@@ -20,7 +20,7 @@ public class BukkitResetPublisher implements ResetPublisher {
     }
 
     @Override
-    public void publishReset(String resetId) {
+    public void publishReset(@NotNull String resetId) {
 
         QuestPlayer.getRegistered().forEach(questPlayer -> questPlayer.removeActiveQuest(resetId));
 

@@ -155,7 +155,7 @@ public class QuestManager {
         final ConfigurationSection section = configuration.getConfigurationSection("quests");
 
         if(section == null) {
-            throw new NullPointerException("section");
+            return;
         }
 
         for(String key : section.getKeys(false)) {

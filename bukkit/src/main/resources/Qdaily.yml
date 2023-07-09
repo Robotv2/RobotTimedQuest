@@ -1,0 +1,235 @@
+quests:
+  qdaily_cobblemania:
+    name: "&aCobblemania"
+    description:
+      - "&7Mine a lot of stone !"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&8300x Stone"
+    menu_item: STONE
+
+    reset_id: DAILY
+    quest_type: BREAK
+    required_amount: 300
+    required_targets:
+      - STONE
+      - COBBLESTONE
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 100"
+      - "[MESSAGE] &aCongrats %player_name%, you've ended the quest %quest_name%!"
+
+    conditions:
+      is-in-world:
+        - world
+  qdaily_sheerer:
+    name: "&ePink Sheep Sheerer"
+    description:
+      - "&7Sheer some pink sheep"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&820x Sheep"
+    menu_item: PINK_WOOL
+
+    reset_id: DAILY
+    quest_type: SHEAR
+    required_amount: 20
+    required_targets:
+      - "SHEEP"
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 100"
+      - "[MESSAGE] &aCongrats %player_name%, you've ended the quest %quest_name%!"
+
+    conditions:
+      sheep-color: PINK
+
+  qdaily_farmingfrenzy:
+    name: "&aFarming Frenzy"
+    description:
+      - "&cCollect a lot of Wheat!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&8250x Wheat"
+    menu_item: WHEAT
+
+    reset_id: DAILY
+    quest_type: FARMING
+    required_amount: 250
+    required_targets:
+      - WHEAT
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 200"
+      - "[MESSAGE] &aGreat job %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_fisherman:
+    name: "&bFisherman"
+    description:
+      - "&9Gather fishes from the sea!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&810x Cod"
+    menu_item: COD
+
+    reset_id: DAILY
+    quest_type: FISH
+    required_amount: 10
+    required_targets:
+      - COD
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 200"
+      - "[MESSAGE] &bGreat job %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_miningmayhem:
+    name: "&3Mining Mayhem"
+    description:
+      - "&7Mine a lot of gold!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&850x Gold Ore"
+    menu_item: GOLD_ORE
+
+    reset_id: DAILY
+    quest_type: BREAK
+    required_amount: 50
+    required_targets:
+      - GOLD_ORE
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 300"
+      - "[MESSAGE] &3Well done %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_breedbonanza:
+    name: "&dBreeding Bonanza"
+    description:
+      - "&5Breed plenty of cows!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&715x Cows"
+    menu_item: COW_SPAWN_EGG
+
+    reset_id: DAILY
+    quest_type: BREED
+    required_amount: 15
+    required_targets:
+      - COW
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 250"
+      - "[MESSAGE] &dGood job %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_lumberjack:
+    name: "&eLumber Jack"
+    description:
+      - "&6Chop down a collection of Oak Trees!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&7100x Oak Log"
+    menu_item: OAK_LOG
+
+    reset_id: DAILY
+    quest_type: BREAK
+    required_amount: 100
+    required_targets:
+      - OAK_LOG
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 200"
+      - "[MESSAGE] &eNice work %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_masterchef:
+    name: "&bMaster Chef"
+    description:
+      - "&9Cook a variety of food!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Cooked Porkchop"
+    menu_item: COOKED_PORKCHOP
+
+    reset_id: DAILY
+    quest_type: COOK
+    required_amount: 10
+    required_targets:
+      - COOKED_PORKCHOP
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 250"
+      - "[MESSAGE] &bGreat job %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_tamingtournament:
+    name: "&2Taming Tournament"
+    description:
+      - "&aTame a bunch of wolves!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&75x Wolves"
+    menu_item: BONE
+
+    reset_id: DAILY
+    quest_type: TAME
+    required_amount: 5
+    required_targets:
+      - WOLF
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 250"
+      - "[MESSAGE] &aBrilliant %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_gladiator:
+    name: "&cGladiator"
+    description:
+      - "&4Show your warrior spirit by defeating enemies!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Zombie"
+    menu_item: ROTTEN_FLESH
+
+    reset_id: DAILY
+    quest_type: KILL
+    required_amount: 10
+    required_targets:
+      - ZOMBIE
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 250"
+      - "[MESSAGE] &cWell done %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_topchef:
+    name: "&6Top Chef"
+    description:
+      - "&eCraft a variety of food!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&75x Bread"
+    menu_item: BREAD
+
+    reset_id: DAILY
+    quest_type: CRAFT
+    required_amount: 5
+    required_targets:
+      - BREAD
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 200"
+      - "[MESSAGE] &eWell done %player_name%, you've completed the quest %quest_name%!"
+
+  qdaily_enchantmentwisdom:
+    name: "&dEnchantment Wisdom"
+    description:
+      - "&5Enchant any tool!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Enchanted Pickaxe"
+    menu_item: DIAMOND_PICKAXE
+
+    reset_id: DAILY
+    quest_type: ENCHANT
+    required_amount: 10
+    required_targets:
+      - "*"
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 300"
+      - "[MESSAGE] &dGreat job %player_name%, you've completed the quest %quest_name%!"

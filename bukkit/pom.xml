@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.2-SNAPSHOT</version>
     </parent>
 
     <!-- Artifact Information -->
@@ -52,6 +52,10 @@
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <!-- Dependencies -->
@@ -84,6 +88,13 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.2</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- CUSTOM FAST INV -->
+        <dependency>
+            <groupId>com.github.Robotv2</groupId>
+            <artifactId>FastInv</artifactId>
+            <version>75dea8599c</version>
         </dependency>
     </dependencies>
 </project>

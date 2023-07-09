@@ -57,7 +57,7 @@ public class QuestPlayer {
     @UnmodifiableView
     public List<ActiveQuest> getActiveQuests(String resetId) {
         return Collections.unmodifiableList(getActiveQuests().stream()
-                .filter(quest -> quest.getResetId().equals(resetId))
+                .filter(quest -> quest.getResetId().equalsIgnoreCase(resetId))
                 .collect(Collectors.toList()));
     }
 
@@ -70,11 +70,11 @@ public class QuestPlayer {
     }
 
     public void removeActiveQuest(String resetId) {
-        this.activeQuests.removeIf(quest -> quest.getResetId().equals(resetId));
+        this.activeQuests.removeIf(quest -> quest.getResetId().equalsIgnoreCase(resetId));
     }
 
     public boolean hasQuest(String questId) {
         return getActiveQuests().stream()
-                .anyMatch(quest -> quest.getQuestId().equals(questId));
+                .anyMatch(quest -> quest.getQuestId().equalsIgnoreCase(questId));
     }
 }

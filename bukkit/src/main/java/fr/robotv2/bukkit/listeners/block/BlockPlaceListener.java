@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.block;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,7 +22,6 @@ public class BlockPlaceListener extends QuestProgressionEnhancer<Material> {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
 
-        final QuestActionData data = QuestActionData.of(player, block);
-        this.incrementProgression(player, QuestType.PLACE, block.getType(), data, 1);
+        this.incrementProgression(player, QuestType.PLACE, block.getType(), event, 1);
     }
 }

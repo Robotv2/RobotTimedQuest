@@ -6,7 +6,7 @@
 
     <groupId>fr.robotv2</groupId>
     <artifactId>RobotTimedQuest</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2-SNAPSHOT</version>
 
     <name>RobotTimedQuest</name>
     <packaging>pom</packaging>

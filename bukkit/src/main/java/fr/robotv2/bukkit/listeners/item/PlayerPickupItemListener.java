@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -30,7 +29,6 @@ public class PlayerPickupItemListener extends QuestProgressionEnhancer<Material>
             return;
         }
 
-        final QuestActionData data = QuestActionData.of(player, null, item, item.getItemStack());
-        this.incrementProgression(player, QuestType.PICKUP, item.getItemStack().getType(), data, item.getItemStack().getAmount());
+        this.incrementProgression(player, QuestType.PICKUP, item.getItemStack().getType(), event, item.getItemStack().getAmount());
     }
 }

@@ -1,13 +1,12 @@
 package fr.robotv2.bukkit.command;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.common.data.impl.ActiveQuest;
+import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Subcommand;
-import revxrsal.commands.annotation.Usage;
+import revxrsal.commands.annotation.*;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
@@ -27,16 +26,17 @@ public class BukkitMainCommand {
     @CommandPermission("robottimedquest.command.reload")
     public void onReload(BukkitCommandActor actor) {
         plugin.onReload();
-        actor.reply(ChatColor.GREEN + "The plugin has been reloaded successfully.");
+        actor.getSender().sendMessage(ChatColor.GREEN + "The plugin has been reloaded successfully.");
     }
 
     @Subcommand("reset")
     @Usage("reset <player> [<reset_id>]")
     @CommandPermission("robottimedquest.command.reset")
+    @AutoComplete("@players @services")
     public void onReset(BukkitCommandActor actor, OfflinePlayer offlinePlayer, @Optional ResetService service) {
 
         if(plugin.isBungeecordMode()) {
-            actor.reply(ChatColor.RED + "Please, use the bungeecord command to reset a player.");
+            actor.getSender().sendMessage(ChatColor.RED + "Please, use the bungeecord command to reset a player.");
             return;
         }
 
@@ -44,6 +44,24 @@ public class BukkitMainCommand {
         final String resetId = service != null ? service.getId() : null;
 
         plugin.getResetPublisher().reset(targetUniqueId, resetId);
-        actor.reply(ChatColor.GREEN + "The player has been reinitialized successfully. ");
+        actor.getSender().sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
+    }
+
+    @Subcommand("quests")
+    @Usage("quests")
+    @CommandPermission("robottimedquest.command.quests")
+    public void onQuests(BukkitCommandActor actor) {
+        plugin.getGuiHandler().openMenu(actor.requirePlayer());
+    }
+
+    @Subcommand("debug")
+    @Usage("debug")
+    @CommandPermission("robottimedquest.command.debug")
+    public void onDebug(BukkitCommandActor actor) {
+        actor.getSender().sendMessage("STARTING DEBUG");
+        for(ActiveQuest activeQuest : QuestPlayer.getQuestPlayer(actor.requirePlayer().getUniqueId()).getActiveQuests()) {
+            actor.getSender().sendMessage(activeQuest.getQuestId());
+        }
+        actor.getSender().sendMessage("END DEBUG");
     }
 }

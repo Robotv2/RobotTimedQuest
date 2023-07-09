@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,11 +18,6 @@ public class PlayerConsumeListener extends QuestProgressionEnhancer<Material> {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onConsume(PlayerItemConsumeEvent event) {
-
-        final Player player = event.getPlayer();
-        final ItemStack itemStack = event.getItem();
-        final QuestActionData data = QuestActionData.of(event.getPlayer(), itemStack);
-
-        this.incrementProgression(player, QuestType.CONSUME, event.getItem().getType(), data,1);
+        this.incrementProgression(event.getPlayer(), QuestType.CONSUME, event.getItem().getType(), event,1);
     }
 }

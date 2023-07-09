@@ -1,8 +1,7 @@
-package fr.robotv2.bukkit.listeners.entity;
+package fr.robotv2.bukkit.listeners.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -12,9 +11,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerFishEvent;
 
-public class EntityFishItemListener extends QuestProgressionEnhancer<Material> {
+public class PlayerFishItemListener extends QuestProgressionEnhancer<Material> {
 
-    public EntityFishItemListener(RTQBukkitPlugin plugin) {
+    public PlayerFishItemListener(RTQBukkitPlugin plugin) {
         super(plugin);
     }
 
@@ -33,8 +32,7 @@ public class EntityFishItemListener extends QuestProgressionEnhancer<Material> {
         }
 
         if(entity instanceof Item) {
-            final QuestActionData data = QuestActionData.of(player, entity);
-            this.incrementProgression(player, QuestType.FISH, ((Item) entity).getItemStack().getType(), data, 1);
+            this.incrementProgression(player, QuestType.FISH_ITEM, ((Item) entity).getItemStack().getType(), event, 1);
         }
     }
 }

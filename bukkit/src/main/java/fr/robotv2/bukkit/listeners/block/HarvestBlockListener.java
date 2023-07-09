@@ -3,7 +3,6 @@ package fr.robotv2.bukkit.listeners.block;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.events.MultipleCropsBreakEvent;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -12,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -56,7 +56,7 @@ public class HarvestBlockListener extends QuestProgressionEnhancer<Material> {
         Bukkit.getPluginManager().callEvent(multipleCropsBreakEvent);
     }
 
-    private void handleCrops(Player player, BlockData data, Collection<ItemStack> stacks, @Nullable CropFilter filter) {
+    private void handleCrops(Player player, BlockData data, Collection<ItemStack> stacks, Event event, @Nullable CropFilter filter) {
 
         if(!(data instanceof Ageable)) {
             return;
@@ -75,8 +75,7 @@ public class HarvestBlockListener extends QuestProgressionEnhancer<Material> {
                 .mapToInt(ItemStack::getAmount)
                 .sum();
 
-        final QuestActionData questActionData = QuestActionData.of(player);
-        this.incrementProgression(player, QuestType.FARMING, material, questActionData, amount);
+        this.incrementProgression(player, QuestType.FARMING, material, event, amount);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -89,8 +88,7 @@ public class HarvestBlockListener extends QuestProgressionEnhancer<Material> {
                 .mapToInt(ItemStack::getAmount)
                 .sum();
 
-        final QuestActionData questActionData = QuestActionData.of(event.getPlayer());
-        this.incrementProgression(event.getPlayer(), QuestType.FARMING, event.getMaterial(), questActionData, amount);
+        this.incrementProgression(event.getPlayer(), QuestType.FARMING, event.getMaterial(), event, amount);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -109,6 +107,7 @@ public class HarvestBlockListener extends QuestProgressionEnhancer<Material> {
                 event.getPlayer(),
                 event.getHarvestedBlock().getBlockData(),
                 event.getItemsHarvested(),
+                event,
                 filter
         );
     }
@@ -141,6 +140,7 @@ public class HarvestBlockListener extends QuestProgressionEnhancer<Material> {
                 event.getPlayer(),
                 event.getBlock().getBlockData(),
                 event.getBlock().getDrops(),
+                event,
                 filter
         );
     }

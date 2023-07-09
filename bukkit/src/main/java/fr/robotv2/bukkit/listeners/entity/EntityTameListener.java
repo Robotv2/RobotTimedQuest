@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.entity;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -20,12 +19,7 @@ public class EntityTameListener extends QuestProgressionEnhancer<EntityType> {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onTame(EntityTameEvent event) {
         if (event.getOwner() instanceof Player) {
-
-            final Player player = (Player) event.getOwner();
-            final Entity entity = event.getEntity();
-
-            final QuestActionData data = QuestActionData.of(player, entity);
-            this.incrementProgression(player, QuestType.TAME, event.getEntityType(), data, 1);
+            this.incrementProgression((Player) event.getOwner(), QuestType.TAME, event.getEntityType(), event, 1);
         }
     }
 }

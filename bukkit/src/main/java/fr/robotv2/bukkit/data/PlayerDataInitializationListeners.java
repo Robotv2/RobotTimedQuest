@@ -81,7 +81,7 @@ public class PlayerDataInitializationListeners implements Listener {
 
         CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0])).thenAccept(ignored -> {
             QuestPlayer.unregisterQuestPlayer(questPlayer);
-            plugin.getLogger().info(String.format("The quest(s) of player %s has been successfully saved to the database.", player.getPlayer()));
+            plugin.getLogger().info(String.format("The quest(s) of player %s has been successfully saved to the database.", player.getName()));
         });
 
 

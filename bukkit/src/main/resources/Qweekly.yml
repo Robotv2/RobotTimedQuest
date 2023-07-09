@@ -1,0 +1,293 @@
+quests:
+  qweekly_diamonddigger:
+    name: "&bDiamond Digger"
+    description:
+      - "&9Mine a lot of diamonds!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&760x Diamond Ore"
+    menu_item: DIAMOND_ORE
+
+    reset_id: WEEKLY
+    quest_type: BREAK
+    required_amount: 60
+    required_targets:
+      - DIAMOND_ORE
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &bGood job %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_carrotcollector:
+    name: "&aCarrot Collector"
+    description:
+      - "&2Collect a lot of carrots!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&7400x Carrots"
+    menu_item: CARROT
+
+    reset_id: WEEKLY
+    quest_type: FARMING
+    required_amount: 400
+    required_targets:
+      - CARROT
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &aNice work %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_ironminer:
+    name: "&8Iron Miner"
+    description:
+      - "&7Mine a lot of iron!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&790x Iron Ore"
+    menu_item: IRON_ORE
+
+    reset_id: WEEKLY
+    quest_type: BREAK
+    required_amount: 90
+    required_targets:
+      - IRON_ORE
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &8Good job %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_greattamer:
+    name: "&dGreat Tamer"
+    description:
+      - "&5Tame a variety of animals!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Donkey"
+    menu_item: HORSE_SADDLE
+
+    reset_id: WEEKLY
+    quest_type: TAME
+    required_amount: 10
+    required_targets:
+      - DONKEY
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &dWell done %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_masterbreeder:
+    name: "&6Master Breeder"
+    description:
+      - "&eBreed a variety of animals!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&720x Sheep"
+    menu_item: SHEARS
+
+    reset_id: WEEKLY
+    quest_type: BREED
+    required_amount: 20
+    required_targets:
+      - SHEEP
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &6Excellent %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_monsterhunter:
+    name: "&4Monster Hunter"
+    description:
+      - "&cHunt a variety of monsters!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&720x Zombies"
+      - " &8| &r&720x Skeletons"
+    menu_item: ZOMBIE_HEAD
+
+    reset_id: WEEKLY
+    quest_type: KILL
+    required_amount: 40
+    required_targets:
+      - ZOMBIE
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &4Well done %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_masterfisher:
+    name: "&bMaster Fisher"
+    description:
+      - "&9Catch a bunch of fishes!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&750x Salmon"
+    menu_item: SALMON
+
+    reset_id: WEEKLY
+    quest_type: FISH
+    required_amount: 50
+    required_targets:
+      - SALMON
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &bExcellent %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_gourmetchef:
+    name: "&dGourmet Chef"
+    description:
+      - "&5Cook many types of food items!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&720x Cooked Chicken"
+    menu_item: COOKED_CHICKEN
+
+    reset_id: WEEKLY
+    quest_type: COOK
+    required_amount: 20
+    required_targets:
+      - COOKED_CHICKEN
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &dWell done %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_mastercrafter:
+    name: "&6Master Crafter"
+    description:
+      - "&eCraft sophisticated items!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Diamond Pickaxe"
+    menu_item: DIAMOND_PICKAXE
+
+    reset_id: WEEKLY
+    quest_type: CRAFT
+    required_amount: 10
+    required_targets:
+      - DIAMOND_PICKAXE
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &6Great job %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_enchantmentmaster:
+    name: "&5Enchantment Master"
+    description:
+      - "&8Enchant various tools!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Enchanted Sword"
+    menu_item: DIAMOND_SWORD
+
+    reset_id: WEEKLY
+    quest_type: ENCHANT
+    required_amount: 10
+    required_targets:
+      - NETHERITE_SWORD
+      - DIAMOND_SWORD
+      - IRON_SWORD
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &5Excellent %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_masterbuilder:
+    name: "&aMaster Builder"
+    description:
+      - "&2Build using various blocks!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&7500x Stone Bricks"
+    menu_item: STONE_BRICKS
+
+    reset_id: WEEKLY
+    quest_type: PLACE
+    required_amount: 500
+    required_targets:
+      - STONE_BRICKS
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &aGood job %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_mastergardener:
+    name: "&2Master Gardener"
+    description:
+      - "&aPlant a wide variety of plants!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&7300x Saplings"
+    menu_item: OAK_SAPLING
+
+    reset_id: WEEKLY
+    quest_type: PLACE
+    required_amount: 30
+    required_targets:
+      - OAK_SAPLING
+      - SPRUCE_SAPLING
+      - BIRCH_SAPLING
+      - JUNGLE_SAPLING
+      - ACACIA_SAPLING
+      - DARK_OAK_SAPLING
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &2Well done %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_mastershearer:
+    name: "&6Master Shearer"
+    description:
+      - "&eShear a whole flock of Sheep!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&725x Wool"
+    menu_item: SHEARS
+
+    reset_id: WEEKLY
+    quest_type: SHEAR
+    required_amount: 25
+    required_targets:
+      - WOOL
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &6Great job %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_masterfarmer:
+    name: "&5Master Farmer"
+    description:
+      - "&8Harvest a whole field of Crops!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&7500x Wheat"
+    menu_item: WHEAT
+
+    reset_id: WEEKLY
+    quest_type: FARMING
+    required_amount: 500
+    required_targets:
+      - WHEAT
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &5Excellent %player_name%, you've completed the quest %quest_name%!"
+
+  qweekly_potionbrewer:
+    name: "&dPotion Brewer"
+    description:
+      - "&5Master the art of potion brewing!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Potion of Healing"
+    menu_item: POTION
+
+    reset_id: WEEKLY
+    quest_type: CRAFT
+    required_amount: 10
+    required_targets:
+      - POTION
+
+    rewards:
+      - "[COMMAND] eco give %player_name% 500"
+      - "[MESSAGE] &dFantastic work %player_name%, you've completed the quest %quest_name%!"

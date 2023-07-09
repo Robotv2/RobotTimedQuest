@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -24,8 +23,6 @@ public class PlayerProjectileListener extends QuestProgressionEnhancer<EntityTyp
         }
 
         final Player player = (Player) event.getEntity().getShooter();
-        final QuestActionData data = QuestActionData.of(player, event.getEntity());
-
-        this.incrementProgression(player, QuestType.LAUNCH, event.getEntityType(), data,1);
+        this.incrementProgression(player, QuestType.LAUNCH, event.getEntityType(), event,1);
     }
 }

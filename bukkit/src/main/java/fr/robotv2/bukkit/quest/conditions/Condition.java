@@ -1,5 +1,12 @@
 package fr.robotv2.bukkit.quest.conditions;
 
-public interface Condition<T> {
-    boolean matchCondition(T value);
+import fr.robotv2.bukkit.enums.QuestType;
+import org.bukkit.event.Event;
+import org.bukkit.entity.Player;
+
+import java.util.EnumSet;
+
+public interface Condition {
+    boolean matchCondition(Player player, Event event);
+    EnumSet<QuestType> referencedType();
 }

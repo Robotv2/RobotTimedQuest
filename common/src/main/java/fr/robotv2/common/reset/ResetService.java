@@ -20,6 +20,7 @@ public class ResetService {
         this.cronSyntax = cronSyntax;
         this.timeZone = timeZone;
         this.scheduler = new Scheduler();
+        this.calculateNextExecution();
     }
 
     public String getId() {
@@ -38,6 +39,10 @@ public class ResetService {
         return this.nextExecution;
     }
 
+    public void calculateNextExecution() {
+        this.nextExecution = new Predictor(this.cronSyntax).nextMatchingTime();
+    }
+
     public void prepareScheduler(ResetPublisher publisher) {
 
         if(scheduler.isStarted()) {
@@ -47,7 +52,7 @@ public class ResetService {
         scheduler.setTimeZone(timeZone);
         scheduler.schedule(cronSyntax, () -> {
             publisher.publishReset(id);
-            this.nextExecution = new Predictor(this.cronSyntax).nextMatchingTime();
+            calculateNextExecution();
         });
     }
 

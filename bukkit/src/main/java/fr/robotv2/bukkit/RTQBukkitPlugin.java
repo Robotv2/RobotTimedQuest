@@ -11,11 +11,13 @@ import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
 import fr.robotv2.bukkit.listeners.block.HarvestBlockListener;
 import fr.robotv2.bukkit.listeners.entity.*;
 import fr.robotv2.bukkit.listeners.item.*;
+import fr.robotv2.bukkit.listeners.quest.QuestIncrementListener;
 import fr.robotv2.bukkit.listeners.quest.QuestResetListener;
 import fr.robotv2.bukkit.quest.QuestManager;
 import fr.robotv2.bukkit.quest.conditions.ConditionManager;
 import fr.robotv2.bukkit.reset.BukkitResetPublisher;
 import fr.robotv2.bukkit.reset.BukkitResetServiceRepo;
+import fr.robotv2.bukkit.ui.GuiHandler;
 import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
@@ -37,7 +39,9 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private QuestManager questManager;
     private BukkitDatabaseManager databaseManager;
     private ConditionManager conditionManager;
-    private BukkitCommandHandler handler;
+
+    private GuiHandler guiHandler;
+    private BukkitCommandHandler commandHandler;
 
     private GlitchChecker glitchChecker;
 
@@ -45,13 +49,26 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private final BukkitResetPublisher resetPublisher = new BukkitResetPublisher(this);
 
     private BukkitConfigFile resetServiceFile;
+    private BukkitConfigFile guiFile;
 
     public static RTQBukkitPlugin getInstance() {
         return JavaPlugin.getPlugin(RTQBukkitPlugin.class);
     }
 
     @Override
+    public void onLoad() {
+        this.conditionManager = new ConditionManager(this);
+    }
+
+    @Override
     public void onEnable() {
+
+        if(!this.getDataFolder().exists()) {
+            this.getDataFolder().mkdir();
+            this.setupDefaultFilesQuest();
+        }
+
+        this.conditionManager.closeRegistration();
 
         this.setupFiles();
         this.setupListeners();
@@ -63,8 +80,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
         }
 
         this.questManager = new QuestManager(this);
-        this.conditionManager = new ConditionManager(this);
         this.glitchChecker = new GlitchChecker(this);
+        this.guiHandler = new GuiHandler(this);
 
         this.setupDatabase();
         this.setupQuests();
@@ -87,6 +104,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         this.reloadConfig();
         getResetServiceFile().reload();
+        getGuiFile().reload();
+
         this.setupQuests();
 
         if(!this.isBungeecordMode()) {
@@ -118,6 +137,10 @@ public class RTQBukkitPlugin extends JavaPlugin {
         return this.resetServiceFile;
     }
 
+    public BukkitConfigFile getGuiFile() {
+        return this.guiFile;
+    }
+
     public BukkitDatabaseManager getDatabaseManager() {
         return this.databaseManager;
     }
@@ -134,11 +157,20 @@ public class RTQBukkitPlugin extends JavaPlugin {
         return this.glitchChecker;
     }
 
+    public GuiHandler getGuiHandler() {
+        return this.guiHandler;
+    }
+
     // LOADERS
 
     private void setupFiles() {
-        saveDefaultConfig();
+        this.saveDefaultConfig();
         resetServiceFile = new BukkitConfigFile(this, "reset-service.yml", true);
+        this.guiFile = new BukkitConfigFile(this, "gui.yml", true);
+    }
+
+    private void setupDefaultFilesQuest() {
+        new BukkitConfigFile(this, "Qdaily.yml", true);
     }
 
     private void setupDatabase() {
@@ -204,7 +236,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         // ENTITY
         pm.registerEvents(new EntityBreedListener(this), this);
-        pm.registerEvents(new EntityFishItemListener(this), this);
+        pm.registerEvents(new PlayerFishItemListener(this), this);
         pm.registerEvents(new EntityFishListener(this), this);
         pm.registerEvents(new EntityKillListener(this), this);
         pm.registerEvents(new EntityShearListener(this), this);
@@ -219,18 +251,21 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new PlayerProjectileListener(this), this);
 
         // QUEST
-        pm.registerEvents(new QuestResetListener(this), this);
+        // pm.registerEvents(new QuestResetListener(this), this);
+        pm.registerEvents(new QuestIncrementListener(), this);
     }
 
     private void setupCommandHandlers() {
-        this.handler = BukkitCommandHandler.create(this);
-        this.handler.register(new BukkitMainCommand(this));
+        this.commandHandler = BukkitCommandHandler.create(this);
+        this.commandHandler.registerContextResolver(ResetService.class, (context)
+                -> this.getBukkitResetServiceRepo().getService(context.input().get(0)));
+        this.commandHandler.register(new BukkitMainCommand(this));
         this.registerPluginSuggestion();
     }
 
     private void registerPluginSuggestion() {
         final SuggestionProvider provider = (args, sender, command) -> this.resetServiceRepo.getServices().stream().map(ResetService::getId).collect(Collectors.toList());
-        this.handler.getAutoCompleter()
+        this.commandHandler.getAutoCompleter()
                 .registerSuggestion("services", provider);
     }
 }

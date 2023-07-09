@@ -24,14 +24,8 @@ public class BukkitResetServiceRepo extends AbstractResetServiceRepo {
 
         final YamlConfiguration serviceConfiguration = plugin.getResetServiceFile().getConfiguration();
 
-        final TimeZone timeZone;
         final String timeZoneString = serviceConfiguration.getString("options.time-zone", "default");
-
-        if(timeZoneString == null || timeZoneString.equalsIgnoreCase("default")) {
-            timeZone = TimeZone.getDefault();
-        } else {
-            timeZone = TimeZone.getTimeZone(timeZoneString);
-        }
+        final TimeZone timeZone = timeZoneString.equalsIgnoreCase("default") ? TimeZone.getDefault() : TimeZone.getTimeZone(timeZoneString);
 
         final ConfigurationSection serviceSection = serviceConfiguration.getConfigurationSection("services");
 
@@ -42,9 +36,12 @@ public class BukkitResetServiceRepo extends AbstractResetServiceRepo {
         for(String serviceId : serviceSection.getKeys(false)) {
             final String cronSyntax = serviceSection.getString(serviceId);
             final ResetService service = new ResetService(serviceId, cronSyntax, timeZone);
+            service.calculateNextExecution();
             this.registerService(service);
         }
 
-        startServices(plugin.getResetPublisher());
+        if(!plugin.isBungeecordMode()) {
+            startServices(plugin.getResetPublisher());
+        }
     }
 }

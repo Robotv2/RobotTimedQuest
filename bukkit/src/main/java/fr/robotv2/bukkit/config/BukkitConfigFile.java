@@ -32,7 +32,9 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
             this.file = new File(plugin.getDataFolder(), fileName);
         }
 
-        this.plugin.saveResource(fileName, false);
+        if(!file.exists()) {
+            this.plugin.saveResource(fileName, false);
+        }
     }
 
     @Override

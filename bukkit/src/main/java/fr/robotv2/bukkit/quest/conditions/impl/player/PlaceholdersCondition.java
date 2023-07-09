@@ -1,18 +1,21 @@
 package fr.robotv2.bukkit.quest.conditions.impl.player;
 
-import fr.robotv2.bukkit.quest.conditions.interfaces.PlayerCondition;
+import fr.robotv2.bukkit.enums.QuestType;
+import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.util.NumberUtil;
 import fr.robotv2.bukkit.util.PlaceholderUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
-public class PlaceholdersCondition implements PlayerCondition {
+public class PlaceholdersCondition implements Condition {
 
     private final List<PlaceholderCondition> placeholderConditions = new ArrayList<>();
 
@@ -32,7 +35,7 @@ public class PlaceholdersCondition implements PlayerCondition {
     }
 
     @Override
-    public boolean matchCondition(Player value) {
+    public boolean matchCondition(Player value, Event event) {
 
         for(PlaceholderCondition condition : placeholderConditions) {
 
@@ -54,6 +57,11 @@ public class PlaceholdersCondition implements PlayerCondition {
         return true;
     }
 
+    @Override
+    public EnumSet<QuestType> referencedType() {
+        return EnumSet.allOf(QuestType.class);
+    }
+
     private enum PlaceholderValueType {
         NUMERICAL,
         STRING,
@@ -61,6 +69,7 @@ public class PlaceholdersCondition implements PlayerCondition {
     }
 
     private enum PlaceholderValueComparator {
+
         MORE((playerValue, matchValue) -> playerValue > matchValue),
         MORE_EQUAL((playerValue, matchValue) -> playerValue >= matchValue),
         EQUAL(Objects::equals),

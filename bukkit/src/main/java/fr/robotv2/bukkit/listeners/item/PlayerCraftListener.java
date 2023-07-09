@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,7 +35,6 @@ public class PlayerCraftListener extends QuestProgressionEnhancer<Material> {
             return;
         }
 
-        final QuestActionData data = QuestActionData.of(player, item);
-        this.incrementProgression(player, QuestType.CRAFT, item.getType(), data, item.getAmount());
+        this.incrementProgression(player, QuestType.CRAFT, item.getType(), event, item.getAmount());
     }
 }

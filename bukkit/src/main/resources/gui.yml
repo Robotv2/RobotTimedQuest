@@ -1,0 +1,27 @@
+quest-gui:
+  name: "&f&lQUESTS"
+  row: 5
+  pattern:
+    - "122222221"
+    - "222202222"
+    - "220202022"
+    - "222020222"
+    - "122222221"
+  items:
+    '1':
+      material: LIME_STAINED_GLASS_PANE
+      name: "&8"
+    '2':
+      material: BLACK_STAINED_GLASS_PANE
+      name: "&8"
+  services:
+    DAILY:
+      - 13
+    WEEKLY:
+      - 19
+      - 22
+      - 25
+    MONTHLY:
+      - 28
+      - 31
+      - 34

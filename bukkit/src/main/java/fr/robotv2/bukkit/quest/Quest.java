@@ -38,7 +38,7 @@ public class Quest {
     private final List<String> rewards;
 
     private final QuestRequirement<?> questRequirement;
-    private final List<Condition<?>> conditions = new ArrayList<>();
+    private final List<Condition> conditions = new ArrayList<>();
 
     public Quest(ConfigurationSection section) {
         this.section = section;
@@ -48,19 +48,16 @@ public class Quest {
         this.description = section.getStringList("description");
 
         final String materialString = section.getString("menu_item", "BOOK");
-        this.material = Objects.requireNonNull(Material.matchMaterial(materialString), materialString + " isn't a valid material.");
+        this.material = Objects.requireNonNull(Material.matchMaterial(materialString), "missing menu_item for quest: " + id);
 
-        this.resetId = Objects.requireNonNull(section.getString("reset_id"));
-        this.type = QuestType.getByName(section.getString("quest_type"));
-
-        this.requiredAmount = section.getInt("required_amount", 0);
+        this.resetId = Objects.requireNonNull(section.getString("reset_id"), "missing reset server for quest: " + id);
+        this.type = Objects.requireNonNull(QuestType.getByName(section.getString("quest_type")), "missing type for quest: " + id);
+        ;
+        this.requiredAmount = type.isNumerical() ? section.getInt("required_amount", 0) : 1;
         this.rewards = section.getStringList("rewards");
 
-        if(type == null || type.getQuestRequirementConstant() == null) {
-            this.questRequirement = null;
-        } else {
-            this.questRequirement = type.getQuestRequirementConstant().toInstance(this);
-        }
+        this.questRequirement = type.getQuestRequirementConstant() == null
+                ? null : type.getQuestRequirementConstant().toInstance(this);
 
         final ConfigurationSection conditionSection = section.getConfigurationSection("conditions");
         if(conditionSection != null) {
@@ -95,24 +92,17 @@ public class Quest {
         final List<String> description = new ArrayList<>(this.description);
 
         meta.setDisplayName(ColorUtil.color(this.name));
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         description.add(" ");
 
-        if(type.isNumerical()) {
-            if (progress >= requiredAmount) {
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-                description.add("&aYou have successfully done this quest.");
-            } else {
-                description.add("&7Progress: &e" + progress + "&8/&e" + this.requiredAmount);
-            }
+        if(progress >= requiredAmount) {
+            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
+            description.add("&aYou have successfully done this quest.");
+        } else if(type.isNumerical()) {
+            description.add("&7Progress: &e" + progress + "&8/&e" + this.requiredAmount);
         } else {
-            if(progress >= 1) {
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-                description.add("&aYou have successfully done this quest.");
-            } else {
-                description.add("&cThis quest is not done yet.");
-            }
+            description.add("&cThis quest is not done yet.");
         }
 
         meta.setLore(description.stream().map(ColorUtil::color).collect(Collectors.toList()));
@@ -144,12 +134,12 @@ public class Quest {
 
     private void loadConditions(@NotNull ConfigurationSection conditionSection) {
         for(String key : conditionSection.getKeys(false)) {
-            final Optional<Condition<?>> optional = PLUGIN.getConditionManager().toInstance(key, conditionSection);
+            final Optional<Condition> optional = PLUGIN.getConditionManager().toInstance(key, conditionSection);
             optional.ifPresent(conditions::add);
         }
     }
 
-    public List<Condition<?>> getConditions() {
+    public List<Condition> getConditions() {
         return this.conditions;
     }
 

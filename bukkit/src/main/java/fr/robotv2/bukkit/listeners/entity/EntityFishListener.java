@@ -2,7 +2,6 @@ package fr.robotv2.bukkit.listeners.entity;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.listeners.QuestActionData;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -31,7 +30,6 @@ public class EntityFishListener extends QuestProgressionEnhancer<EntityType> {
             return;
         }
 
-        final QuestActionData data = QuestActionData.of(player, entity);
-        this.incrementProgression(player, QuestType.FISH, entity.getType(), data, 1);
+        this.incrementProgression(player, QuestType.FISH, entity.getType(), event, 1);
     }
 }
