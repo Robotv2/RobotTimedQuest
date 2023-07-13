@@ -1,11 +1,13 @@
 package fr.robotv2.bungeecord;
 
+import fr.robotv2.bungeecord.command.BungeeMainCommand;
 import fr.robotv2.bungeecord.config.BungeeConfigFile;
 import fr.robotv2.bungeecord.reset.BungeeResetPublisher;
 import fr.robotv2.bungeecord.reset.BungeeResetServiceRepo;
 import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
 import fr.robotv2.common.data.impl.MySqlCredentials;
+import fr.robotv2.common.reset.ResetService;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import revxrsal.commands.bungee.BungeeCommandHandler;
@@ -26,8 +28,12 @@ public class RTQBungeePlugin extends Plugin {
     @Override
     public void onEnable() {
 
+        if(!getDataFolder().exists()) {
+            getDataFolder().mkdir();
+        }
+
         this.configFile = new BungeeConfigFile(this, "bungee-config.yml", true);
-        this.resetServiceFile = new BungeeConfigFile(this, "bungee-reset-services.yml", true);
+        this.resetServiceFile = new BungeeConfigFile(this, "bungee-reset-service.yml", true);
 
         this.bungeeResetServiceRepo = new BungeeResetServiceRepo(this);
         this.bungeeResetPublisher = new BungeeResetPublisher(this);
@@ -36,11 +42,16 @@ public class RTQBungeePlugin extends Plugin {
         this.setupDatabase();
 
         this.commandHandler = BungeeCommandHandler.create(this);
+        this.commandHandler.registerContextResolver(ResetService.class, (context)
+                -> this.getBungeeResetServiceRepo().getService(context.input().get(0)));
+        this.commandHandler.register(new BungeeMainCommand(this));
     }
 
     @Override
     public void onDisable() {
-        this.databaseManager.closeConnection();
+        if(this.databaseManager != null && this.databaseManager.isConnected()) {
+            this.databaseManager.closeConnection();
+        }
     }
 
     public void onReload() {
@@ -87,8 +98,20 @@ public class RTQBungeePlugin extends Plugin {
 
         try {
             this.databaseManager = new DatabaseManager(credentials);
+            getLogger().info("Successfully connected to the database.");
         } catch (SQLException exception) {
-            throw new RuntimeException(exception);
+            getLogger().warning(" ");
+            getLogger().warning("An error occurred trying to connect to the database.");
+            getLogger().warning("Please check again your credentials.");
+            getLogger().warning("The plugin will not work.");
+            getLogger().warning(" ");
+            this.disablePlugin();
         }
+    }
+
+    private void disablePlugin() {
+        getProxy().getPluginManager().unregisterListeners(this);
+        getProxy().getPluginManager().unregisterCommands(this);
+        this.onDisable();
     }
 }

@@ -30,11 +30,11 @@ public class Quest {
     private final String name;
     private final List<String> description;
     private final Material material;
+    private final int customModelData;
 
     private final String resetId;
     private final QuestType type;
 
-    private final int requiredAmount;
     private final List<String> rewards;
 
     private final QuestRequirement<?> questRequirement;
@@ -49,11 +49,10 @@ public class Quest {
 
         final String materialString = section.getString("menu_item", "BOOK");
         this.material = Objects.requireNonNull(Material.matchMaterial(materialString), "missing menu_item for quest: " + id);
+        this.customModelData = section.getInt("custom-model-data");
 
         this.resetId = Objects.requireNonNull(section.getString("reset_id"), "missing reset server for quest: " + id);
-        this.type = Objects.requireNonNull(QuestType.getByName(section.getString("quest_type")), "missing type for quest: " + id);
-        ;
-        this.requiredAmount = type.isNumerical() ? section.getInt("required_amount", 0) : 1;
+        this.type = Objects.requireNonNull(QuestType.getByName(section.getString("quest_type")), "missing type for quest: " + id);;
         this.rewards = section.getStringList("rewards");
 
         this.questRequirement = type.getQuestRequirementConstant() == null
@@ -93,14 +92,19 @@ public class Quest {
 
         meta.setDisplayName(ColorUtil.color(this.name));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        if(hasCustomModelData()) {
+            meta.setCustomModelData(this.getCustomModelData());
+        }
+
         description.add(" ");
 
-        if(progress >= requiredAmount) {
+        if(progress >= getRequiredAmount()) {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
             description.add("&aYou have successfully done this quest.");
         } else if(type.isNumerical()) {
-            description.add("&7Progress: &e" + progress + "&8/&e" + this.requiredAmount);
+            description.add("&7Progress: &e" + progress + "&8/&e" + this.getRequiredAmount());
         } else {
             description.add("&cThis quest is not done yet.");
         }
@@ -124,7 +128,15 @@ public class Quest {
     }
 
     public int getRequiredAmount() {
-        return this.requiredAmount;
+        return getQuestRequirement() != null ? getQuestRequirement().getRequiredAmount() : 1;
+    }
+
+    public boolean hasCustomModelData() {
+        return this.customModelData != 0;
+    }
+
+    public int getCustomModelData() {
+        return this.customModelData;
     }
 
     @Nullable
@@ -144,9 +156,8 @@ public class Quest {
     }
 
     public boolean isTarget(Object object) {
-        final QuestRequirement<?> questRequirement = getQuestRequirement();
-        if(questRequirement == null) return true;
-        return questRequirement.isTarget0(object);
+        return getQuestRequirement() == null
+                || getQuestRequirement().isTarget0(object);
     }
 
     @Override

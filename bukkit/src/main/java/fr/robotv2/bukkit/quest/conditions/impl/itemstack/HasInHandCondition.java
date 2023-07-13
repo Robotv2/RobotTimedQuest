@@ -38,8 +38,9 @@ public class HasInHandCondition implements Condition {
         }
 
         final String handValueString = parent.getString(key + ".hand");
-        this.handValue = handValueString != null ?
-                Enums.getIfPresent(PlayerHandValue.class, handValueString).or(PlayerHandValue.BOTH) : PlayerHandValue.BOTH;
+        this.handValue = handValueString != null
+                ? Enums.getIfPresent(PlayerHandValue.class, handValueString).or(PlayerHandValue.BOTH)
+                : PlayerHandValue.BOTH;
     }
 
     @Override

@@ -1,4 +1,4 @@
-#With bungeecord, MySQL is mandatory.
+# with bungeecord, MySQL is mandatory.
 storage:
   mysql-credentials:
     host: your-host

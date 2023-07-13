@@ -14,8 +14,10 @@ public class StringListProcessor {
 
             final String prefix = reward.split(" ")[0];
 
-            reward = reward.length() == prefix.length() ? reward.trim() : reward.substring(prefix.length() + 1).trim();
-            reward = PlaceholderUtil.parsePlaceholders(player, reward);
+            String argument = reward.length() == prefix.length() ? reward.trim() : reward.substring(prefix.length() + 1).trim();
+
+            argument = PlaceholderUtil.PLAYER_PLACEHOLDER.parse(player, argument);
+            argument = PlaceholderUtil.parsePlaceholders(player, argument);
 
             switch (prefix) {
 
@@ -23,31 +25,31 @@ public class StringListProcessor {
                     player.closeInventory();
                     break;
 
-                case "[CONSOLE]":
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), reward);
+                case "[COMMAND]":
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), argument);
                     break;
 
                 case "[PLAYER]":
-                    Bukkit.dispatchCommand(player, reward);
+                    Bukkit.dispatchCommand(player, argument);
                     break;
 
                 case "[MONEY]":
-                    final double bal = Double.parseDouble(reward);
+                    final double bal = Double.parseDouble(argument);
                     // VaultAPI.giveMoney(player, bal); // TODO
                     break;
 
                 case "[EXP_LEVEL]":
-                    final int level = Integer.parseInt(reward);
+                    final int level = Integer.parseInt(argument);
                     player.giveExpLevels(level);
                     break;
 
                 case "[EXP_POINTS]":
-                    final int points = Integer.parseInt(reward);
+                    final int points = Integer.parseInt(argument);
                     player.giveExp(points);
                     break;
 
                 case "[MESSAGE]":
-                    final String message = ColorUtil.color(reward);
+                    final String message = ColorUtil.color(argument);
                     player.sendMessage(message);
                     break;
 
@@ -67,6 +69,7 @@ public class StringListProcessor {
                 .stream()
                 .map(string -> PlaceholderUtil.QUEST_PLACEHOLDER.parse(quest, string))
                 .collect(Collectors.toList());
+
         this.process(player, rewards);
     }
 }

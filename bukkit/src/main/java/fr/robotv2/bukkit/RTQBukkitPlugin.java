@@ -11,8 +11,9 @@ import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
 import fr.robotv2.bukkit.listeners.block.HarvestBlockListener;
 import fr.robotv2.bukkit.listeners.entity.*;
 import fr.robotv2.bukkit.listeners.item.*;
+import fr.robotv2.bukkit.listeners.player.PlayerMoveListener;
+import fr.robotv2.bukkit.listeners.quest.QuestDoneListener;
 import fr.robotv2.bukkit.listeners.quest.QuestIncrementListener;
-import fr.robotv2.bukkit.listeners.quest.QuestResetListener;
 import fr.robotv2.bukkit.quest.QuestManager;
 import fr.robotv2.bukkit.quest.conditions.ConditionManager;
 import fr.robotv2.bukkit.reset.BukkitResetPublisher;
@@ -24,9 +25,12 @@ import fr.robotv2.common.data.DatabaseManager;
 import fr.robotv2.common.data.impl.MySqlCredentials;
 import fr.robotv2.common.data.impl.SqlLiteCredentials;
 import fr.robotv2.common.reset.ResetService;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import revxrsal.commands.autocomplete.SuggestionProvider;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 
@@ -48,6 +52,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private final BukkitResetServiceRepo resetServiceRepo = new BukkitResetServiceRepo(this);
     private final BukkitResetPublisher resetPublisher = new BukkitResetPublisher(this);
 
+    private BukkitConfigFile configurationFile;
     private BukkitConfigFile resetServiceFile;
     private BukkitConfigFile guiFile;
 
@@ -92,6 +97,10 @@ public class RTQBukkitPlugin extends JavaPlugin {
                 20 * 60 * 2, // Every 2 minutes
                 20 * 60 * 2
         );
+
+        //setup metrics
+        final int serviceId = 19047;
+        new Metrics(this, serviceId);
     }
 
     @Override
@@ -102,7 +111,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
     public void onReload() {
 
-        this.reloadConfig();
+        getConfigurationFile().reload();
         getResetServiceFile().reload();
         getGuiFile().reload();
 
@@ -110,6 +119,12 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         if(!this.isBungeecordMode()) {
             this.resetServiceRepo.registerServices();
+        }
+    }
+
+    public void debug(String message) {
+        if(this.getConfig().getBoolean("options.debug")) {
+            getLogger().info("[DEBUG] " + message);
         }
     }
 
@@ -131,6 +146,15 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
     public BukkitResetPublisher getResetPublisher() {
         return this.resetPublisher;
+    }
+
+    public BukkitConfigFile getConfigurationFile() {
+        return this.configurationFile;
+    }
+
+    @Override
+    public @NotNull YamlConfiguration getConfig() {
+        return this.configurationFile.getConfiguration();
     }
 
     public BukkitConfigFile getResetServiceFile() {
@@ -164,13 +188,14 @@ public class RTQBukkitPlugin extends JavaPlugin {
     // LOADERS
 
     private void setupFiles() {
-        this.saveDefaultConfig();
-        resetServiceFile = new BukkitConfigFile(this, "reset-service.yml", true);
+        this.configurationFile = new BukkitConfigFile(this, "bukkit-config.yml", true);
+        this.resetServiceFile = new BukkitConfigFile(this, "reset-service.yml", true);
         this.guiFile = new BukkitConfigFile(this, "gui.yml", true);
     }
 
     private void setupDefaultFilesQuest() {
         new BukkitConfigFile(this, "Qdaily.yml", true);
+        new BukkitConfigFile(this, "Qweekly.yml", true);
     }
 
     private void setupDatabase() {
@@ -250,9 +275,13 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new PlayerPickupItemListener(this), this);
         pm.registerEvents(new PlayerProjectileListener(this), this);
 
+        //player
+        pm.registerEvents(new PlayerMoveListener(this), this);
+
         // QUEST
         // pm.registerEvents(new QuestResetListener(this), this);
-        pm.registerEvents(new QuestIncrementListener(), this);
+        pm.registerEvents(new QuestIncrementListener(this), this);
+        pm.registerEvents(new QuestDoneListener(this), this);
     }
 
     private void setupCommandHandlers() {

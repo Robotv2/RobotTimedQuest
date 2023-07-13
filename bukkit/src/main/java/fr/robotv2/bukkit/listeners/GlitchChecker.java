@@ -41,7 +41,8 @@ public class GlitchChecker implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
 
-        if(event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+        if(event.getPlayer().getGameMode() == GameMode.CREATIVE
+                && this.plugin.getConfig().getBoolean("options.anti-dupe.disable_marking_creative_progression")) {
             return; // Do not mark if the player is in creative.
         }
 
@@ -55,7 +56,7 @@ public class GlitchChecker implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntitySpawn(SpawnerSpawnEvent event) {
-        if(this.plugin.getConfig().getBoolean("options.disable_spawners_progression")) {
+        if(this.plugin.getConfig().getBoolean("options.anti-dupe.disable_spawners_progression")) {
             this.mark(event.getEntity());
         }
     }

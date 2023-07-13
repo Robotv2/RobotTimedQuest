@@ -15,8 +15,8 @@ public class QuestResetListener implements Listener {
 
     @EventHandler
     public void onReset(DelayQuestResetEvent event) {
-        plugin.getLogger().info("-------------");
-        plugin.getLogger().info("RESET TERMINÉ: " + event.getResetId());
-        plugin.getLogger().info("-------------");
+        plugin.debug("-----");
+        plugin.debug("Reset Triggered ! " + event.getResetId());
+        plugin.debug("-----");
     }
 }

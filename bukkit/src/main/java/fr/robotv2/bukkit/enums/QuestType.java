@@ -28,7 +28,7 @@ public enum QuestType {
     LAUNCH(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
     EXP_POINTS(true, null), // NOT DONE
 
-    LOCATION(false, QuestRequirementConstant.LOCATION_REQUIREMENT),
+    LOCATION(false, QuestRequirementConstant.LOCATION_REQUIREMENT), // DONE
     ;
 
     public static final QuestType[] VALUES = QuestType.values();

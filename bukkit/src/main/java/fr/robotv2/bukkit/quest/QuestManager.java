@@ -38,7 +38,7 @@ public class QuestManager {
     }
 
     public void cacheQuest(@NotNull Quest quest) {
-        this.quests.put(quest.getId().toLowerCase(), quest);
+        this.quests.put(quest.getId(), quest);
     }
 
     @UnmodifiableView
@@ -90,8 +90,7 @@ public class QuestManager {
 
             if(required > playerNumber) {
                 final int diff = (int) (required - playerNumber);
-                this.fillPlayer(questPlayer, resetId, diff);
-                return diff;
+                return this.fillPlayer(questPlayer, resetId, diff);
             } else if(required != playerNumber) {
                 plugin.getLogger().warning(String.format("The player %s seem to have an unusual number of quest.", questPlayer.getUniqueId()));
             }
@@ -100,7 +99,7 @@ public class QuestManager {
         return 0;
     }
 
-    public void fillPlayer(QuestPlayer questPlayer, String resetId, int amount) {
+    public int fillPlayer(QuestPlayer questPlayer, String resetId, int amount) {
 
         final List<Quest> quests = new ArrayList<>();
         final int max = this.getQuests(resetId).size();
@@ -134,6 +133,8 @@ public class QuestManager {
             final ActiveQuest activeQuest = new ActiveQuest(questPlayer.getUniqueId(), quest.getId(), service);
             questPlayer.addActiveQuest(activeQuest);
         }
+
+        return quests.size();
     }
 
     public void loadQuests(@NotNull String resourcePath) {
@@ -170,13 +171,15 @@ public class QuestManager {
                 final Quest quest = new Quest(questSection);
                 this.cacheQuest(quest);
             } catch (Exception exception) {
+                plugin.getLogger().warning(" WARNING - " + key);
                 plugin.getLogger().warning("An error occurred while loading quest '" + key);
                 plugin.getLogger().warning("Error's message: " + exception.getMessage());
+                plugin.getLogger().warning(" ");
             }
         }
     }
 
     public Quest fromId(@NotNull String id) {
-        return quests.get(id.toLowerCase());
+        return quests.get(id);
     }
 }

@@ -28,9 +28,9 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
         return this.plugin.getGlitchChecker();
     }
 
-    public boolean allConditionsMatch(List<Condition> conditions, Player player, Event event) {
+    public boolean allConditionsMatch(List<Condition> conditions, Player player, Event event, QuestType type) {
         for(Condition condition : conditions) {
-            if(!condition.matchCondition(player, event)) {
+            if(condition.referencedType().contains(type) && !condition.matchCondition(player, event)) {
                 return false;
             }
         }
@@ -38,6 +38,10 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
     }
 
     public void incrementProgression(Player player, QuestType type, T target, Event event, int amount) {
+
+        if(type != QuestType.LOCATION) {
+            plugin.debug(type.name() + " has been triggered by " + player.getName() + ".");
+        }
 
         if(amount <= 0) {
             return;
@@ -65,7 +69,7 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
             }
 
             if(!quest.getConditions().isEmpty() // Check if conditions are empty.
-                    && !this.allConditionsMatch(quest.getConditions(), player, event)) // Does all the conditions are met ?
+                    && !this.allConditionsMatch(quest.getConditions(), player, event, type)) // Does all the conditions are met ?
             {
                 continue;
             }
@@ -74,8 +78,10 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
             Bukkit.getPluginManager().callEvent(new QuestIncrementEvent(activeQuest, amount));
 
             if(activeQuest.getProgress() >= quest.getRequiredAmount()) {
+
                 activeQuest.setDone(true);
                 new StringListProcessor().process(player, quest);
+
                 Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
             }
         }

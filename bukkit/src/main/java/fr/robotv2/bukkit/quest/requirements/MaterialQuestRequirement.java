@@ -1,8 +1,6 @@
 package fr.robotv2.bukkit.quest.requirements;
 
-import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.Quest;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,8 +27,7 @@ public class MaterialQuestRequirement extends QuestRequirement<Material> {
             final Material material = Material.matchMaterial(materialString);
 
             if(material == null) {
-                RTQBukkitPlugin.getInstance().getLogger().warning(ChatColor.RED + materialString + " isn't a valid material name.");
-                continue;
+                throw new IllegalArgumentException(String.format("%s is not a valid material type.", materialString));
             }
 
             materials.add(material);

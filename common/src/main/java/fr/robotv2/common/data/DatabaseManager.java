@@ -29,6 +29,10 @@ public class DatabaseManager {
         this.source.closeQuietly();
     }
 
+    public boolean isConnected() {
+        return this.source != null;
+    }
+
     public OrmData<ActiveQuest, Integer> getActiveQuestOrmData() {
         return this.activeQuestOrmData;
     }

@@ -3,9 +3,7 @@ package fr.robotv2.bukkit.listeners.entity;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerShearEntityEvent;
@@ -18,6 +16,11 @@ public class EntityShearListener extends QuestProgressionEnhancer<EntityType> {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onShear(PlayerShearEntityEvent event) {
+
+        if(this.getGlitchChecker().isMarked(event.getEntity())) {
+            return;
+        }
+
         this.incrementProgression(event.getPlayer(), QuestType.SHEAR, event.getEntity().getType(), event, 1);
     }
 }

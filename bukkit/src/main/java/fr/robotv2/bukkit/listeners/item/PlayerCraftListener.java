@@ -7,8 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.CraftingInventory;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerCraftListener extends QuestProgressionEnhancer<Material> {
@@ -18,22 +17,10 @@ public class PlayerCraftListener extends QuestProgressionEnhancer<Material> {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onCraft(InventoryClickEvent event) {
-
-        if(!(event.getInventory() instanceof CraftingInventory)) {
-            return;
-        }
-
-        if(event.getSlot() != 0) {
-            return;
-        }
+    public void onCraft(CraftItemEvent event) {
 
         final Player player = (Player) event.getWhoClicked();
-        final ItemStack item = event.getCurrentItem();
-
-        if(item == null) {
-            return;
-        }
+        final ItemStack item = event.getRecipe().getResult();
 
         this.incrementProgression(player, QuestType.CRAFT, item.getType(), event, item.getAmount());
     }

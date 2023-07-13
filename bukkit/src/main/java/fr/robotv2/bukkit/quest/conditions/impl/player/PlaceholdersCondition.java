@@ -115,7 +115,7 @@ public class PlaceholdersCondition implements Condition {
             this.comparator = comparator;
             this.match = match;
 
-            this.type = match != null && NumberUtil.isNumber(match) ? PlaceholderValueType.NUMERICAL : PlaceholderValueType.STRING;
+            this.type = NumberUtil.isNumber(match) ? PlaceholderValueType.NUMERICAL : PlaceholderValueType.STRING;
             this.matchValue = type == PlaceholderValueType.NUMERICAL ? Double.parseDouble(match) : 0;
         }
     }

@@ -1,0 +1,4 @@
+name: RobotTimedQuest-Bungee
+main: fr.robotv2.bungeecord.RTQBungeePlugin
+author: Robotv2
+version: ${project.version}

@@ -1,6 +1,6 @@
 quests:
   qdaily_cobblemania:
-    name: "&aCobblemania"
+    display: "&aCobblemania"
     description:
       - "&7Mine a lot of stone !"
       - ""
@@ -16,14 +16,14 @@ quests:
       - COBBLESTONE
 
     rewards:
-      - "[COMMAND] eco give %player_name% 100"
-      - "[MESSAGE] &aCongrats %player_name%, you've ended the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 100"
+      - "[MESSAGE] &aCongrats %player%, you've ended the quest %quest_name%!"
 
     conditions:
       is-in-world:
         - world
   qdaily_sheerer:
-    name: "&ePink Sheep Sheerer"
+    display: "&ePink Sheep Sheerer"
     description:
       - "&7Sheer some pink sheep"
       - ""
@@ -38,14 +38,14 @@ quests:
       - "SHEEP"
 
     rewards:
-      - "[COMMAND] eco give %player_name% 100"
-      - "[MESSAGE] &aCongrats %player_name%, you've ended the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 100"
+      - "[MESSAGE] &aCongrats %player%, you've ended the quest %quest_name%!"
 
     conditions:
       sheep-color: PINK
 
   qdaily_farmingfrenzy:
-    name: "&aFarming Frenzy"
+    display: "&aFarming Frenzy"
     description:
       - "&cCollect a lot of Wheat!"
       - ""
@@ -60,11 +60,11 @@ quests:
       - WHEAT
 
     rewards:
-      - "[COMMAND] eco give %player_name% 200"
-      - "[MESSAGE] &aGreat job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 200"
+      - "[MESSAGE] &aGreat job %player%, you've completed the quest %quest_name%!"
 
   qdaily_fisherman:
-    name: "&bFisherman"
+    display: "&bFisherman"
     description:
       - "&9Gather fishes from the sea!"
       - ""
@@ -79,11 +79,11 @@ quests:
       - COD
 
     rewards:
-      - "[COMMAND] eco give %player_name% 200"
-      - "[MESSAGE] &bGreat job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 200"
+      - "[MESSAGE] &bGreat job %player%, you've completed the quest %quest_name%!"
 
   qdaily_miningmayhem:
-    name: "&3Mining Mayhem"
+    display: "&3Mining Mayhem"
     description:
       - "&7Mine a lot of gold!"
       - ""
@@ -91,18 +91,26 @@ quests:
       - " &8| &r&850x Gold Ore"
     menu_item: GOLD_ORE
 
+    required_location:
+      x: 10
+      y: 55
+      z: 100
+      world: world_the_nether
+      distance-from-location: 5
+
     reset_id: DAILY
     quest_type: BREAK
     required_amount: 50
     required_targets:
       - GOLD_ORE
+      - DEEPSLATE_GOLD_ORE
 
     rewards:
-      - "[COMMAND] eco give %player_name% 300"
-      - "[MESSAGE] &3Well done %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 300"
+      - "[MESSAGE] &3Well done %player%, you've completed the quest %quest_name%!"
 
   qdaily_breedbonanza:
-    name: "&dBreeding Bonanza"
+    display: "&dBreeding Bonanza"
     description:
       - "&5Breed plenty of cows!"
       - ""
@@ -117,11 +125,11 @@ quests:
       - COW
 
     rewards:
-      - "[COMMAND] eco give %player_name% 250"
-      - "[MESSAGE] &dGood job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 250"
+      - "[MESSAGE] &dGood job %player%, you've completed the quest %quest_name%!"
 
   qdaily_lumberjack:
-    name: "&eLumber Jack"
+    display: "&eLumber Jack"
     description:
       - "&6Chop down a collection of Oak Trees!"
       - ""
@@ -136,11 +144,11 @@ quests:
       - OAK_LOG
 
     rewards:
-      - "[COMMAND] eco give %player_name% 200"
-      - "[MESSAGE] &eNice work %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 200"
+      - "[MESSAGE] &eNice work %player%, you've completed the quest %quest_name%!"
 
   qdaily_masterchef:
-    name: "&bMaster Chef"
+    display: "&bMaster Chef"
     description:
       - "&9Cook a variety of food!"
       - ""
@@ -155,11 +163,11 @@ quests:
       - COOKED_PORKCHOP
 
     rewards:
-      - "[COMMAND] eco give %player_name% 250"
-      - "[MESSAGE] &bGreat job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 250"
+      - "[MESSAGE] &bGreat job %player%, you've completed the quest %quest_name%!"
 
   qdaily_tamingtournament:
-    name: "&2Taming Tournament"
+    display: "&2Taming Tournament"
     description:
       - "&aTame a bunch of wolves!"
       - ""
@@ -174,11 +182,11 @@ quests:
       - WOLF
 
     rewards:
-      - "[COMMAND] eco give %player_name% 250"
-      - "[MESSAGE] &aBrilliant %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 250"
+      - "[MESSAGE] &aBrilliant %player%, you've completed the quest %quest_name%!"
 
   qdaily_gladiator:
-    name: "&cGladiator"
+    display: "&cGladiator"
     description:
       - "&4Show your warrior spirit by defeating enemies!"
       - ""
@@ -193,11 +201,11 @@ quests:
       - ZOMBIE
 
     rewards:
-      - "[COMMAND] eco give %player_name% 250"
-      - "[MESSAGE] &cWell done %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 250"
+      - "[MESSAGE] &cWell done %player%, you've completed the quest %quest_name%!"
 
   qdaily_topchef:
-    name: "&6Top Chef"
+    display: "&6Top Chef"
     description:
       - "&eCraft a variety of food!"
       - ""
@@ -212,11 +220,11 @@ quests:
       - BREAD
 
     rewards:
-      - "[COMMAND] eco give %player_name% 200"
-      - "[MESSAGE] &eWell done %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 200"
+      - "[MESSAGE] &eWell done %player%, you've completed the quest %quest_name%!"
 
   qdaily_enchantmentwisdom:
-    name: "&dEnchantment Wisdom"
+    display: "&dEnchantment Wisdom"
     description:
       - "&5Enchant any tool!"
       - ""
@@ -231,5 +239,5 @@ quests:
       - "*"
 
     rewards:
-      - "[COMMAND] eco give %player_name% 300"
-      - "[MESSAGE] &dGreat job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 300"
+      - "[MESSAGE] &dGreat job %player%, you've completed the quest %quest_name%!"

@@ -55,9 +55,9 @@ public class PlayerDataInitializationListeners implements Listener {
         })).thenAccept(activeQuests -> { // apply the quest to the current QuestPlayer object synchronously.
 
             questPlayer.addActiveQuests(activeQuests);
-            int total = plugin.getQuestManager().fillPlayer(questPlayer);
+            final int newQuest = plugin.getQuestManager().fillPlayer(questPlayer);
 
-            plugin.getLogger().info(String.format("The " + total + " quest(s) has been loaded successfully for the player %s.", player.getName()));
+            plugin.getLogger().info(String.format(questPlayer.getActiveQuests().size() + " quest(s) has been loaded successfully for the player %s (" + newQuest + " new).", player.getName()));
         });
     }
 

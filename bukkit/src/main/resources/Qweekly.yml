@@ -1,6 +1,6 @@
 quests:
   qweekly_diamonddigger:
-    name: "&bDiamond Digger"
+    display: "&bDiamond Digger"
     description:
       - "&9Mine a lot of diamonds!"
       - ""
@@ -15,11 +15,11 @@ quests:
       - DIAMOND_ORE
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &bGood job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &bGood job %player%, you've completed the quest %quest_name%!"
 
   qweekly_carrotcollector:
-    name: "&aCarrot Collector"
+    display: "&aCarrot Collector"
     description:
       - "&2Collect a lot of carrots!"
       - ""
@@ -34,11 +34,11 @@ quests:
       - CARROT
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &aNice work %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &aNice work %player%, you've completed the quest %quest_name%!"
 
   qweekly_ironminer:
-    name: "&8Iron Miner"
+    display: "&8Iron Miner"
     description:
       - "&7Mine a lot of iron!"
       - ""
@@ -53,11 +53,11 @@ quests:
       - IRON_ORE
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &8Good job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &8Good job %player%, you've completed the quest %quest_name%!"
 
   qweekly_greattamer:
-    name: "&dGreat Tamer"
+    display: "&dGreat Tamer"
     description:
       - "&5Tame a variety of animals!"
       - ""
@@ -72,11 +72,11 @@ quests:
       - DONKEY
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &dWell done %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &dWell done %player%, you've completed the quest %quest_name%!"
 
   qweekly_masterbreeder:
-    name: "&6Master Breeder"
+    display: "&6Master Breeder"
     description:
       - "&eBreed a variety of animals!"
       - ""
@@ -91,11 +91,11 @@ quests:
       - SHEEP
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &6Excellent %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &6Excellent %player%, you've completed the quest %quest_name%!"
 
   qweekly_monsterhunter:
-    name: "&4Monster Hunter"
+    display: "&4Monster Hunter"
     description:
       - "&cHunt a variety of monsters!"
       - ""
@@ -111,11 +111,11 @@ quests:
       - ZOMBIE
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &4Well done %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &4Well done %player%, you've completed the quest %quest_name%!"
 
   qweekly_masterfisher:
-    name: "&bMaster Fisher"
+    display: "&bMaster Fisher"
     description:
       - "&9Catch a bunch of fishes!"
       - ""
@@ -130,11 +130,11 @@ quests:
       - SALMON
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &bExcellent %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &bExcellent %player%, you've completed the quest %quest_name%!"
 
   qweekly_gourmetchef:
-    name: "&dGourmet Chef"
+    display: "&dGourmet Chef"
     description:
       - "&5Cook many types of food items!"
       - ""
@@ -149,11 +149,11 @@ quests:
       - COOKED_CHICKEN
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &dWell done %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &dWell done %player%, you've completed the quest %quest_name%!"
 
   qweekly_mastercrafter:
-    name: "&6Master Crafter"
+    display: "&6Master Crafter"
     description:
       - "&eCraft sophisticated items!"
       - ""
@@ -168,11 +168,11 @@ quests:
       - DIAMOND_PICKAXE
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &6Great job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &6Great job %player%, you've completed the quest %quest_name%!"
 
   qweekly_enchantmentmaster:
-    name: "&5Enchantment Master"
+    display: "&5Enchantment Master"
     description:
       - "&8Enchant various tools!"
       - ""
@@ -189,11 +189,11 @@ quests:
       - IRON_SWORD
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &5Excellent %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &5Excellent %player%, you've completed the quest %quest_name%!"
 
   qweekly_masterbuilder:
-    name: "&aMaster Builder"
+    display: "&aMaster Builder"
     description:
       - "&2Build using various blocks!"
       - ""
@@ -208,11 +208,11 @@ quests:
       - STONE_BRICKS
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &aGood job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &aGood job %player%, you've completed the quest %quest_name%!"
 
   qweekly_mastergardener:
-    name: "&2Master Gardener"
+    display: "&2Master Gardener"
     description:
       - "&aPlant a wide variety of plants!"
       - ""
@@ -232,11 +232,11 @@ quests:
       - DARK_OAK_SAPLING
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &2Well done %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &2Well done %player%, you've completed the quest %quest_name%!"
 
   qweekly_mastershearer:
-    name: "&6Master Shearer"
+    display: "&6Master Shearer"
     description:
       - "&eShear a whole flock of Sheep!"
       - ""
@@ -248,14 +248,14 @@ quests:
     quest_type: SHEAR
     required_amount: 25
     required_targets:
-      - WOOL
+      - SHEEP
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &6Great job %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &6Great job %player%, you've completed the quest %quest_name%!"
 
   qweekly_masterfarmer:
-    name: "&5Master Farmer"
+    display: "&5Master Farmer"
     description:
       - "&8Harvest a whole field of Crops!"
       - ""
@@ -270,11 +270,11 @@ quests:
       - WHEAT
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &5Excellent %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &5Excellent %player%, you've completed the quest %quest_name%!"
 
   qweekly_potionbrewer:
-    name: "&dPotion Brewer"
+    display: "&dPotion Brewer"
     description:
       - "&5Master the art of potion brewing!"
       - ""
@@ -289,5 +289,5 @@ quests:
       - POTION
 
     rewards:
-      - "[COMMAND] eco give %player_name% 500"
-      - "[MESSAGE] &dFantastic work %player_name%, you've completed the quest %quest_name%!"
+      - "[COMMAND] eco give %player% 500"
+      - "[MESSAGE] &dFantastic work %player%, you've completed the quest %quest_name%!"

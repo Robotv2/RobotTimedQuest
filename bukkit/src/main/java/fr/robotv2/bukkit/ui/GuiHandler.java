@@ -16,7 +16,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -56,19 +55,24 @@ public class GuiHandler {
         final Material material = Material.matchMaterial(section.getString("material", "BOOK"));
         final String name = section.getString("name");
         final List<String> lore = section.getStringList("lore");
+        final int customModelData = section.getInt("custom-model-data", Integer.MIN_VALUE);
 
-        ItemStack result = new ItemStack(material != null ? material : Material.BOOK);
-
+        final ItemStack result = new ItemStack(material != null ? material : Material.BOOK);
         final ItemMeta meta = Objects.requireNonNull(result.getItemMeta());
 
         if(name != null) {
             meta.setDisplayName(ColorUtil.color(name));
         }
 
+        if(customModelData != Integer.MIN_VALUE) {
+            meta.setCustomModelData(customModelData);
+        }
+
         meta.setLore(lore.stream()
                 .map(ColorUtil::color)
                 .map(line -> PlaceholderUtil.parsePlaceholders(player, line))
                 .collect(Collectors.toList()));
+
         result.setItemMeta(meta);
 
         final List<String> actions = section.getStringList("on-click");

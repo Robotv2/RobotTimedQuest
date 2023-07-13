@@ -1,8 +1,6 @@
 package fr.robotv2.bukkit.quest.requirements;
 
-import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.Quest;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,8 +27,7 @@ public class EntityQuestRequirement extends QuestRequirement<EntityType> {
             final EntityType entityType = EntityType.fromName(entityString);
 
             if(entityType == null) {
-                RTQBukkitPlugin.getInstance().getLogger().warning(ChatColor.RED + entityString + " isn't a valid entity type name.");
-                continue;
+                throw new IllegalArgumentException(String.format("%s is not a valid entity type.", entityString));
             }
 
             entities.add(entityType);

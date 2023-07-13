@@ -72,10 +72,10 @@ public class ConditionManager {
         try {
             final Constructor<? extends Condition> constructor = conditionClazz.getConstructor(ConfigurationSection.class, String.class);
             return Optional.of(constructor.newInstance(parent, key));
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
-            plugin.getLogger().warning("An error occurred while loading condition: " + key);
-            plugin.getLogger().warning("Error's message: " + e.getMessage());
-            return Optional.empty();
+        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException exception) {
+            exception.printStackTrace();
         }
+
+        return Optional.empty();
     }
 }
