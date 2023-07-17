@@ -9,7 +9,7 @@ public enum QuestType {
 
     BREAK(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
     PLACE(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    FARMING(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // NOT DONE
+    FARMING(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
 
     FISH(true, QuestRequirementConstant.ENTITY_REQUIREMENT), // DONE
     FISH_ITEM(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE

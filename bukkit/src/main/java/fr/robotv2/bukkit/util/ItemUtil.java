@@ -1,14 +1,20 @@
 package fr.robotv2.bukkit.util;
 
+import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.hook.Hooks;
+import fr.robotv2.bukkit.hook.ItemAdderHook;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ItemUtil {
 
@@ -42,34 +48,49 @@ public class ItemUtil {
         return false;
     }
 
-    public static boolean isItem(ConfigurationSection parent, ItemStack comparator) {
+    @Nullable
+    public static ItemStack toItemStack(ConfigurationSection parent) {
+        return toItemStack(parent, null);
+    }
 
-        if(parent == null) {
-            return true; // there is nothing to check.
+    @Nullable
+    public static ItemStack toItemStack(ConfigurationSection parent, Player player) {
+        final String itemAdder = parent.getString("item_adder");
+        if(itemAdder != null && Hooks.isItemAdderEnabled()) {
+
+            if(!ItemAdderHook.isValidItemRegistry(itemAdder)) {
+                RTQBukkitPlugin.getPluginLogger().warning( itemAdder + " is not a valid item adder id.");
+                return null;
+            }
+
+            return ItemAdderHook.getCustomStack(itemAdder);
         }
 
+        final Material material = Material.matchMaterial(parent.getString("material", "BOOK"));
         final String name = parent.getString("name");
-        final int customModelData = parent.getInt("custom-model-data", Integer.MIN_VALUE);
-        final Set<Material> materials = parent.getStringList("materials")
-                .stream()
-                .map(Material::matchMaterial)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toSet())
-                ;
+        final List<String> lore = parent.getStringList("lore");
+        final int customModelData = parent.getInt("custom_model_data", Integer.MIN_VALUE);
+
+        final ItemStack stack = new ItemStack(Objects.requireNonNull(material));
+        final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
 
         if(name != null) {
-            return checkName(name, comparator);
+            meta.setDisplayName(ColorUtil.color(name));
         }
 
         if(customModelData != Integer.MIN_VALUE) {
-            return checkModelData(customModelData, comparator);
+            meta.setCustomModelData(customModelData);
         }
 
-        if(!materials.isEmpty()) {
-            return materials.contains(comparator.getType());
+        Stream<String> stream = lore.stream().map(ColorUtil::color);
+
+        if(player != null) {
+            stream = stream.map(line -> PlaceholderUtil.parsePlaceholders(player, line));
         }
 
-        return true;
+        meta.setLore(stream.collect(Collectors.toList()));
+        stack.setItemMeta(meta);
+
+        return stack;
     }
-
 }

@@ -5,6 +5,7 @@ import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -38,7 +39,7 @@ public class GlitchChecker implements Listener {
 
     /* { LISTENERS } */
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
 
         if(event.getPlayer().getGameMode() == GameMode.CREATIVE
@@ -49,12 +50,21 @@ public class GlitchChecker implements Listener {
         this.mark(event.getBlock());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent event) {
         this.mark(event.getItemDrop());
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onBreak(BlockDropItemEvent event) {
+        if(this.isMarked(event.getBlockState())) { // block is placed by a player
+            if(this.plugin.getConfig().getBoolean("options.anti-dupe.disable_items_from_placed_block")) {
+                event.getItems().forEach(this::mark); // not consider
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntitySpawn(SpawnerSpawnEvent event) {
         if(this.plugin.getConfig().getBoolean("options.anti-dupe.disable_spawners_progression")) {
             this.mark(event.getEntity());

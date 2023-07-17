@@ -6,4 +6,5 @@ import java.sql.SQLException;
 
 public interface DatabaseCredentials {
     ConnectionSource createConnectionSource() throws SQLException;
+    void close();
 }

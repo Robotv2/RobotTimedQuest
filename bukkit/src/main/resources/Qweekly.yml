@@ -63,7 +63,7 @@ quests:
       - ""
       - "&eRequirement:"
       - " &8| &r&710x Donkey"
-    menu_item: HORSE_SADDLE
+    menu_item: SADDLE
 
     reset_id: WEEKLY
     quest_type: TAME

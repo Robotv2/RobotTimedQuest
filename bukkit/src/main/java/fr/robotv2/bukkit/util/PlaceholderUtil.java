@@ -22,7 +22,7 @@ public class PlaceholderUtil {
     );
 
     public static InternalPlaceholder<Quest> QUEST_PLACEHOLDER = ((value, input) -> input
-            .replace("%quest_name%", value.getName())
+            .replace("%quest_display%", value.getDisplay())
             .replace("%quest_id%", value.getId())
             .replace("%quest_service%", value.getResetId())
             .replace("%quest_type%", value.getType().name())

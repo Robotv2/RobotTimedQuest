@@ -43,6 +43,7 @@ public class BukkitMessageListener implements PluginMessageListener {
                 final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(uuid);
                 if(questPlayer != null) {
                     questPlayer.clearActiveQuests();
+                    plugin.getQuestManager().fillPlayer(questPlayer);
                 }
                 break;
             }
@@ -53,6 +54,7 @@ public class BukkitMessageListener implements PluginMessageListener {
                 final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(uuid);
                 if(questPlayer != null) {
                     questPlayer.removeActiveQuest(resetId);
+                    plugin.getQuestManager().fillPlayer(questPlayer);
                 }
                 break;
             }

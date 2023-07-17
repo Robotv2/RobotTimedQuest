@@ -4,6 +4,7 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.DelayQuestResetEvent;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetPublisher;
+import fr.robotv2.common.reset.ResetService;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,6 +24,7 @@ public class BukkitResetPublisher implements ResetPublisher {
     public void publishReset(@NotNull String resetId) {
 
         QuestPlayer.getRegistered().forEach(questPlayer -> questPlayer.removeActiveQuest(resetId));
+        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new DelayQuestResetEvent(resetId)));
 
         if(!plugin.isBungeecordMode()) {
             plugin.getDatabaseManager().getActiveQuestOrmData().removeWhere(where -> {
@@ -34,7 +36,10 @@ public class BukkitResetPublisher implements ResetPublisher {
             });
         }
 
-        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(new DelayQuestResetEvent(resetId)));
+        final ResetService service = this.plugin.getBukkitResetServiceRepo().getService(resetId);
+        if(service != null) {
+            service.calculateNextExecution();
+        }
     }
 
     @Override

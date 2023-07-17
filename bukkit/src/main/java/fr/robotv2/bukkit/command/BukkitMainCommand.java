@@ -1,8 +1,6 @@
 package fr.robotv2.bukkit.command;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
-import fr.robotv2.common.data.impl.ActiveQuest;
-import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -35,8 +33,8 @@ public class BukkitMainCommand {
     @AutoComplete("@players @services")
     public void onReset(BukkitCommandActor actor, OfflinePlayer offlinePlayer, @Optional ResetService service) {
 
-        if(plugin.isBungeecordMode()) {
-            actor.getSender().sendMessage(ChatColor.RED + "Please, use the bungeecord command to reset a player.");
+        if(!offlinePlayer.isOnline() && plugin.isBungeecordMode()) {
+            actor.getSender().sendMessage(ChatColor.RED + "Please use the bungeecord command to reset an offline player.");
             return;
         }
 
@@ -47,21 +45,11 @@ public class BukkitMainCommand {
         actor.getSender().sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
     }
 
+    @DefaultFor({"rtq", "robottimedquest"})
     @Subcommand("quests")
     @Usage("quests")
     @CommandPermission("robottimedquest.command.quests")
     public void onQuests(BukkitCommandActor actor) {
         plugin.getGuiHandler().openMenu(actor.requirePlayer());
-    }
-
-    @Subcommand("debug")
-    @Usage("debug")
-    @CommandPermission("robottimedquest.command.debug")
-    public void onDebug(BukkitCommandActor actor) {
-        actor.getSender().sendMessage("STARTING DEBUG");
-        for(ActiveQuest activeQuest : QuestPlayer.getQuestPlayer(actor.requirePlayer().getUniqueId()).getActiveQuests()) {
-            actor.getSender().sendMessage(activeQuest.getQuestId());
-        }
-        actor.getSender().sendMessage("END DEBUG");
     }
 }

@@ -11,10 +11,13 @@ import java.util.Objects;
 public class QuestIncrementEvent extends ActiveQuestEvent {
 
     private final static HandlerList HANDLER_LIST = new HandlerList();
+
+    private final Player player;
     private final int amountIncremented;
 
     public QuestIncrementEvent(ActiveQuest activeQuest, int amountIncremented) {
         super(activeQuest);
+        this.player = Objects.requireNonNull(Bukkit.getPlayer(getActiveQuest().getOwner()));
         this.amountIncremented = amountIncremented;
     }
 
@@ -30,7 +33,7 @@ public class QuestIncrementEvent extends ActiveQuestEvent {
 
     @NotNull // can't be null if the player just increment this quest.
     public Player getPlayer() {
-        return Objects.requireNonNull(Bukkit.getPlayer(getActiveQuest().getOwner()));
+        return this.player;
     }
 
     public int getAmountIncremented() {

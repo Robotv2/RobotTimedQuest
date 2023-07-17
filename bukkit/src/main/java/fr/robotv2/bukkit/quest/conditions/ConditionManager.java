@@ -2,6 +2,7 @@ package fr.robotv2.bukkit.quest.conditions;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.SheepColorCondition;
+import fr.robotv2.bukkit.quest.conditions.impl.itemstack.EnchantCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.HasInHandCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.player.IsInWorldCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.player.PlaceholdersCondition;
@@ -48,6 +49,7 @@ public class ConditionManager {
         registerCondition("placeholders", PlaceholdersCondition.class);
         registerCondition("is-in-world", IsInWorldCondition.class);
         registerCondition("is-holding", HasInHandCondition.class);
+        registerCondition("enchant-condition", EnchantCondition.class);
 
         //ENTITY
         registerCondition("sheep-color", SheepColorCondition.class);

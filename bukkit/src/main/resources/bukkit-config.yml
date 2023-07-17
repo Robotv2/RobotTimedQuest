@@ -4,6 +4,7 @@ options:
   anti-dupe:
     disable_spawners_progression: false
     disable_marking_creative_progression: false
+    disable_items_from_placed_block: false
 
 storage:
   # Default mode is "SQLITE".
@@ -31,11 +32,11 @@ quest-assignment:
 cosmetics:
   actionbar:
     enabled: true
-    progression-message: "%quest_name% &8| %quest_progressbar% &8| &7%quest_progression% &8/ &7%quest_required%"
+    progression_message: "%quest_display% &8| %quest_progressbar% &8| &7%quest_progression% &8/ &7%quest_required%"
   title:
     enabled: true
     fade-in: 10
     stay: 20
     fade-out: 10
     title: "&a&lCONGRATULATION %player%"
-    subtitle: "&aYou have successfully done the quest: %quest_name%"
+    subtitle: "&aYou have successfully done the quest: %quest_display%"

@@ -29,12 +29,9 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
     }
 
     public boolean allConditionsMatch(List<Condition> conditions, Player player, Event event, QuestType type) {
-        for(Condition condition : conditions) {
-            if(condition.referencedType().contains(type) && !condition.matchCondition(player, event)) {
-                return false;
-            }
-        }
-        return true;
+        return conditions.stream()
+                .filter(condition -> condition.referencedType().contains(type))
+                .allMatch(condition -> condition.matchCondition(player, event));
     }
 
     public void incrementProgression(Player player, QuestType type, T target, Event event, int amount) {

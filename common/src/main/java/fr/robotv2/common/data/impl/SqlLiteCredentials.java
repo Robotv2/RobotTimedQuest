@@ -31,4 +31,9 @@ public class SqlLiteCredentials implements DatabaseCredentials {
     public ConnectionSource createConnectionSource() throws SQLException {
         return new JdbcConnectionSource("jdbc:sqlite:".concat(this.database.getPath()));
     }
+
+    @Override
+    public void close() {
+        // ignored
+    }
 }

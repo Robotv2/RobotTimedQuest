@@ -6,23 +6,20 @@ import fr.mrmicky.fastinv.InventoryScheme;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.ColorUtil;
-import fr.robotv2.bukkit.util.PlaceholderUtil;
+import fr.robotv2.bukkit.util.ItemUtil;
 import fr.robotv2.bukkit.util.StringListProcessor;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class GuiHandler {
 
@@ -52,30 +49,9 @@ public class GuiHandler {
             return null;
         }
 
-        final Material material = Material.matchMaterial(section.getString("material", "BOOK"));
-        final String name = section.getString("name");
-        final List<String> lore = section.getStringList("lore");
-        final int customModelData = section.getInt("custom-model-data", Integer.MIN_VALUE);
+        final ItemStack result = ItemUtil.toItemStack(section, player);
+        final List<String> actions = section.getStringList("on_click");
 
-        final ItemStack result = new ItemStack(material != null ? material : Material.BOOK);
-        final ItemMeta meta = Objects.requireNonNull(result.getItemMeta());
-
-        if(name != null) {
-            meta.setDisplayName(ColorUtil.color(name));
-        }
-
-        if(customModelData != Integer.MIN_VALUE) {
-            meta.setCustomModelData(customModelData);
-        }
-
-        meta.setLore(lore.stream()
-                .map(ColorUtil::color)
-                .map(line -> PlaceholderUtil.parsePlaceholders(player, line))
-                .collect(Collectors.toList()));
-
-        result.setItemMeta(meta);
-
-        final List<String> actions = section.getStringList("on-click");
         return new Pair<>(result, actions.isEmpty()
                 ? null : (ignored) -> new StringListProcessor().process(player, actions));
     }
@@ -147,8 +123,12 @@ public class GuiHandler {
 
                         fastInv.setItem(slot, quest.getGuiItem(activeQuest.getProgress()));
 
-                    } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
-                        exception.printStackTrace();
+                    } catch (NumberFormatException exception) {
+                        plugin.getLogger().warning(slotString + " is not a valid slot.");
+                    } catch (IndexOutOfBoundsException exception) {
+                        // there is more slot on the gui.yml than what the player has/is supposed to have
+                        // This can easily happen if configuration mismatch.
+                        plugin.getLogger().warning("configuration mismatch. There is too many slots for the reset id: " + serviceId + ".");
                     }
                 }
             }

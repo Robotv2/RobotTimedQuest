@@ -4,9 +4,11 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -92,7 +94,8 @@ public class QuestManager {
                 final int diff = (int) (required - playerNumber);
                 return this.fillPlayer(questPlayer, resetId, diff);
             } else if(required != playerNumber) {
-                plugin.getLogger().warning(String.format("The player %s seem to have an unusual number of quest.", questPlayer.getUniqueId()));
+                final Player player = Bukkit.getPlayer(questPlayer.getUniqueId());
+                plugin.getLogger().warning(String.format("The player %s seem to have an unusual number of quest for reset id %s", player != null ? player.getName() : "UNKNOWN", resetId));
             }
         }
 
@@ -139,9 +142,12 @@ public class QuestManager {
 
     public void loadQuests(@NotNull String resourcePath) {
         final File file = new File(plugin.getDataFolder(), resourcePath);
+
         if(!file.exists()) {
             plugin.getLogger().warning(resourcePath + " is marked as resource path but doesn't exist.");
+            return;
         }
+
         this.loadQuests(file);
     }
 
@@ -170,6 +176,7 @@ public class QuestManager {
             try {
                 final Quest quest = new Quest(questSection);
                 this.cacheQuest(quest);
+                this.plugin.getLogger().info(key + " has been loaded successfully.");
             } catch (Exception exception) {
                 plugin.getLogger().warning(" WARNING - " + key);
                 plugin.getLogger().warning("An error occurred while loading quest '" + key);

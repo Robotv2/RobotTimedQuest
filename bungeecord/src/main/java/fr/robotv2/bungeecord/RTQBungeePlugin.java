@@ -10,9 +10,11 @@ import fr.robotv2.common.data.impl.MySqlCredentials;
 import fr.robotv2.common.reset.ResetService;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
+import revxrsal.commands.autocomplete.SuggestionProvider;
 import revxrsal.commands.bungee.BungeeCommandHandler;
 
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 public class RTQBungeePlugin extends Plugin {
 
@@ -44,6 +46,7 @@ public class RTQBungeePlugin extends Plugin {
         this.commandHandler = BungeeCommandHandler.create(this);
         this.commandHandler.registerContextResolver(ResetService.class, (context)
                 -> this.getBungeeResetServiceRepo().getService(context.input().get(0)));
+        this.registerPluginSuggestion();
         this.commandHandler.register(new BungeeMainCommand(this));
     }
 
@@ -113,5 +116,11 @@ public class RTQBungeePlugin extends Plugin {
         getProxy().getPluginManager().unregisterListeners(this);
         getProxy().getPluginManager().unregisterCommands(this);
         this.onDisable();
+    }
+
+    private void registerPluginSuggestion() {
+        final SuggestionProvider provider = (args, sender, command) -> this.bungeeResetServiceRepo.getServices().stream().map(ResetService::getId).collect(Collectors.toList());
+        this.commandHandler.getAutoCompleter()
+                .registerSuggestion("services", provider);
     }
 }

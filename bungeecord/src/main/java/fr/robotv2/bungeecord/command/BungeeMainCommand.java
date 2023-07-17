@@ -35,12 +35,12 @@ public class BungeeMainCommand {
         UUIDFetcher.getUUID(playerName, !plugin.isOnlineMode()).thenAccept(uuid -> {
 
             if(uuid == null) {
-                actor.reply(ChatColor.RED + "This player doesn't exist.");
+                actor.getSender().sendMessage(ChatColor.RED + "This player does not exist.");
                 return;
             }
 
             plugin.getBungeeResetPublisher().reset(uuid, service != null ? service.getId() : null);
-            actor.reply(ChatColor.GREEN + "The player has been reinitialized successfully. ");
+            actor.getSender().sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
         });
     }
 }

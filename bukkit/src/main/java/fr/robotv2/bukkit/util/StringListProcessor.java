@@ -1,5 +1,7 @@
 package fr.robotv2.bukkit.util;
 
+import fr.robotv2.bukkit.hook.Hooks;
+import fr.robotv2.bukkit.hook.VaultHook;
 import fr.robotv2.bukkit.quest.Quest;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -34,8 +36,11 @@ public class StringListProcessor {
                     break;
 
                 case "[MONEY]":
+                    if(!Hooks.isVaultEnabled()) {
+                       throw new IllegalStateException("Vault missing. Please install vault in order to use the [MONEY] prefix");
+                    }
                     final double bal = Double.parseDouble(argument);
-                    // VaultAPI.giveMoney(player, bal); // TODO
+                    VaultHook.giveMoney(player, bal);
                     break;
 
                 case "[EXP_LEVEL]":

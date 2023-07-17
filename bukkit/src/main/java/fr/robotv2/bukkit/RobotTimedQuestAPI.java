@@ -5,6 +5,7 @@ import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,6 +38,14 @@ public class RobotTimedQuestAPI {
     public static Collection<ActiveQuest> getPlayerQuest(UUID uuid) {
         QuestPlayer questPlayer;
         return (questPlayer = getQuestPlayer(uuid)) != null ? questPlayer.getActiveQuests() : Collections.emptyList();
+    }
+
+    public void resetPlayer(Player player) {
+        INSTANCE.getResetPublisher().reset(player.getUniqueId(), null);
+    }
+
+    public void resetPlayer(Player player, String resetId) {
+        INSTANCE.getResetPublisher().reset(player.getUniqueId(), resetId);
     }
 
     public static void registerCondition(String key, Class<? extends Condition> condition) {

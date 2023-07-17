@@ -5,6 +5,7 @@ import fr.robotv2.bukkit.command.BukkitMainCommand;
 import fr.robotv2.bukkit.config.BukkitConfigFile;
 import fr.robotv2.bukkit.data.BukkitDatabaseManager;
 import fr.robotv2.bukkit.data.PlayerDataInitializationListeners;
+import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.listeners.GlitchChecker;
 import fr.robotv2.bukkit.listeners.block.BlockBreakListener;
 import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
@@ -28,6 +29,7 @@ import fr.robotv2.common.reset.ResetService;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -36,12 +38,12 @@ import revxrsal.commands.bukkit.BukkitCommandHandler;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class RTQBukkitPlugin extends JavaPlugin {
 
     private QuestManager questManager;
-    private BukkitDatabaseManager databaseManager;
     private ConditionManager conditionManager;
 
     private GuiHandler guiHandler;
@@ -56,8 +58,15 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private BukkitConfigFile resetServiceFile;
     private BukkitConfigFile guiFile;
 
+    private BukkitDatabaseManager databaseManager;
+    private DatabaseManager.DatabaseType type;
+
     public static RTQBukkitPlugin getInstance() {
         return JavaPlugin.getPlugin(RTQBukkitPlugin.class);
+    }
+
+    public static Logger getPluginLogger() {
+        return getInstance().getLogger();
     }
 
     @Override
@@ -80,9 +89,9 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         if(this.isBungeecordMode()) {
             this.setupBungeeMode();
-        } else {
-            this.resetServiceRepo.registerServices();
         }
+
+        this.resetServiceRepo.registerServices();
 
         this.questManager = new QuestManager(this);
         this.glitchChecker = new GlitchChecker(this);
@@ -91,6 +100,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.setupDatabase();
         this.setupQuests();
         this.setupCommandHandlers();
+
+        Hooks.loadHooks(this);
 
         Bukkit.getScheduler().runTaskTimer(this,
                 () -> this.databaseManager.savePlayers(true),
@@ -101,6 +112,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
         //setup metrics
         final int serviceId = 19047;
         new Metrics(this, serviceId);
+
+        printBeautifulMessage();
     }
 
     @Override
@@ -237,6 +250,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         try {
             this.databaseManager = new BukkitDatabaseManager(credentials);
+            this.type = type;
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
@@ -246,6 +260,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         getQuestManager().clearQuests();
         getConfig().getStringList("quest-files")
                 .forEach(questPath -> getQuestManager().loadQuests(questPath));
+        getLogger().info(getQuestManager().getQuests().size() + "quest(s) has been loaded.");
     }
 
     private void setupListeners() {
@@ -288,13 +303,29 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.commandHandler = BukkitCommandHandler.create(this);
         this.commandHandler.registerContextResolver(ResetService.class, (context)
                 -> this.getBukkitResetServiceRepo().getService(context.input().get(0)));
-        this.commandHandler.register(new BukkitMainCommand(this));
         this.registerPluginSuggestion();
+        this.commandHandler.register(new BukkitMainCommand(this));
     }
 
     private void registerPluginSuggestion() {
         final SuggestionProvider provider = (args, sender, command) -> this.resetServiceRepo.getServices().stream().map(ResetService::getId).collect(Collectors.toList());
         this.commandHandler.getAutoCompleter()
                 .registerSuggestion("services", provider);
+    }
+
+    private void printBeautifulMessage() {
+
+        final Logger logger = getLogger();
+        final PluginDescriptionFile description = getDescription();
+
+        logger.info("-- RobotTimedQuest --");
+        logger.info("");
+        logger.info("Author(s): " + String.join(", ", description.getAuthors()));
+        logger.info("Version: " + description.getVersion());
+        logger.info("");
+        logger.info("Database Type: " + type.name());
+        logger.info("Bungeecord: " + isBungeecordMode());
+        logger.info("");
+        logger.info("Thanks you for using RTQ !");
     }
 }

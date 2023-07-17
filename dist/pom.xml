@@ -6,7 +6,7 @@
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.4-SNAPSHOT</version>
     </parent>
 
     <artifactId>dist</artifactId>
@@ -15,7 +15,7 @@
 
     <build>
         <directory>../out</directory>
-        <finalName>RobotTimedQuest-${project.version}</finalName>
+        <finalName>RobotTimedQuest-BETA-${project.version}</finalName>
         <defaultGoal>clean install</defaultGoal>
         <plugins>
             <plugin>

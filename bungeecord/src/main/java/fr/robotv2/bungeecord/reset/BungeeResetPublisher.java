@@ -24,7 +24,9 @@ public class BungeeResetPublisher implements ResetPublisher {
 
     private void sendServerMessage(ByteArrayDataOutput out, ServerInfo... servers) {
         for(ServerInfo serverInfo : servers) {
-            serverInfo.sendData(ChannelConstant.RESET_CHANNEL, out.toByteArray());
+            if(!serverInfo.getPlayers().isEmpty()) { // server won't receive message if no player on it.
+                serverInfo.sendData(ChannelConstant.RESET_CHANNEL, out.toByteArray());
+            }
         }
     }
 

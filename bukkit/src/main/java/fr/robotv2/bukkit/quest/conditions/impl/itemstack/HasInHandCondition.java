@@ -3,21 +3,18 @@ package fr.robotv2.bukkit.quest.conditions.impl.itemstack;
 import com.google.common.base.Enums;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
-import org.bukkit.Material;
+import fr.robotv2.bukkit.util.comparator.ItemStackSectionComparator;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.EnumSet;
 import java.util.Objects;
 
 public class HasInHandCondition implements Condition {
 
-    private final String name;
-    private final int customModelData;
-    private final EnumSet<Material> materials = EnumSet.noneOf(Material.class);
+    private final ItemStackSectionComparator itemStackSectionComparator;
     private final PlayerHandValue handValue;
 
     private enum PlayerHandValue {
@@ -28,14 +25,9 @@ public class HasInHandCondition implements Condition {
     }
 
     public HasInHandCondition(ConfigurationSection parent, String key) {
-        this.name = parent.getString(key + ".name");
-        this.customModelData = parent.getInt(key + ".custom-model-data", Integer.MIN_VALUE);
 
-        for(String materialString : parent.getStringList(key + ".materials")) {
-            final Material material = Material.matchMaterial(materialString);
-            if(material == null) continue;
-            materials.add(material);
-        }
+        final ConfigurationSection child = Objects.requireNonNull(parent.getConfigurationSection(key));
+        this.itemStackSectionComparator = new ItemStackSectionComparator(child);
 
         final String handValueString = parent.getString(key + ".hand");
         this.handValue = handValueString != null
@@ -51,40 +43,13 @@ public class HasInHandCondition implements Condition {
 
         switch (handValue) {
             case MAIN_HAND:
-                return isItem(mainHand);
+                return itemStackSectionComparator.isSame(mainHand);
             case OFF_HAND:
-                return isItem(offHand);
+                return itemStackSectionComparator.isSame(offHand);
             case BOTH:
-                return isItem(mainHand) || isItem(offHand);
+                return itemStackSectionComparator.isSame(mainHand) || itemStackSectionComparator.isSame(offHand);
             default:
-                throw new IllegalArgumentException(handValue + " is not a valid value");
-        }
-    }
-
-    private boolean isItem(ItemStack stack) {
-        if(stack.getType() != Material.AIR && stack.hasItemMeta()) {
-
-            final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
-
-            if(name != null) {
-                if(!meta.hasDisplayName() || !meta.getDisplayName().equals(name)) {
-                    return false;
-                }
-            }
-
-            if(customModelData != Integer.MIN_VALUE) {
-                if(!meta.hasCustomModelData() || meta.getCustomModelData() != customModelData) {
-                    return false;
-                }
-            }
-
-            if(!materials.isEmpty()) {
-                return materials.contains(stack.getType());
-            }
-
-            return true;
-        } else {
-            return false;
+                throw new IllegalArgumentException(handValue + " is not a valid value.");
         }
     }
 

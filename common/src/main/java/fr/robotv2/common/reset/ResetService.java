@@ -50,7 +50,7 @@ public class ResetService {
         }
 
         scheduler.setTimeZone(timeZone);
-        scheduler.schedule(cronSyntax, () -> {
+        scheduler.schedule(getCronSyntax(), () -> {
             publisher.publishReset(id);
             calculateNextExecution();
         });

@@ -30,7 +30,7 @@ public class QuestIncrementListener implements Listener {
             return;
         }
 
-        String progressMessage = this.plugin.getConfig().getString("cosmetics.actionbar.progression-message", "%quest_name% &8| %quest_progressbar% &8| &7%quest_progress% &8/ &7%quest_required%");
+        String progressMessage = this.plugin.getConfig().getString("cosmetics.actionbar.progression_message", "%quest_name% &8| %quest_progressbar% &8| &7%quest_progress% &8/ &7%quest_required%");
 
         progressMessage = PlaceholderUtil.QUEST_PLACEHOLDER.parse(quest, progressMessage);
         progressMessage = PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, progressMessage);

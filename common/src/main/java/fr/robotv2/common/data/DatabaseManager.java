@@ -7,6 +7,8 @@ import java.sql.SQLException;
 
 public class DatabaseManager {
 
+    private final DatabaseCredentials databaseCredentials;
+
     private final ConnectionSource source;
     private final OrmData<ActiveQuest, Integer> activeQuestOrmData = new OrmData<>();
 
@@ -17,15 +19,13 @@ public class DatabaseManager {
     }
 
     public DatabaseManager(DatabaseCredentials credentials) throws SQLException {
-        this(credentials.createConnectionSource());
-    }
-
-    public DatabaseManager(ConnectionSource source) throws SQLException {
-        this.source = source;
+        this.databaseCredentials = credentials;
+        this.source = credentials.createConnectionSource();
         this.activeQuestOrmData.initialize(source, ActiveQuest.class);
     }
 
     public void closeConnection() {
+        this.databaseCredentials.close();
         this.source.closeQuietly();
     }
 

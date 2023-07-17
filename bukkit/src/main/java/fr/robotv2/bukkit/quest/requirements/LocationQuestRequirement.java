@@ -23,7 +23,7 @@ public class LocationQuestRequirement extends QuestRequirement<Location> {
         }
 
         this.location = new Location(Bukkit.getWorld(world), x, y, z);
-        this.distanceFromLocation = quest.getSection().getDouble("required_location.distance-from-location", 5D);
+        this.distanceFromLocation = quest.getSection().getDouble("required_location.distance_from_location", 5D);
     }
 
     @Override

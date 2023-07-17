@@ -44,12 +44,12 @@ public class Quest {
         this.section = section;
 
         this.id = section.getName();
-        this.name = section.getString("name");
+        this.name = section.getString("display");
         this.description = section.getStringList("description");
 
         final String materialString = section.getString("menu_item", "BOOK");
         this.material = Objects.requireNonNull(Material.matchMaterial(materialString), "missing menu_item for quest: " + id);
-        this.customModelData = section.getInt("custom-model-data");
+        this.customModelData = section.getInt("custom_model_data", Integer.MIN_VALUE);
 
         this.resetId = Objects.requireNonNull(section.getString("reset_id"), "missing reset server for quest: " + id);
         this.type = Objects.requireNonNull(QuestType.getByName(section.getString("quest_type")), "missing type for quest: " + id);;
@@ -72,7 +72,7 @@ public class Quest {
         return this.id;
     }
 
-    public String getName() {
+    public String getDisplay() {
         return this.name;
     }
 
@@ -90,7 +90,11 @@ public class Quest {
         final ItemMeta meta = Objects.requireNonNull(itemStack.getItemMeta());
         final List<String> description = new ArrayList<>(this.description);
 
-        meta.setDisplayName(ColorUtil.color(this.name));
+        meta.setDisplayName(
+                this.name != null && !this.name.isEmpty()
+                        ? ColorUtil.color(this.name)
+                        : this.name
+        );
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
         if(hasCustomModelData()) {
@@ -109,7 +113,7 @@ public class Quest {
             description.add("&cThis quest is not done yet.");
         }
 
-        meta.setLore(description.stream().map(ColorUtil::color).collect(Collectors.toList()));
+        meta.setLore(description.stream().map(line -> !line.isEmpty() ? ColorUtil.color(line) : line).collect(Collectors.toList()));
         itemStack.setItemMeta(meta);
 
         return itemStack;
@@ -132,7 +136,7 @@ public class Quest {
     }
 
     public boolean hasCustomModelData() {
-        return this.customModelData != 0;
+        return this.customModelData != Integer.MIN_VALUE;
     }
 
     public int getCustomModelData() {

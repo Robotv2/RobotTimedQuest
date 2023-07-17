@@ -10,10 +10,12 @@ import java.util.Objects;
 
 public class QuestDoneEvent extends ActiveQuestEvent {
 
+    private final Player player;
     private final static HandlerList HANDLER_LIST = new HandlerList();
 
     public QuestDoneEvent(ActiveQuest activeQuest) {
         super(activeQuest);
+        this.player = Objects.requireNonNull(Bukkit.getPlayer(activeQuest.getOwner()));
     }
 
     @NotNull
@@ -26,8 +28,8 @@ public class QuestDoneEvent extends ActiveQuestEvent {
         return HANDLER_LIST;
     }
 
-    @NotNull // can't be null if the player just did his quest.
+    @NotNull
     public Player getPlayer() {
-        return Objects.requireNonNull(Bukkit.getPlayer(getActiveQuest().getOwner()));
+        return this.player;
     }
 }
