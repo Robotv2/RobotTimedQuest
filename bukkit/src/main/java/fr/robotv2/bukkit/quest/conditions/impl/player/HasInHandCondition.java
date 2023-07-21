@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.quest.conditions.impl.itemstack;
+package fr.robotv2.bukkit.quest.conditions.impl.player;
 
 import com.google.common.base.Enums;
 import fr.robotv2.bukkit.enums.QuestType;
@@ -36,7 +36,7 @@ public class HasInHandCondition implements Condition {
     }
 
     @Override
-    public boolean matchCondition(Player player, Event event) {
+    public boolean matchCondition(Player player, QuestType type, Event event) {
 
         final ItemStack mainHand = player.getInventory().getItemInMainHand();
         final ItemStack offHand = player.getInventory().getItemInOffHand();

@@ -8,11 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class PlaceholdersCondition implements Condition {
@@ -35,7 +31,7 @@ public class PlaceholdersCondition implements Condition {
     }
 
     @Override
-    public boolean matchCondition(Player value, Event event) {
+    public boolean matchCondition(Player value, QuestType type, Event event) {
 
         for(PlaceholderCondition condition : placeholderConditions) {
 

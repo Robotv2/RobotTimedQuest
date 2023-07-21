@@ -20,7 +20,7 @@ public class BukkitMessageListener implements PluginMessageListener {
     }
 
     @Override
-    public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, @NotNull byte[] message) {
+    public void onPluginMessageReceived(@NotNull String channel, @NotNull Player player, byte @NotNull [] message) {
 
         if(!channel.equals(ChannelConstant.RESET_CHANNEL)) {
             return;
@@ -30,13 +30,6 @@ public class BukkitMessageListener implements PluginMessageListener {
         final String sub = input.readUTF();
 
         switch (sub.toLowerCase()) {
-
-            case "reset": {
-                final String resetId = input.readUTF();
-                plugin.getResetPublisher().publishReset(resetId);
-                break;
-            }
-
 
             case "clear-quests": {
                 final UUID uuid = UUID.fromString(input.readUTF());

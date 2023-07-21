@@ -24,6 +24,7 @@ public enum QuestType {
     CRAFT(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
     ENCHANT(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
     PICKUP(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
+    BREW(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
 
     LAUNCH(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
     EXP_POINTS(true, null), // NOT DONE

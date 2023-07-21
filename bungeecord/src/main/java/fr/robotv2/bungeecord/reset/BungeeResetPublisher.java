@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.UUID;
 
 public class BungeeResetPublisher implements ResetPublisher {
@@ -30,16 +29,10 @@ public class BungeeResetPublisher implements ResetPublisher {
         }
     }
 
-    private void sendServerMessage(ByteArrayDataOutput out, Collection<ServerInfo> servers) {
-        sendServerMessage(out, servers.toArray(new ServerInfo[0]));
-    }
-
     @Override
     public void publishReset(@NotNull String resetId) {
 
-        final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("reset");
-        this.sendServerMessage(out, plugin.getProxy().getServers().values());
+        this.plugin.getRedisConnector().publish(ChannelConstant.RESET_CHANNEL, resetId);
 
         plugin.getDatabaseManager().getActiveQuestOrmData().removeWhere(where -> {
             try {

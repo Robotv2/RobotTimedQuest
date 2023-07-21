@@ -37,7 +37,7 @@ public class StringListProcessor {
 
                 case "[MONEY]":
                     if(!Hooks.isVaultEnabled()) {
-                       throw new IllegalStateException("Vault missing. Please install vault in order to use the [MONEY] prefix");
+                       throw new IllegalStateException("Vault's missing. Please install vault in order to use the [MONEY] prefix");
                     }
                     final double bal = Double.parseDouble(argument);
                     VaultHook.giveMoney(player, bal);

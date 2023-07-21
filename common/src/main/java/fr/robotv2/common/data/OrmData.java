@@ -8,6 +8,7 @@ import com.j256.ormlite.stmt.Where;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import org.jetbrains.annotations.NotNull;
+import redis.clients.jedis.Jedis;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -22,6 +23,7 @@ public class OrmData<D, ID> {
     public void initialize(@NotNull ConnectionSource source, @NotNull Class<D> clazz) throws SQLException {
         this.dao = DaoManager.createDao(source, clazz);
         TableUtils.createTableIfNotExists(source, clazz);
+        Jedis jedis = new Jedis();
     }
 
     public CompletableFuture<D> get(ID identification) {

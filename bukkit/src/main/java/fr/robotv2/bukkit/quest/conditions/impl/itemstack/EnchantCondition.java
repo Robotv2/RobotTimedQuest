@@ -21,7 +21,7 @@ public class EnchantCondition implements Condition {
 
     public EnchantCondition(ConfigurationSection parent, String key) {
         this.requiredLevel = parent.getInt(key + ".required_level", Integer.MIN_VALUE);
-        for(String enchantString : parent.getStringList(key + ".required_enchants")) {
+        for(String enchantString : parent.getStringList(key + ".required_types")) {
             final NamespacedKey namespacedKey = NamespacedKey.minecraft(enchantString);
             final Enchantment enchantment = Enchantment.getByKey(namespacedKey);
             if(enchantment == null) continue;
@@ -30,26 +30,34 @@ public class EnchantCondition implements Condition {
     }
 
     @Override
-    public boolean matchCondition(Player player, Event event) {
+    public boolean matchCondition(Player player, QuestType type, Event event) {
 
-        if(event instanceof EnchantItemEvent) {
-            final EnchantItemEvent enchantItemEvent = (EnchantItemEvent) event;
+        if(type != QuestType.ENCHANT) {
+            return true;
+        }
 
-            for(Map.Entry<Enchantment, Integer> entry : enchantItemEvent.getEnchantsToAdd().entrySet()) {
+        final EnchantItemEvent enchantItemEvent = (EnchantItemEvent) event;
+        final Set<Map.Entry<Enchantment, Integer>> entries = enchantItemEvent.getEnchantsToAdd().entrySet();
 
-                if(!enchants.isEmpty() // an enchant is required
-                        && !enchants.contains(entry.getKey())) { // if it does not match this required enchant
-                    return false;
-                }
+        for(Map.Entry<Enchantment, Integer> entry : entries) {
 
-                if(requiredLevel != Integer.MIN_VALUE // a level is required
-                        && entry.getValue() < requiredLevel) { // if it LESS than this required level
-                    return false;
-                }
+            if(this.isEnchantPresent(entry.getKey())
+                    && this.isLevelSufficient(entry.getValue())) {
+                return true;
             }
         }
 
-        return true;
+        return false;
+    }
+
+    private boolean isEnchantPresent(Enchantment enchantment) {
+        return enchants.isEmpty() // if true, no enchant is required.
+                || enchants.contains(enchantment);
+    }
+
+    private boolean isLevelSufficient(int level) {
+        return requiredLevel == Integer.MIN_VALUE // if true, no level is required.
+                || level >= requiredLevel;
     }
 
     @Override

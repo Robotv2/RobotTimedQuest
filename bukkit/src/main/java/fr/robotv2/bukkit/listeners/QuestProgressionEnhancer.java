@@ -13,6 +13,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -31,10 +33,11 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
     public boolean allConditionsMatch(List<Condition> conditions, Player player, Event event, QuestType type) {
         return conditions.stream()
                 .filter(condition -> condition.referencedType().contains(type))
-                .allMatch(condition -> condition.matchCondition(player, event));
+                .allMatch(condition -> condition.matchCondition(player, type, event));
     }
 
-    public void incrementProgression(Player player, QuestType type, T target, Event event, int amount) {
+    public void incrementProgression(@NotNull Player player, @NotNull QuestType type
+            , @Nullable T target, @Nullable Event event, int amount) {
 
         if(type != QuestType.LOCATION) {
             plugin.debug(type.name() + " has been triggered by " + player.getName() + ".");

@@ -43,10 +43,6 @@ public class QuestDoneListener implements Listener {
         final Player player = event.getPlayer();
         final Quest quest = event.getQuest();
 
-        if(quest == null) {
-            return;
-        }
-
         if(this.plugin.getConfig().getBoolean("cosmetics.title.enabled")) {
             this.sendCongratulationTitle(player, quest);
         }

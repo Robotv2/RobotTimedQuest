@@ -71,10 +71,6 @@ public class MySqlCredentials implements DatabaseCredentials {
         hikariConfig.addDataSourceProperty("alwaysSendSetIsolation", "false");
         hikariConfig.addDataSourceProperty("cacheCallableStmts", "true");
 
-        // Set the driver level TCP socket timeout
-        // See: https://github.com/brettwooldridge/HikariCP/wiki/Rapid-Recovery
-        hikariConfig.addDataSourceProperty("socketTimeout", String.valueOf(TimeUnit.SECONDS.toMillis(30)));
-
         this.hikariDataSource = new HikariDataSource(hikariConfig);
         return new JdbcPooledConnectionSource(hikariDataSource.getJdbcUrl(), hikariDataSource.getUsername(), hikariDataSource.getPassword());
     }

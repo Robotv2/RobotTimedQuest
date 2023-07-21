@@ -2,10 +2,13 @@ package fr.robotv2.bungeecord;
 
 import fr.robotv2.bungeecord.command.BungeeMainCommand;
 import fr.robotv2.bungeecord.config.BungeeConfigFile;
+import fr.robotv2.bungeecord.listeners.BungeeRedisMessenger;
 import fr.robotv2.bungeecord.reset.BungeeResetPublisher;
 import fr.robotv2.bungeecord.reset.BungeeResetServiceRepo;
+import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
+import fr.robotv2.common.data.RedisConnector;
 import fr.robotv2.common.data.impl.MySqlCredentials;
 import fr.robotv2.common.reset.ResetService;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -27,6 +30,8 @@ public class RTQBungeePlugin extends Plugin {
     private BungeeConfigFile configFile;
     private BungeeConfigFile resetServiceFile;
 
+    private RedisConnector redisConnector;
+
     @Override
     public void onEnable() {
 
@@ -41,7 +46,9 @@ public class RTQBungeePlugin extends Plugin {
         this.bungeeResetPublisher = new BungeeResetPublisher(this);
 
         this.getBungeeResetServiceRepo().registerServices();
+
         this.setupDatabase();
+        this.setupRedis();
 
         this.commandHandler = BungeeCommandHandler.create(this);
         this.commandHandler.registerContextResolver(ResetService.class, (context)
@@ -55,11 +62,15 @@ public class RTQBungeePlugin extends Plugin {
         if(this.databaseManager != null && this.databaseManager.isConnected()) {
             this.databaseManager.closeConnection();
         }
+
+        if(this.redisConnector != null && this.redisConnector.getJedis() != null) {
+            this.redisConnector.close();
+        }
     }
 
     public void onReload() {
-        configFile.reload();
-        resetServiceFile.reload();
+        getConfigFile().reload();
+        getResetServiceFile().reload();
         this.getBungeeResetServiceRepo().registerServices();
     }
 
@@ -75,6 +86,10 @@ public class RTQBungeePlugin extends Plugin {
         return this.databaseManager;
     }
 
+    public RedisConnector getRedisConnector() {
+        return redisConnector;
+    }
+
     public BungeeConfigFile getResetServiceFile() {
         return this.resetServiceFile;
     }
@@ -85,6 +100,38 @@ public class RTQBungeePlugin extends Plugin {
 
     public boolean isOnlineMode() {
         return getProxy().getConfig().isOnlineMode();
+    }
+
+    private void setupRedis() {
+
+        final Configuration configuration = this.getConfigFile().getConfiguration();
+        final String address = configuration.getString("options.redis_address", "127.0.0.1");
+        final int port = configuration.getInt("options.redis_port", 6379);
+        final String password = configuration.getString("options.redis_password");
+
+        try {
+            this.redisConnector = new RedisConnector(
+                    address,
+                    port,
+                    password
+            );
+            this.redisConnector.setMessenger(new BungeeRedisMessenger(this));
+            this.redisConnector.subscribe(
+                    ChannelConstant.RESET_CHANNEL,
+                    ChannelConstant.IS_SAVED_CHANNEL,
+                    ChannelConstant.WAIT_SAVING_CHANNEL
+            );
+        } catch (Exception exception) {
+
+            exception.printStackTrace();
+
+            getLogger().warning(" ");
+            getLogger().warning("An error occurred while trying to connect to redis.");
+            getLogger().warning("Please check again your credentials.");
+            getLogger().warning("The plugin will not work.");
+            getLogger().warning(" ");
+            this.disablePlugin();
+        }
     }
 
     private void setupDatabase() {
@@ -104,7 +151,7 @@ public class RTQBungeePlugin extends Plugin {
             getLogger().info("Successfully connected to the database.");
         } catch (SQLException exception) {
             getLogger().warning(" ");
-            getLogger().warning("An error occurred trying to connect to the database.");
+            getLogger().warning("An error occurred while trying to connect to the database.");
             getLogger().warning("Please check again your credentials.");
             getLogger().warning("The plugin will not work.");
             getLogger().warning(" ");

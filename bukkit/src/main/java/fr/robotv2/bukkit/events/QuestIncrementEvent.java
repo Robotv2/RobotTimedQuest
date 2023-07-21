@@ -31,7 +31,7 @@ public class QuestIncrementEvent extends ActiveQuestEvent {
         return HANDLER_LIST;
     }
 
-    @NotNull // can't be null if the player just increment this quest.
+    @NotNull
     public Player getPlayer() {
         return this.player;
     }

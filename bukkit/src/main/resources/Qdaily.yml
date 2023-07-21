@@ -17,11 +17,8 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 100"
-      - "[MESSAGE] &aCongrats %player%, you've ended the quest %quest_name%!"
-
-    conditions:
-      is-in-world:
-        - world
+      - "[MESSAGE] &aCongrats %player%, you've ended the quest %quest_display%!"
+      -
   qdaily_sheerer:
     display: "&ePink Sheep Sheerer"
     description:
@@ -39,10 +36,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 100"
-      - "[MESSAGE] &aCongrats %player%, you've ended the quest %quest_name%!"
-
-    conditions:
-      sheep-color: PINK
+      - "[MESSAGE] &aCongrats %player%, you've ended the quest %quest_display%!"
 
   qdaily_farmingfrenzy:
     display: "&aFarming Frenzy"
@@ -61,7 +55,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 200"
-      - "[MESSAGE] &aGreat job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &aGreat job %player%, you've completed the quest %quest_display%!"
 
   qdaily_fisherman:
     display: "&bFisherman"
@@ -80,7 +74,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 200"
-      - "[MESSAGE] &bGreat job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &bGreat job %player%, you've completed the quest %quest_display%!"
 
   qdaily_miningmayhem:
     display: "&3Mining Mayhem"
@@ -91,13 +85,6 @@ quests:
       - " &8| &r&850x Gold Ore"
     menu_item: GOLD_ORE
 
-    required_location:
-      x: 10
-      y: 55
-      z: 100
-      world: world_the_nether
-      distance-from-location: 5
-
     reset_id: DAILY
     quest_type: BREAK
     required_amount: 50
@@ -107,7 +94,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 300"
-      - "[MESSAGE] &3Well done %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &3Well done %player%, you've completed the quest %quest_display%!"
 
   qdaily_breedbonanza:
     display: "&dBreeding Bonanza"
@@ -126,7 +113,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 250"
-      - "[MESSAGE] &dGood job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &dGood job %player%, you've completed the quest %quest_display%!"
 
   qdaily_lumberjack:
     display: "&eLumber Jack"
@@ -145,7 +132,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 200"
-      - "[MESSAGE] &eNice work %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &eNice work %player%, you've completed the quest %quest_display%!"
 
   qdaily_masterchef:
     display: "&bMaster Chef"
@@ -164,7 +151,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 250"
-      - "[MESSAGE] &bGreat job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &bGreat job %player%, you've completed the quest %quest_display%!"
 
   qdaily_tamingtournament:
     display: "&2Taming Tournament"
@@ -183,7 +170,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 250"
-      - "[MESSAGE] &aBrilliant %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &aBrilliant %player%, you've completed the quest %quest_display%!"
 
   qdaily_gladiator:
     display: "&cGladiator"
@@ -191,18 +178,18 @@ quests:
       - "&4Show your warrior spirit by defeating enemies!"
       - ""
       - "&eRequirement:"
-      - " &8| &r&710x Zombie"
+      - " &8| &r&720x Zombie"
     menu_item: ROTTEN_FLESH
 
     reset_id: DAILY
     quest_type: KILL
-    required_amount: 10
+    required_amount: 20
     required_targets:
       - ZOMBIE
 
     rewards:
       - "[COMMAND] eco give %player% 250"
-      - "[MESSAGE] &cWell done %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &cWell done %player%, you've completed the quest %quest_display%!"
 
   qdaily_topchef:
     display: "&6Top Chef"
@@ -221,23 +208,23 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 200"
-      - "[MESSAGE] &eWell done %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &eWell done %player%, you've completed the quest %quest_display%!"
 
   qdaily_enchantmentwisdom:
     display: "&dEnchantment Wisdom"
     description:
-      - "&5Enchant any tool!"
+      - "&5Enchant any item!"
       - ""
       - "&eRequirement:"
-      - " &8| &r&710x Enchanted Pickaxe"
+      - " &8| &r&73x Enchanted Item"
     menu_item: DIAMOND_PICKAXE
 
     reset_id: DAILY
     quest_type: ENCHANT
-    required_amount: 10
+    required_amount: 3
     required_targets:
       - "*"
 
     rewards:
       - "[COMMAND] eco give %player% 300"
-      - "[MESSAGE] &dGreat job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &dGreat job %player%, you've completed the quest %quest_display%!"

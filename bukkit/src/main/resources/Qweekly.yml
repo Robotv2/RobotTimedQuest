@@ -13,10 +13,11 @@ quests:
     required_amount: 60
     required_targets:
       - DIAMOND_ORE
+      - DEEPSLATE_DIAMOND_ORE
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &bGood job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &bGood job %player%, you've completed the quest %quest_display%!"
 
   qweekly_carrotcollector:
     display: "&aCarrot Collector"
@@ -35,7 +36,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &aNice work %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &aNice work %player%, you've completed the quest %quest_display%!"
 
   qweekly_ironminer:
     display: "&8Iron Miner"
@@ -51,10 +52,11 @@ quests:
     required_amount: 90
     required_targets:
       - IRON_ORE
+      - DEEPSLATE_IRON_ORE
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &8Good job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &8Good job %player%, you've completed the quest %quest_display%!"
 
   qweekly_greattamer:
     display: "&dGreat Tamer"
@@ -73,7 +75,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &dWell done %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &dWell done %player%, you've completed the quest %quest_display%!"
 
   qweekly_masterbreeder:
     display: "&6Master Breeder"
@@ -92,7 +94,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &6Excellent %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &6Excellent %player%, you've completed the quest %quest_display%!"
 
   qweekly_monsterhunter:
     display: "&4Monster Hunter"
@@ -100,8 +102,7 @@ quests:
       - "&cHunt a variety of monsters!"
       - ""
       - "&eRequirement:"
-      - " &8| &r&720x Zombies"
-      - " &8| &r&720x Skeletons"
+      - " &8| &r&740x Zombies or Skeletons"
     menu_item: ZOMBIE_HEAD
 
     reset_id: WEEKLY
@@ -109,10 +110,11 @@ quests:
     required_amount: 40
     required_targets:
       - ZOMBIE
+      - SKELETON
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &4Well done %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &4Well done %player%, you've completed the quest %quest_display%!"
 
   qweekly_masterfisher:
     display: "&bMaster Fisher"
@@ -120,18 +122,18 @@ quests:
       - "&9Catch a bunch of fishes!"
       - ""
       - "&eRequirement:"
-      - " &8| &r&750x Salmon"
+      - " &8| &r&740x Salmon"
     menu_item: SALMON
 
     reset_id: WEEKLY
     quest_type: FISH
-    required_amount: 50
+    required_amount: 40
     required_targets:
       - SALMON
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &bExcellent %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &bExcellent %player%, you've completed the quest %quest_display%!"
 
   qweekly_gourmetchef:
     display: "&dGourmet Chef"
@@ -150,7 +152,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &dWell done %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &dWell done %player%, you've completed the quest %quest_display%!"
 
   qweekly_mastercrafter:
     display: "&6Master Crafter"
@@ -158,18 +160,18 @@ quests:
       - "&eCraft sophisticated items!"
       - ""
       - "&eRequirement:"
-      - " &8| &r&710x Diamond Pickaxe"
+      - " &8| &r&75x Diamond Pickaxe"
     menu_item: DIAMOND_PICKAXE
 
     reset_id: WEEKLY
     quest_type: CRAFT
-    required_amount: 10
+    required_amount: 5
     required_targets:
       - DIAMOND_PICKAXE
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &6Great job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &6Great job %player%, you've completed the quest %quest_display%!"
 
   qweekly_enchantmentmaster:
     display: "&5Enchantment Master"
@@ -187,10 +189,13 @@ quests:
       - NETHERITE_SWORD
       - DIAMOND_SWORD
       - IRON_SWORD
+      - GOLDEN_SWORD
+      - STONE_SWORD
+      - WOODEN_SWORD
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &5Excellent %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &5Excellent %player%, you've completed the quest %quest_display%!"
 
   qweekly_masterbuilder:
     display: "&aMaster Builder"
@@ -198,18 +203,18 @@ quests:
       - "&2Build using various blocks!"
       - ""
       - "&eRequirement:"
-      - " &8| &r&7500x Stone Bricks"
+      - " &8| &r&7200x Stone Bricks"
     menu_item: STONE_BRICKS
 
     reset_id: WEEKLY
     quest_type: PLACE
-    required_amount: 500
+    required_amount: 200
     required_targets:
       - STONE_BRICKS
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &aGood job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &aGood job %player%, you've completed the quest %quest_display%!"
 
   qweekly_mastergardener:
     display: "&2Master Gardener"
@@ -217,12 +222,12 @@ quests:
       - "&aPlant a wide variety of plants!"
       - ""
       - "&eRequirement:"
-      - " &8| &r&7300x Saplings"
+      - " &8| &r&760x Saplings"
     menu_item: OAK_SAPLING
 
     reset_id: WEEKLY
     quest_type: PLACE
-    required_amount: 30
+    required_amount: 60
     required_targets:
       - OAK_SAPLING
       - SPRUCE_SAPLING
@@ -233,7 +238,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &2Well done %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &2Well done %player%, you've completed the quest %quest_display%!"
 
   qweekly_mastershearer:
     display: "&6Master Shearer"
@@ -252,7 +257,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &6Great job %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &6Great job %player%, you've completed the quest %quest_display%!"
 
   qweekly_masterfarmer:
     display: "&5Master Farmer"
@@ -271,7 +276,7 @@ quests:
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &5Excellent %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &5Excellent %player%, you've completed the quest %quest_display%!"
 
   qweekly_potionbrewer:
     display: "&dPotion Brewer"
@@ -283,11 +288,19 @@ quests:
     menu_item: POTION
 
     reset_id: WEEKLY
-    quest_type: CRAFT
+    quest_type: BREW
     required_amount: 10
     required_targets:
       - POTION
+      - LINGERING_POTION
+      - SPLASH_POTION
 
     rewards:
       - "[COMMAND] eco give %player% 500"
-      - "[MESSAGE] &dFantastic work %player%, you've completed the quest %quest_name%!"
+      - "[MESSAGE] &dFantastic work %player%, you've completed the quest %quest_display%!"
+    conditions:
+      required_potions:
+        required_types:
+          - INSTANT_HEAL
+        required_upgraded: false
+        required_extended: false

@@ -24,18 +24,16 @@ public class PlayerMoveListener extends QuestProgressionEnhancer<Location> {
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
 
-        // Only trigger if the player move a full block
-
         final Location from = event.getFrom();
-        final double xFrom = from.getX();
-        final double yFrom = from.getY();
-        final double zFrom = from.getZ();
-
         final Location to = event.getTo();
 
         if(to == null) {
             return;
         }
+
+        final double xFrom = from.getX();
+        final double yFrom = from.getY();
+        final double zFrom = from.getZ();
 
         final double xTo = to.getX();
         final double yTo = to.getY();

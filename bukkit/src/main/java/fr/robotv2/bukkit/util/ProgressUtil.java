@@ -15,11 +15,11 @@ public class ProgressUtil {
         final int grayBarNumber = barNumber - greenBarNumber;
 
         for (int i = 0; i < greenBarNumber; i++) {
-            builder.append(ChatColor.GREEN + "|");
+            builder.append(ChatColor.GREEN).append("|");
         }
 
         for (int i = 0; i < grayBarNumber; i++) {
-            builder.append(ChatColor.GRAY + "|");
+            builder.append(ChatColor.GRAY).append("|");
         }
 
         return builder.toString();

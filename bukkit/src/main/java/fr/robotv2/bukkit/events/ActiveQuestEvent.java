@@ -5,7 +5,6 @@ import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import org.bukkit.event.Event;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public abstract class ActiveQuestEvent extends Event {
 
@@ -20,7 +19,7 @@ public abstract class ActiveQuestEvent extends Event {
         return activeQuest;
     }
 
-    @Nullable
+    @NotNull
     public Quest getQuest() {
         return RTQBukkitPlugin.getInstance().getQuestManager().fromId(activeQuest.getQuestId());
     }

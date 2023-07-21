@@ -1,10 +1,11 @@
 package fr.robotv2.bukkit;
 
 import fr.robotv2.bukkit.bungee.BukkitMessageListener;
+import fr.robotv2.bukkit.bungee.BukkitRedisMessenger;
 import fr.robotv2.bukkit.command.BukkitMainCommand;
 import fr.robotv2.bukkit.config.BukkitConfigFile;
 import fr.robotv2.bukkit.data.BukkitDatabaseManager;
-import fr.robotv2.bukkit.data.PlayerDataInitializationListeners;
+import fr.robotv2.bukkit.data.PlayerDataInitListeners;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.listeners.GlitchChecker;
 import fr.robotv2.bukkit.listeners.block.BlockBreakListener;
@@ -23,6 +24,7 @@ import fr.robotv2.bukkit.ui.GuiHandler;
 import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
+import fr.robotv2.common.data.RedisConnector;
 import fr.robotv2.common.data.impl.MySqlCredentials;
 import fr.robotv2.common.data.impl.SqlLiteCredentials;
 import fr.robotv2.common.reset.ResetService;
@@ -33,6 +35,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import revxrsal.commands.autocomplete.SuggestionProvider;
 import revxrsal.commands.bukkit.BukkitCommandHandler;
 
@@ -42,6 +45,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class RTQBukkitPlugin extends JavaPlugin {
+
+    private boolean bungeecordMode;
 
     private QuestManager questManager;
     private ConditionManager conditionManager;
@@ -60,6 +65,9 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
     private BukkitDatabaseManager databaseManager;
     private DatabaseManager.DatabaseType type;
+
+    private RedisConnector redisConnector;
+    private PlayerDataInitListeners playerDataInitListeners;
 
     public static RTQBukkitPlugin getInstance() {
         return JavaPlugin.getPlugin(RTQBukkitPlugin.class);
@@ -86,6 +94,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         this.setupFiles();
         this.setupListeners();
+
+        this.bungeecordMode = getConfig().getBoolean("options.bungeecord.enabled", false);
 
         if(this.isBungeecordMode()) {
             this.setupBungeeMode();
@@ -120,6 +130,10 @@ public class RTQBukkitPlugin extends JavaPlugin {
     public void onDisable() {
         this.databaseManager.savePlayers(false);
         this.databaseManager.closeConnection();
+
+        if(this.redisConnector != null) {
+            this.redisConnector.close();
+        }
     }
 
     public void onReload() {
@@ -130,9 +144,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         this.setupQuests();
 
-        if(!this.isBungeecordMode()) {
-            this.resetServiceRepo.registerServices();
-        }
+        this.getBukkitResetServiceRepo().registerServices();
     }
 
     public void debug(String message) {
@@ -144,10 +156,23 @@ public class RTQBukkitPlugin extends JavaPlugin {
     // BUNGEE
 
     public boolean isBungeecordMode() {
-        return getConfig().getBoolean("options.bungeecord", false);
+        return this.bungeecordMode;
     }
 
     private void setupBungeeMode() {
+
+        this.redisConnector = new RedisConnector(
+                getConfig().getString("options.bungeecord.redis_address", "127.0.0.1"),
+                getConfig().getInt("options.bungeecord.redis_port", 6379),
+                getConfig().getString("options.bungeecord.redis_password")
+        );
+
+        this.redisConnector.setMessenger(new BukkitRedisMessenger(this, this.playerDataInitListeners));
+        this.redisConnector.subscribe(
+                ChannelConstant.RESET_CHANNEL,
+                ChannelConstant.IS_SAVED_CHANNEL,
+                ChannelConstant.WAIT_SAVING_CHANNEL
+        );
         getServer().getMessenger().registerIncomingPluginChannel(this, ChannelConstant.RESET_CHANNEL, new BukkitMessageListener(this));
     }
 
@@ -196,6 +221,11 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
     public GuiHandler getGuiHandler() {
         return this.guiHandler;
+    }
+
+    @Nullable
+    public RedisConnector getRedisConnector() {
+        return this.redisConnector;
     }
 
     // LOADERS
@@ -260,14 +290,14 @@ public class RTQBukkitPlugin extends JavaPlugin {
         getQuestManager().clearQuests();
         getConfig().getStringList("quest-files")
                 .forEach(questPath -> getQuestManager().loadQuests(questPath));
-        getLogger().info(getQuestManager().getQuests().size() + "quest(s) has been loaded.");
+        getLogger().info(getQuestManager().getQuests().size() + " quest(s) has been loaded.");
     }
 
     private void setupListeners() {
         final PluginManager pm = getServer().getPluginManager();
 
         // DATA
-        pm.registerEvents(new PlayerDataInitializationListeners(this), this);
+        pm.registerEvents((this.playerDataInitListeners = new PlayerDataInitListeners(this)), this);
 
         // BLOCK
         pm.registerEvents(new BlockBreakListener(this), this);
@@ -283,6 +313,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new EntityTameListener(this), this);
 
         // ITEM
+        pm.registerEvents(new PlayerBrewListener(this), this);
         pm.registerEvents(new PlayerConsumeListener(this), this);
         pm.registerEvents(new PlayerCookListener(this), this);
         pm.registerEvents(new PlayerCraftListener(this), this);

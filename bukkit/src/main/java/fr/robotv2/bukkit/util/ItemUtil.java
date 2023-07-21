@@ -54,7 +54,7 @@ public class ItemUtil {
     }
 
     @Nullable
-    public static ItemStack toItemStack(ConfigurationSection parent, Player player) {
+    public static ItemStack toItemStack(ConfigurationSection parent, @Nullable Player player) {
         final String itemAdder = parent.getString("item_adder");
         if(itemAdder != null && Hooks.isItemAdderEnabled()) {
 

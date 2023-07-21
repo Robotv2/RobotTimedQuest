@@ -18,7 +18,7 @@ public class IsInWorldCondition implements Condition {
     }
 
     @Override
-    public boolean matchCondition(Player player, Event event) {
+    public boolean matchCondition(Player player, QuestType type, Event event) {
         return worlds.contains(player.getWorld().getName());
     }
 

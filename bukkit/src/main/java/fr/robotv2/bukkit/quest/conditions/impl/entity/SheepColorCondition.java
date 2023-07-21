@@ -26,15 +26,15 @@ public class SheepColorCondition implements Condition {
     }
 
     @Override
-    public boolean matchCondition(Player player, Event event) {
+    public boolean matchCondition(Player player, QuestType type, Event event) {
 
         Entity entity = null;
 
-        if(event instanceof EntityEvent) {
-            final EntityEvent entityEvent = (EntityEvent) event;
-            entity = entityEvent.getEntity();
-        } else if(event instanceof PlayerShearEntityEvent) {
+        if(type == QuestType.SHEAR) {
             final PlayerShearEntityEvent entityEvent = (PlayerShearEntityEvent) event;
+            entity = entityEvent.getEntity();
+        } else if (event instanceof EntityEvent) {
+            final EntityEvent entityEvent = (EntityEvent) event;
             entity = entityEvent.getEntity();
         }
 

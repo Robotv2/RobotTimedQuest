@@ -37,6 +37,7 @@ public class BukkitResetPublisher implements ResetPublisher {
         }
 
         final ResetService service = this.plugin.getBukkitResetServiceRepo().getService(resetId);
+
         if(service != null) {
             service.calculateNextExecution();
         }

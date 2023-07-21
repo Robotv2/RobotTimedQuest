@@ -25,12 +25,11 @@ public class QuestIncrementListener implements Listener {
         final ActiveQuest activeQuest = event.getActiveQuest();
         final Quest quest = event.getQuest();
 
-        if(quest == null
-                || !plugin.getConfig().getBoolean("cosmetics.actionbar.enabled")) {
+        if(!plugin.getConfig().getBoolean("cosmetics.actionbar.enabled")) {
             return;
         }
 
-        String progressMessage = this.plugin.getConfig().getString("cosmetics.actionbar.progression_message", "%quest_name% &8| %quest_progressbar% &8| &7%quest_progress% &8/ &7%quest_required%");
+        String progressMessage = this.plugin.getConfig().getString("cosmetics.actionbar.progression_message", "&8");
 
         progressMessage = PlaceholderUtil.QUEST_PLACEHOLDER.parse(quest, progressMessage);
         progressMessage = PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, progressMessage);
