@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.util;
+package fr.robotv2.bukkit.util.text;
 
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.common.data.impl.ActiveQuest;

@@ -26,6 +26,10 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
         this.plugin = plugin;
     }
 
+    public RTQBukkitPlugin getPlugin() {
+        return this.plugin;
+    }
+
     public GlitchChecker getGlitchChecker() {
         return this.plugin.getGlitchChecker();
     }
@@ -36,8 +40,16 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
                 .allMatch(condition -> condition.matchCondition(player, type, event));
     }
 
-    public void incrementProgression(@NotNull Player player, @NotNull QuestType type
-            , @Nullable T target, @Nullable Event event, int amount) {
+    public void incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target) {
+        this.incrementProgression(player, type, target, null, 1);
+    }
+
+    public void incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target, @Nullable Event event) {
+        this.incrementProgression(player, type, target, event, 1);
+    }
+
+    public void incrementProgression(@NotNull Player player, @NotNull QuestType type,
+                                     @Nullable T target, @Nullable Event event, int amount) {
 
         if(type != QuestType.LOCATION) {
             plugin.debug(type.name() + " has been triggered by " + player.getName() + ".");

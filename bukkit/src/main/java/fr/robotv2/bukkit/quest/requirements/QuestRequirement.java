@@ -36,7 +36,7 @@ public abstract class QuestRequirement<T> {
         }
 
         if(type == null) return false;
-        if(type.getQuestRequirementConstant() == null) return true;
+        if(type.getRequiredClass() == null) return true;
 
         return this.isTarget((T) object);
     }

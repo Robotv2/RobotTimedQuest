@@ -6,7 +6,7 @@ import fr.mrmicky.fastinv.InventoryScheme;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.QuestInventoryClickEvent;
 import fr.robotv2.bukkit.quest.Quest;
-import fr.robotv2.bukkit.util.ColorUtil;
+import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.ItemUtil;
 import fr.robotv2.bukkit.util.StringListProcessor;
 import fr.robotv2.common.data.impl.ActiveQuest;
@@ -124,7 +124,7 @@ public class GuiHandler {
 
                         fastInv.setItem(
                                 slot,
-                                quest.getGuiItem(activeQuest.getProgress()),
+                                quest.getGuiItem(activeQuest, player),
                                 inventoryClickEvent -> Bukkit.getPluginManager().callEvent(new QuestInventoryClickEvent(inventoryClickEvent, activeQuest))
                         );
 

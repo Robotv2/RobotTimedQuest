@@ -4,8 +4,12 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.requirements.QuestRequirement;
-import fr.robotv2.bukkit.util.ColorUtil;
+import fr.robotv2.bukkit.quest.requirements.QuestRequirements;
+import fr.robotv2.bukkit.util.text.ColorUtil;
+import fr.robotv2.bukkit.util.text.PlaceholderUtil;
+import fr.robotv2.common.data.impl.ActiveQuest;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -34,6 +38,7 @@ public class Quest {
 
     private final String resetId;
     private final QuestType type;
+    private final String customType;
 
     private final List<String> rewards;
 
@@ -52,11 +57,13 @@ public class Quest {
         this.customModelData = section.getInt("custom_model_data", Integer.MIN_VALUE);
 
         this.resetId = Objects.requireNonNull(section.getString("reset_id"), "missing reset server for quest: " + id);
-        this.type = Objects.requireNonNull(QuestType.getByName(section.getString("quest_type")), "missing type for quest: " + id);;
+        this.type = Objects.requireNonNull(QuestType.getByName(section.getString("quest_type")), "missing type for quest: " + id);
+        this.customType = section.getString("custom_type");
         this.rewards = section.getStringList("rewards");
 
-        this.questRequirement = type.getQuestRequirementConstant() == null
-                ? null : type.getQuestRequirementConstant().toInstance(this);
+        this.questRequirement = type.getRequiredClass() == null
+                ? null
+                : QuestRequirements.toQuestRequirement(type.getRequiredClass(), this);
 
         final ConfigurationSection conditionSection = section.getConfigurationSection("conditions");
         if(conditionSection != null) {
@@ -84,7 +91,7 @@ public class Quest {
         return this.material;
     }
 
-    public ItemStack getGuiItem(int progress) {
+    public ItemStack getGuiItem(ActiveQuest activeQuest, OfflinePlayer offlinePlayer) {
 
         final ItemStack itemStack = new ItemStack(this.getMaterial());
         final ItemMeta meta = Objects.requireNonNull(itemStack.getItemMeta());
@@ -103,17 +110,23 @@ public class Quest {
 
         description.add(" ");
 
-        if(progress >= getRequiredAmount()) {
+        if(activeQuest.getProgress() >= getRequiredAmount()) {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
             description.add("&aYou have successfully done this quest.");
         } else if(type.isNumerical()) {
-            description.add("&7Progress: &e" + progress + "&8/&e" + this.getRequiredAmount());
+            description.add("&7Progress: &e" + activeQuest.getProgress() + "&8/&e" + this.getRequiredAmount());
         } else {
             description.add("&cThis quest is not done yet.");
         }
 
-        meta.setLore(description.stream().map(line -> !line.isEmpty() ? ColorUtil.color(line) : line).collect(Collectors.toList()));
+        meta.setLore(description.stream()
+                .map(line -> !line.isEmpty() ? ColorUtil.color(line) : line)
+                .map(line -> PlaceholderUtil.parsePlaceholders(offlinePlayer, line))
+                .map(line -> PlaceholderUtil.QUEST_PLACEHOLDER.parse(this, line))
+                .map(line -> PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, line))
+                .map(line -> PlaceholderUtil.ACTIVE_QUEST_RELATIONAL_PLACEHOLDER.parse(this, activeQuest, line))
+                .collect(Collectors.toList()));
         itemStack.setItemMeta(meta);
 
         return itemStack;

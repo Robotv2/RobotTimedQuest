@@ -16,11 +16,6 @@ public class EntityShearListener extends QuestProgressionEnhancer<EntityType> {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onShear(PlayerShearEntityEvent event) {
-
-        if(this.getGlitchChecker().isMarked(event.getEntity())) {
-            return;
-        }
-
-        this.incrementProgression(event.getPlayer(), QuestType.SHEAR, event.getEntity().getType(), event, 1);
+        this.incrementProgression(event.getPlayer(), QuestType.SHEAR, event.getEntity().getType(), event);
     }
 }

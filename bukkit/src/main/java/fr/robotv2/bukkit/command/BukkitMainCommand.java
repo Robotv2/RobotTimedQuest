@@ -4,7 +4,12 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.common.reset.ResetService;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import revxrsal.commands.annotation.*;
+import revxrsal.commands.annotation.AutoComplete;
+import revxrsal.commands.annotation.Command;
+import revxrsal.commands.annotation.DefaultFor;
+import revxrsal.commands.annotation.Optional;
+import revxrsal.commands.annotation.Subcommand;
+import revxrsal.commands.annotation.Usage;
 import revxrsal.commands.bukkit.BukkitCommandActor;
 import revxrsal.commands.bukkit.annotation.CommandPermission;
 
@@ -17,6 +22,11 @@ public class BukkitMainCommand {
 
     public BukkitMainCommand(RTQBukkitPlugin plugin) {
         this.plugin = plugin;
+    }
+
+    @DefaultFor({"rtq", "robottimedquest"})
+    public void onDefault(BukkitCommandActor actor) {
+        actor.getSender().sendMessage(ChatColor.GREEN + "This server is using RobotTimedQuest with version " + plugin.getDescription().getVersion() + ".");
     }
 
     @Subcommand("reload")
@@ -45,7 +55,6 @@ public class BukkitMainCommand {
         actor.getSender().sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
     }
 
-    @DefaultFor({"rtq", "robottimedquest"})
     @Subcommand("quests")
     @Usage("quests")
     @CommandPermission("robottimedquest.command.quests")

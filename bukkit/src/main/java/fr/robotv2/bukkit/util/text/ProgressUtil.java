@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.util;
+package fr.robotv2.bukkit.util.text;
 
 import org.bukkit.ChatColor;
 

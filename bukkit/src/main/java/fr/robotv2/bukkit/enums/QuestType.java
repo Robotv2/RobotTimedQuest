@@ -1,5 +1,8 @@
 package fr.robotv2.bukkit.enums;
 
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -7,36 +10,37 @@ import java.util.Map;
 
 public enum QuestType {
 
-    BREAK(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    PLACE(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    FARMING(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
+    BREAK(true, Material.class),
+    PLACE(true, Material.class),
+    FARMING(true, Material.class),
 
-    FISH(true, QuestRequirementConstant.ENTITY_REQUIREMENT), // DONE
-    FISH_ITEM(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
+    FISH(true, EntityType.class),
+    FISH_ITEM(true, Material.class),
 
-    BREED(true, QuestRequirementConstant.ENTITY_REQUIREMENT), // DONE
-    KILL(true, QuestRequirementConstant.ENTITY_REQUIREMENT), // DONE
-    SHEAR(true, QuestRequirementConstant.ENTITY_REQUIREMENT), // DONE
-    TAME(true, QuestRequirementConstant.ENTITY_REQUIREMENT), // DONE
+    BREED(true, EntityType.class),
+    KILL(true, EntityType.class),
+    SHEAR(true, EntityType.class),
+    TAME(true, EntityType.class),
 
-    CONSUME(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    COOK(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    CRAFT(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    ENCHANT(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    PICKUP(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    BREW(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
+    CONSUME(true, Material.class),
+    COOK(true, Material.class),
+    CRAFT(true, Material.class),
+    ENCHANT(true, Material.class),
+    PICKUP(true, Material.class),
+    BREW(true, Material.class),
 
-    LAUNCH(true, QuestRequirementConstant.MATERIAL_REQUIREMENT), // DONE
-    EXP_POINTS(true, null), // NOT DONE
+    LAUNCH(true, Material.class),
+    LOCATION(false, Location.class),
+    VILLAGER_TRADE(true, Material.class),
 
-    LOCATION(false, QuestRequirementConstant.LOCATION_REQUIREMENT), // DONE
+    CUSTOM(false, null),
     ;
 
     public static final QuestType[] VALUES = QuestType.values();
     private static final Map<String, QuestType> BY_NAME = new HashMap<>();
 
     private final boolean isNumerical;
-    private final QuestRequirementConstant questRequirementConstant;
+    private final Class<?> requiredClazz;
 
     static {
         for(QuestType questType : VALUES) {
@@ -44,17 +48,18 @@ public enum QuestType {
         }
     }
 
-    QuestType(boolean isNumerical, QuestRequirementConstant constant) {
+    QuestType(boolean isNumerical, Class<?> requiredClazz) {
         this.isNumerical = isNumerical;
-        this.questRequirementConstant = constant;
+        this.requiredClazz = requiredClazz;
     }
 
     public boolean isNumerical() {
         return this.isNumerical;
     }
 
-    public QuestRequirementConstant getQuestRequirementConstant() {
-        return this.questRequirementConstant;
+    @Nullable
+    public Class<?> getRequiredClass() {
+        return this.requiredClazz;
     }
 
     @Nullable

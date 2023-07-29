@@ -2,17 +2,17 @@ package fr.robotv2.bukkit.quest.conditions.impl.itemstack;
 
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
+import fr.robotv2.bukkit.quest.conditions.Conditions;
+import org.apache.commons.lang.Validate;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.inventory.ItemStack;
 
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class EnchantCondition implements Condition {
 
@@ -24,29 +24,33 @@ public class EnchantCondition implements Condition {
         for(String enchantString : parent.getStringList(key + ".required_types")) {
             final NamespacedKey namespacedKey = NamespacedKey.minecraft(enchantString);
             final Enchantment enchantment = Enchantment.getByKey(namespacedKey);
-            if(enchantment == null) continue;
+            Validate.notNull(enchantment, enchantString + " is not a valid enchantment key.");
             enchants.add(enchantment);
         }
     }
 
     @Override
     public boolean matchCondition(Player player, QuestType type, Event event) {
-
-        if(type != QuestType.ENCHANT) {
-            return true;
-        }
-
-        final EnchantItemEvent enchantItemEvent = (EnchantItemEvent) event;
-        final Set<Map.Entry<Enchantment, Integer>> entries = enchantItemEvent.getEnchantsToAdd().entrySet();
-
-        for(Map.Entry<Enchantment, Integer> entry : entries) {
-
-            if(this.isEnchantPresent(entry.getKey())
-                    && this.isLevelSufficient(entry.getValue())) {
+        if (type == QuestType.ENCHANT && event instanceof EnchantItemEvent) {
+            final EnchantItemEvent enchantItemEvent = (EnchantItemEvent) event;
+            return checkEnchantment(enchantItemEvent.getEnchantsToAdd().entrySet());
+        } else {
+            Optional<ItemStack> optional = Conditions.getItemStackFor(type, event);
+            if (optional.isPresent()) {
+                ItemStack stack = optional.get();
+                return checkEnchantment(stack.getEnchantments().entrySet());
+            } else {
                 return true;
             }
         }
+    }
 
+    private boolean checkEnchantment(Set<Map.Entry<Enchantment, Integer>> entries) {
+        for (Map.Entry<Enchantment, Integer> entry : entries) {
+            if (isEnchantPresent(entry.getKey()) && isLevelSufficient(entry.getValue())) {
+                return true;
+            }
+        }
         return false;
     }
 

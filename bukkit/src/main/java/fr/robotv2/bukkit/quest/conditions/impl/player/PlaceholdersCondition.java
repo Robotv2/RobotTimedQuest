@@ -3,7 +3,7 @@ package fr.robotv2.bukkit.quest.conditions.impl.player;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.util.NumberUtil;
-import fr.robotv2.bukkit.util.PlaceholderUtil;
+import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -16,11 +16,8 @@ public class PlaceholdersCondition implements Condition {
     private final List<PlaceholderCondition> placeholderConditions = new ArrayList<>();
 
     public PlaceholdersCondition(ConfigurationSection parent, String key) {
-        final ConfigurationSection child = parent.getConfigurationSection(key);
 
-        if(child == null) {
-            return;
-        }
+        final ConfigurationSection child = Objects.requireNonNull(parent.getConfigurationSection(key));
 
         for(String placeholderKey : child.getKeys(false)) {
             final ConfigurationSection placeholderSection = child.getConfigurationSection(placeholderKey);

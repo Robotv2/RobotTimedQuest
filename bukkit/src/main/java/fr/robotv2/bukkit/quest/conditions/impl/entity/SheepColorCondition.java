@@ -3,43 +3,34 @@ package fr.robotv2.bukkit.quest.conditions.impl.entity;
 import com.google.common.base.Enums;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
+import fr.robotv2.bukkit.quest.conditions.Conditions;
 import org.bukkit.DyeColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityEvent;
-import org.bukkit.event.player.PlayerShearEntityEvent;
 
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Optional;
 
 public class SheepColorCondition implements Condition {
 
-    private DyeColor color;
+    private final DyeColor color;
 
     public SheepColorCondition(ConfigurationSection parent, String key) {
-        final String dyeColorString = parent.getString(key);
-        if(dyeColorString == null) return;
+        final String dyeColorString = Objects.requireNonNull(parent.getString(key));
         this.color = Enums.getIfPresent(DyeColor.class, dyeColorString).orNull();
     }
 
     @Override
     public boolean matchCondition(Player player, QuestType type, Event event) {
 
-        Entity entity = null;
+        final Optional<Entity> optional = Conditions.getEntityFor(type, event);
 
-        if(type == QuestType.SHEAR) {
-            final PlayerShearEntityEvent entityEvent = (PlayerShearEntityEvent) event;
-            entity = entityEvent.getEntity();
-        } else if (event instanceof EntityEvent) {
-            final EntityEvent entityEvent = (EntityEvent) event;
-            entity = entityEvent.getEntity();
-        }
-
-        if(this.isSheep(entity)) {
-            return this.hasColor((Sheep) entity);
+        if(optional.isPresent() && this.isSheep(optional.get())) {
+            return this.hasColor((Sheep) optional.get());
         }
 
         return true;
@@ -55,6 +46,6 @@ public class SheepColorCondition implements Condition {
 
     @Override
     public EnumSet<QuestType> referencedType() {
-        return EnumSet.of(QuestType.KILL, QuestType.SHEAR);
+        return Conditions.ENTITY_RELATED_TYPES;
     }
 }

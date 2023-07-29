@@ -42,7 +42,6 @@ import revxrsal.commands.bukkit.BukkitCommandHandler;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class RTQBukkitPlugin extends JavaPlugin {
 
@@ -128,7 +127,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        this.databaseManager.savePlayers(false);
+        this.databaseManager.savePlayers(false).join();
         this.databaseManager.closeConnection();
 
         if(this.redisConnector != null) {
@@ -334,14 +333,12 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.commandHandler = BukkitCommandHandler.create(this);
         this.commandHandler.registerContextResolver(ResetService.class, (context)
                 -> this.getBukkitResetServiceRepo().getService(context.input().get(0)));
-        this.registerPluginSuggestion();
-        this.commandHandler.register(new BukkitMainCommand(this));
-    }
 
-    private void registerPluginSuggestion() {
-        final SuggestionProvider provider = (args, sender, command) -> this.resetServiceRepo.getServices().stream().map(ResetService::getId).collect(Collectors.toList());
+        final SuggestionProvider provider = (args, sender, command) -> this.resetServiceRepo.getServicesNames();
         this.commandHandler.getAutoCompleter()
                 .registerSuggestion("services", provider);
+
+        this.commandHandler.register(new BukkitMainCommand(this));
     }
 
     private void printBeautifulMessage() {

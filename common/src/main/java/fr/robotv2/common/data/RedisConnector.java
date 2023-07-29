@@ -209,7 +209,6 @@ public class RedisConnector {
             }
 
             String channelName = new String(channel, StandardCharsets.UTF_8);
-            redisLogger.info("Message received on channel " + channelName);
 
             try {
                 RedisConnector.this.messenger.registerIncomingMessage(channelName, message);

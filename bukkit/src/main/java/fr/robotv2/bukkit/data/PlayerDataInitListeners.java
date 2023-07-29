@@ -15,8 +15,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PlayerDataInitListeners implements Listener {
@@ -115,30 +116,22 @@ public class PlayerDataInitListeners implements Listener {
             throw new NullPointerException("questPlayer");
         }
 
-        final OrmData<ActiveQuest, Integer> ormData = plugin.getDatabaseManager().getActiveQuestOrmData();
-        final List<CompletableFuture<Void>> completableFutures = new ArrayList<>();
+        this.plugin.getDatabaseManager()
+                        .savePlayer(questPlayer, true)
+                                .thenAccept(ignored -> {
+                                    QuestPlayer.unregisterQuestPlayer(questPlayer);
+                                    plugin.getLogger().info(String.format("The quest(s) of player %s has been successfully saved to the database.", player.getName()));
 
-        for(ActiveQuest activeQuest : questPlayer.getActiveQuests()) {
-            completableFutures.add(ormData.saveAsync(activeQuest));
-        }
-
-        CompletableFuture
-                .allOf(completableFutures.toArray(new CompletableFuture[0]))
-                .thenAccept(ignored -> {
-                    QuestPlayer.unregisterQuestPlayer(questPlayer);
-                    plugin.getLogger().info(String.format("The quest(s) of player %s has been successfully saved to the database.", player.getName()));
-
-                    if(this.plugin.isBungeecordMode()) {
-                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.IS_SAVED_CHANNEL, playerUUID.toString());
-                    }
-                })
-                .exceptionally(ex -> {
-                    ex.printStackTrace();
-                    if(this.plugin.isBungeecordMode()) {
-                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.IS_SAVED_CHANNEL, playerUUID.toString());
-                        // Mark the player as being saved or else he will get blocked while switching server
-                    }
-                    return null;
+                                    if(this.plugin.isBungeecordMode()) {
+                                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.IS_SAVED_CHANNEL, playerUUID.toString());
+                                    }
+                                }).exceptionally(exception -> {
+                                    exception.printStackTrace();
+                                    if(this.plugin.isBungeecordMode()) {
+                                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.IS_SAVED_CHANNEL, playerUUID.toString());
+                                        // Mark the player as being saved or else he will get blocked while switching server
+                                    }
+                                    return null;
                 });
     }
 

@@ -21,11 +21,15 @@ public class BlockPlaceListener extends QuestProgressionEnhancer<Material> {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
-        this.incrementProgression(event.getPlayer(), QuestType.PLACE, event.getBlock().getType(), event, 1);
+        this.incrementProgression(event.getPlayer(), QuestType.PLACE, event.getBlock().getType(), event);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
+
+        if(this.getPlugin().getConfig().getBoolean("options.anti-dupe.disable_block_break_decrease")) {
+            return;
+        }
 
         final Player player = event.getPlayer();
         final Block block = event.getBlock();

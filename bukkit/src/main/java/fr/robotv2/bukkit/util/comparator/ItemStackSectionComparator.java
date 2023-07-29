@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class ItemStackSectionComparator extends SectionComparator<ItemStack> {
 
     private final String itemAdder;
+
     private final String name;
     private final int customModelData;
     private final Set<Material> materials;

@@ -125,8 +125,6 @@ public class QuestManager {
 
         for(Quest quest : quests) {
             final ResetService service = this.plugin.getBukkitResetServiceRepo().getService(quest.getResetId());
-            Objects.requireNonNull(service); // can't be null cause is checked above.
-
             final ActiveQuest activeQuest = new ActiveQuest(questPlayer.getUniqueId(), quest.getId(), service);
             questPlayer.addActiveQuest(activeQuest);
         }
@@ -142,13 +140,7 @@ public class QuestManager {
             return;
         }
 
-        this.loadQuests(file);
-    }
-
-    public void loadQuests(@NotNull File file) {
-        this.loadQuests(
-                YamlConfiguration.loadConfiguration(file)
-        );
+        this.loadQuests(YamlConfiguration.loadConfiguration(file));
     }
 
     public void loadQuests(@NotNull FileConfiguration configuration) {
@@ -156,6 +148,7 @@ public class QuestManager {
         final ConfigurationSection section = configuration.getConfigurationSection("quests");
 
         if(section == null) {
+            this.plugin.getLogger().warning("the file " + configuration.getName() + " ");
             return;
         }
 
@@ -172,9 +165,13 @@ public class QuestManager {
                 this.cacheQuest(quest);
                 this.plugin.getLogger().info(key + " has been loaded successfully.");
             } catch (Exception exception) {
+                plugin.getLogger().warning(" ");
                 plugin.getLogger().warning(" WARNING - " + key);
                 plugin.getLogger().warning("An error occurred while loading quest '" + key);
                 plugin.getLogger().warning("Error's message: " + exception.getMessage());
+                plugin.getLogger().warning(" ");
+                plugin.getLogger().warning("This quest will not be loaded. Please fix it and then reload");
+                plugin.getLogger().warning("the plugin's configuration files.");
                 plugin.getLogger().warning(" ");
             }
         }

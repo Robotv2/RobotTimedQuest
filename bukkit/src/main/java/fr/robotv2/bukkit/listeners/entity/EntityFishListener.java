@@ -30,6 +30,6 @@ public class EntityFishListener extends QuestProgressionEnhancer<EntityType> {
             return;
         }
 
-        this.incrementProgression(player, QuestType.FISH, entity.getType(), event, 1);
+        this.incrementProgression(player, QuestType.FISH, entity.getType(), event);
     }
 }

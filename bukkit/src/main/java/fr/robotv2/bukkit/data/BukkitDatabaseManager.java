@@ -7,6 +7,9 @@ import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class BukkitDatabaseManager extends DatabaseManager {
 
@@ -19,21 +22,37 @@ public class BukkitDatabaseManager extends DatabaseManager {
         return super.getActiveQuestOrmData();
     }
 
-    public void savePlayer(QuestPlayer questPlayer, boolean async) {
+    public CompletableFuture<Void> savePlayer(QuestPlayer questPlayer, boolean async) {
+
+        final List<CompletableFuture<Void>> futures = new ArrayList<>();
+
         for(ActiveQuest activeQuest : questPlayer.getActiveQuests()) {
             if(activeQuest.isDirty()) {
                 if(async) {
-                    getActiveQuestOrmData().saveAsync(activeQuest)
-                            .thenAccept(ignored -> activeQuest.markDirty(false));
+                    futures.add(
+                            getActiveQuestOrmData()
+                            .saveAsync(activeQuest)
+                            .thenAccept(ignored -> activeQuest.markDirty(true))
+                    );
                 } else {
                     getActiveQuestOrmData().save(activeQuest);
-                    activeQuest.markDirty(false);
+                    activeQuest.markDirty(true);
+                    futures.add(CompletableFuture.completedFuture(null));
                 }
             }
         }
+
+        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
     }
 
-    public void savePlayers(boolean async) {
-        QuestPlayer.getRegistered().forEach(questPlayer -> savePlayer(questPlayer, async));
+    public CompletableFuture<Void> savePlayers(boolean async) {
+
+        final List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+        for(QuestPlayer questPlayer : QuestPlayer.getRegistered()) {
+            futures.add(this.savePlayer(questPlayer, async));
+        }
+
+        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
     }
 }

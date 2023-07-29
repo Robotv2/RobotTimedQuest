@@ -23,6 +23,6 @@ public class PlayerProjectileListener extends QuestProgressionEnhancer<EntityTyp
         }
 
         final Player player = (Player) event.getEntity().getShooter();
-        this.incrementProgression(player, QuestType.LAUNCH, event.getEntityType(), event,1);
+        this.incrementProgression(player, QuestType.LAUNCH, event.getEntityType(), event, 1);
     }
 }

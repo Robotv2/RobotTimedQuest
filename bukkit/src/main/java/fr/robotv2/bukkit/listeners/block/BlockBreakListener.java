@@ -26,6 +26,6 @@ public class BlockBreakListener extends QuestProgressionEnhancer<Material> {
             return;
         }
 
-        this.incrementProgression(player, QuestType.BREAK, block.getType(), event,1);
+        this.incrementProgression(player, QuestType.BREAK, block.getType(), event);
     }
 }

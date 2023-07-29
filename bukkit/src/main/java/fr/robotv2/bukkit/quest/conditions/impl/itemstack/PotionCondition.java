@@ -3,15 +3,12 @@ package fr.robotv2.bukkit.quest.conditions.impl.itemstack;
 import com.google.common.base.Enums;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
+import fr.robotv2.bukkit.quest.conditions.Conditions;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -19,6 +16,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Optional;
 
 public class PotionCondition implements Condition {
 
@@ -33,9 +31,7 @@ public class PotionCondition implements Condition {
 
         for(String typeString : parent.getStringList(key + ".required_types")) {
             final PotionType type = Enums.getIfPresent(PotionType.class, typeString).orNull();
-            if(type == null) {
-                throw new IllegalArgumentException(typeString + " is not valid potion effect.");
-            }
+            Validate.notNull(type, typeString + " is not valid potion effect.");
             types.add(type);
         }
     }
@@ -43,43 +39,15 @@ public class PotionCondition implements Condition {
     @Override
     public boolean matchCondition(Player player, QuestType type, Event event) {
 
-        ItemStack stack = null;
+        final Optional<ItemStack> optional = Conditions.getItemStackFor(type, event);
 
-        switch (type) {
-
-            case FISH_ITEM: {
-                final PlayerFishEvent playerFishEvent = (PlayerFishEvent) event;
-                final Item item = (Item) playerFishEvent.getCaught();
-                if(item != null) {
-                    stack = item.getItemStack();
-                }
-                break;
-            }
-
-            case CONSUME: {
-                final PlayerItemConsumeEvent playerItemConsumeEvent = (PlayerItemConsumeEvent) event;
-                stack = playerItemConsumeEvent.getItem();
-                break;
-            }
-
-            case PICKUP: {
-                final EntityPickupItemEvent entityPickupItemEvent = (EntityPickupItemEvent) event;
-                stack = entityPickupItemEvent.getItem().getItemStack();
-                break;
-            }
-
-            case BREW: {
-                final InventoryClickEvent inventoryClickEvent = (InventoryClickEvent) event;
-                stack = inventoryClickEvent.getCurrentItem();
-                break;
-            }
-
-            default: {
-                throw new IllegalArgumentException(type.name() + " is not a valid type for this condition. Please contact the developer.");
-            }
+        if(!optional.isPresent()) {
+            return false;
         }
 
-        if(stack == null || stack.getType() == Material.AIR) {
+        final ItemStack stack = optional.get();
+
+        if(stack.getType() == Material.AIR) {
             return false;
         }
 
@@ -107,11 +75,6 @@ public class PotionCondition implements Condition {
 
     @Override
     public EnumSet<QuestType> referencedType() {
-        return EnumSet.of(
-                QuestType.FISH_ITEM,
-                QuestType.CONSUME,
-                QuestType.PICKUP,
-                QuestType.BREW
-        );
+        return Conditions.ITEMSTACK_RELATED_TYPES;
     }
 }

@@ -2,8 +2,9 @@ options:
   debug: false
   anti-dupe:
     disable_spawners_progression: false
-    disable_marking_creative_progression: false
+    disable_block_marking_from_creative: false
     disable_items_from_placed_block: false
+    disable_block_break_decrease: false
   bungeecord:
     enabled: false
     redis_address: 127.0.0.1
@@ -22,7 +23,7 @@ storage:
     password: your-password
     useSSL: false
 
-quest-files:
+quest-files: # paths to quest files
   - "Qdaily.yml"
   - "Qweekly.yml"
   - "Qmonthly.yml"

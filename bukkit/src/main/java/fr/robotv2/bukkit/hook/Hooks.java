@@ -19,11 +19,10 @@ public class Hooks {
     }
 
     public static boolean isVaultEnabled() {
-        return Bukkit.getPluginManager().isPluginEnabled("Vault");
+        return Bukkit.getPluginManager().isPluginEnabled("Vault") && VaultHook.isInitialized();
     }
 
     public static boolean isItemAdderEnabled() {
         return Bukkit.getPluginManager().isPluginEnabled("ItemAdder");
     }
-
 }

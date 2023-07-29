@@ -3,48 +3,95 @@ package fr.robotv2.bukkit.listeners.item;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
+import fr.robotv2.bukkit.util.BrewUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.BrewingStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.BrewerInventory;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.EnumSet;
+import java.util.UUID;
 
 public class PlayerBrewListener extends QuestProgressionEnhancer<Material> {
 
-    private final EnumSet<InventoryAction> actions = EnumSet.of(
-            InventoryAction.PICKUP_SOME,
-            InventoryAction.PICKUP_HALF,
-            InventoryAction.PICKUP_ONE,
-            InventoryAction.PICKUP_ALL
-    );
 
     public PlayerBrewListener(RTQBukkitPlugin plugin) {
         super(plugin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryClick(InventoryClickEvent event) {
 
-        if(!(event.getInventory() instanceof BrewerInventory)) {
+        if(!(event.getClickedInventory() instanceof BrewerInventory)) {
             return;
         }
 
-        if(!this.actions.contains(event.getAction())) {
+        final BrewerInventory brewerInventory = (BrewerInventory) event.getClickedInventory();
+        final Player player = (Player) event.getWhoClicked();
+
+        final BrewingStand stand = brewerInventory.getHolder();
+
+        if(stand == null || event.getSlot() != 3) {
             return;
         }
 
-        final ItemStack stack = event.getCurrentItem();
+        switch (event.getAction()) {
+            case PICKUP_ALL:
+            case PICKUP_HALF:
+            case PICKUP_ONE:
+            case PICKUP_SOME:
+            case DROP_ALL_SLOT:
+            case DROP_ONE_SLOT:
+            case HOTBAR_SWAP:
+            case COLLECT_TO_CURSOR:
+                this.getGlitchChecker().unMark(stand);
+                break;
+            case PLACE_ALL:
+            case PLACE_SOME:
+            case PLACE_ONE:
+            case SWAP_WITH_CURSOR:
+                this.getGlitchChecker().unMark(stand);
+                this.getGlitchChecker().mark(stand, player);
+                break;
+        }
+    }
 
-        if(stack == null || !stack.getType().name().contains("POTION")) {
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onBrew(BrewEvent event) {
+
+        final BrewerInventory brewerInventory = event.getContents();
+        final BrewingStand stand = brewerInventory.getHolder();
+
+        Player player = null;
+
+        if(stand == null && !brewerInventory.getViewers().isEmpty()) {
+            player = (Player) brewerInventory.getViewers().get(0);
+        }
+
+        if(player == null && stand != null) {
+            final UUID uuid = getGlitchChecker().getActivator(stand);
+            if(uuid != null) {
+                player = Bukkit.getPlayer(uuid);
+            }
+        }
+
+        if(player == null || !player.isOnline()) {
+            return;
+        }
+
+        final ItemStack stack = BrewUtil.getFirstNonNull(event.getContents());
+
+        if(stack == null) {
             return;
         }
 
         this.incrementProgression(
-                (Player) event.getWhoClicked(),
+                player,
                 QuestType.BREW,
                 stack.getType(),
                 event,

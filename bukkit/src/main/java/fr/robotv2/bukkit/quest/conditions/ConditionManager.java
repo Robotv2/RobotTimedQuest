@@ -2,7 +2,10 @@ package fr.robotv2.bukkit.quest.conditions;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.SheepColorCondition;
+import fr.robotv2.bukkit.quest.conditions.impl.entity.VillagerCondition;
+import fr.robotv2.bukkit.quest.conditions.impl.external.IsFromItemAdder;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.EnchantCondition;
+import fr.robotv2.bukkit.quest.conditions.impl.itemstack.IsCustomItem;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.PotionCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.player.HasInHandCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.player.IsInWorldCondition;
@@ -51,8 +54,13 @@ public class ConditionManager {
         registerCondition("is_in_world", IsInWorldCondition.class);
         registerCondition("is_holding", HasInHandCondition.class);
 
+        registerCondition("required_villager", VillagerCondition.class);
         registerCondition("required_enchants", EnchantCondition.class);
         registerCondition("required_potions", PotionCondition.class);
+
+        //ITEM
+        registerCondition("is_custom_item", IsCustomItem.class);
+        registerCondition("is_from_itemadder", IsFromItemAdder.class);
 
         //ENTITY
         registerCondition("sheep-color", SheepColorCondition.class);

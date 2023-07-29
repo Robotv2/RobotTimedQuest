@@ -3,6 +3,8 @@ package fr.robotv2.bukkit.util;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
+import fr.robotv2.bukkit.util.text.ColorUtil;
+import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;

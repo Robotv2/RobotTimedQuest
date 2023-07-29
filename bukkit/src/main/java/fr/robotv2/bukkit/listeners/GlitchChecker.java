@@ -70,7 +70,7 @@ public class GlitchChecker implements Listener {
     public void onPlace(BlockPlaceEvent event) {
 
         if(event.getPlayer().getGameMode() == GameMode.CREATIVE
-                && this.plugin.getConfig().getBoolean("options.anti-dupe.disable_marking_creative_progression")) {
+                && this.plugin.getConfig().getBoolean("options.anti-dupe.disable_block_marking_from_creative")) {
             return; // Do not mark if the player is in creative.
         }
 

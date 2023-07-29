@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class VaultHook {
 
-    private static Economy eco;
+    private static Economy eco = null;
 
     private VaultHook() { }
 
@@ -28,7 +28,11 @@ public class VaultHook {
         return true;
     }
 
-    public static boolean hasEnough(OfflinePlayer offlinePlayer, Double value) {
+    public static boolean isInitialized() {
+        return eco != null;
+    }
+
+    public static boolean has(OfflinePlayer offlinePlayer, Double value) {
         Validate.notNull(eco, "economy is null. Is Vault installed ?");
         return eco.has(offlinePlayer, value);
     }
