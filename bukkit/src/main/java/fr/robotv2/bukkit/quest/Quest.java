@@ -102,7 +102,8 @@ public class Quest {
                         ? ColorUtil.color(this.name)
                         : this.name
         );
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
 
         if(hasCustomModelData()) {
             meta.setCustomModelData(this.getCustomModelData());
@@ -110,7 +111,7 @@ public class Quest {
 
         description.add(" ");
 
-        if(activeQuest.getProgress() >= getRequiredAmount()) {
+        if(activeQuest.isDone()) {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
             description.add("&aYou have successfully done this quest.");
@@ -126,7 +127,8 @@ public class Quest {
                 .map(line -> PlaceholderUtil.QUEST_PLACEHOLDER.parse(this, line))
                 .map(line -> PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, line))
                 .map(line -> PlaceholderUtil.ACTIVE_QUEST_RELATIONAL_PLACEHOLDER.parse(this, activeQuest, line))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList())
+        );
         itemStack.setItemMeta(meta);
 
         return itemStack;

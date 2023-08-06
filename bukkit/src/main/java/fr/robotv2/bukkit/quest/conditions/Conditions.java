@@ -138,8 +138,8 @@ public class Conditions {
                 break;
             case FARMING: {
                 if(event instanceof BlockEvent) break;
-                else if(event instanceof PlayerHarvestBlockEvent) Conditions.processEventFunction(PlayerHarvestBlockEvent.class, event, PlayerHarvestBlockEvent::getHarvestedBlock);
-                else if(event instanceof MultipleCropsBreakEvent) Conditions.processEventFunction(MultipleCropsBreakEvent.class, event, multipleCropsBreakEvent -> multipleCropsBreakEvent.getBlocks().get(0));
+                else if(event instanceof PlayerHarvestBlockEvent) block = Conditions.processEventFunction(PlayerHarvestBlockEvent.class, event, PlayerHarvestBlockEvent::getHarvestedBlock);
+                else if(event instanceof MultipleCropsBreakEvent) block = Conditions.processEventFunction(MultipleCropsBreakEvent.class, event, multipleCropsBreakEvent -> multipleCropsBreakEvent.getBlocks().get(0));
                 break;
             }
             case ENCHANT:

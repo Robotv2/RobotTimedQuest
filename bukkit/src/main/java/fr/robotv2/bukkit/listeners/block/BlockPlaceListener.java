@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.listeners.block;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
+import fr.robotv2.bukkit.util.Options;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -21,13 +22,16 @@ public class BlockPlaceListener extends QuestProgressionEnhancer<Material> {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
-        this.incrementProgression(event.getPlayer(), QuestType.PLACE, event.getBlock().getType(), event);
+        final boolean result = this.incrementProgression(event.getPlayer(), QuestType.PLACE, event.getBlockPlaced().getType(), event);
+        if(result) {
+            this.getGlitchChecker().mark(event.getBlockPlaced(), event.getPlayer());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
 
-        if(this.getPlugin().getConfig().getBoolean("options.anti-dupe.disable_block_break_decrease")) {
+        if(Options.DISABLE_BLOCK_BREAK_DECREASE) {
             return;
         }
 
@@ -38,6 +42,7 @@ public class BlockPlaceListener extends QuestProgressionEnhancer<Material> {
             final UUID uuid = getGlitchChecker().getActivator(block);
             if(uuid != null && uuid.equals(player.getUniqueId())) {
                 this.incrementProgression(player, QuestType.PLACE, block.getType(), event, -1);
+                this.getPlugin().debug("PLACE -> REMOVAL");
             }
         }
     }

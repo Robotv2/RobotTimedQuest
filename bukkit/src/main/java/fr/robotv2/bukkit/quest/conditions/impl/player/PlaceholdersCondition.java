@@ -8,6 +8,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
+import java.math.BigInteger;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -36,7 +37,7 @@ public class PlaceholdersCondition implements Condition {
 
             if(condition.type == PlaceholderValueType.NUMERICAL && NumberUtil.isNumber(placeholder)) {
                 final PlaceholderValueComparator comparator = condition.comparator == null ? PlaceholderValueComparator.EQUAL : condition.comparator;
-                final double playerValue = Double.parseDouble(placeholder);
+                final double playerValue = NumberUtil.toNumber(placeholder).doubleValue();
                 if(!comparator.function.apply(playerValue, condition.matchValue)) {
                     return false;
                 }
@@ -109,7 +110,7 @@ public class PlaceholdersCondition implements Condition {
             this.match = match;
 
             this.type = NumberUtil.isNumber(match) ? PlaceholderValueType.NUMERICAL : PlaceholderValueType.STRING;
-            this.matchValue = type == PlaceholderValueType.NUMERICAL ? Double.parseDouble(match) : 0;
+            this.matchValue = type == PlaceholderValueType.NUMERICAL ? NumberUtil.toNumber(match).doubleValue() : 0;
         }
     }
 }

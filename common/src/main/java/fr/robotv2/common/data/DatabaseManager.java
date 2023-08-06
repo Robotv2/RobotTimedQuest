@@ -9,8 +9,8 @@ public class DatabaseManager {
 
     private final DatabaseCredentials databaseCredentials;
 
-    private final ConnectionSource source;
-    private final OrmData<ActiveQuest, Integer> activeQuestOrmData = new OrmData<>();
+    private ConnectionSource source;
+    private OrmData<ActiveQuest, Integer> activeQuestOrmData = new OrmData<>();
 
     public enum DatabaseType {
         MYSQL,
@@ -27,6 +27,9 @@ public class DatabaseManager {
     public void closeConnection() {
         this.databaseCredentials.close();
         this.source.closeQuietly();
+
+        this.source = null;
+        this.activeQuestOrmData = null;
     }
 
     public boolean isConnected() {

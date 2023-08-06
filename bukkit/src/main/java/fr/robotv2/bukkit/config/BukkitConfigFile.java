@@ -1,6 +1,7 @@
 package fr.robotv2.bukkit.config;
 
 import fr.robotv2.common.config.ConfigFile;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
@@ -71,5 +72,46 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
             YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultStream));
             this.configuration.setDefaults(defaultConfig);
         }
+    }
+
+    public void updateConfig() {
+
+        if(!this.file.exists()) {
+            setup();
+            return;
+        }
+
+        final YamlConfiguration configuration = this.getConfiguration();
+        InputStream defaultFileStream = plugin.getResource("config.yml");
+
+        if(defaultFileStream == null) {
+            return;
+        }
+
+        final YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultFileStream));
+        final boolean modified = this.mergeConfigs(defaultConfig, configuration);
+
+        if (modified) {
+            try {
+                save();
+                plugin.getLogger().info("File " + fileName + " has been updated to newest version.");
+            } catch (IOException e) {
+                plugin.getLogger().severe("Could not save updated configuration!");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private boolean mergeConfigs(FileConfiguration source, FileConfiguration target) {
+        boolean modified = false;
+
+        for (String key : source.getKeys(true)) {
+            if (!target.isSet(key)) {
+                target.set(key, source.get(key));
+                modified = true;
+            }
+        }
+
+        return modified;
     }
 }

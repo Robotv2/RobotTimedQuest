@@ -6,7 +6,7 @@
 
     <groupId>fr.robotv2</groupId>
     <artifactId>RobotTimedQuest</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
 
     <name>RobotTimedQuest</name>
     <packaging>pom</packaging>
@@ -32,17 +32,6 @@
         <module>common</module>
         <module>dist</module>
     </modules>
-
-    <repositories>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 
     <dependencies>
 
@@ -73,16 +62,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.Revxrsal.Lamp</groupId>
-            <artifactId>common</artifactId>
-            <version>3.1.5</version>
-        </dependency>
-
-        <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
             <version>4.4.3</version>
         </dependency>
-
     </dependencies>
 </project>

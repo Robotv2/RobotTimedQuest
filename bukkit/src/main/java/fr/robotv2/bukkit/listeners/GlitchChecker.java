@@ -1,6 +1,7 @@
 package fr.robotv2.bukkit.listeners;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.util.Options;
 import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -70,7 +71,7 @@ public class GlitchChecker implements Listener {
     public void onPlace(BlockPlaceEvent event) {
 
         if(event.getPlayer().getGameMode() == GameMode.CREATIVE
-                && this.plugin.getConfig().getBoolean("options.anti-dupe.disable_block_marking_from_creative")) {
+                && Options.DISABLE_BLOCK_MARKING_FROM_CREATIVE) {
             return; // Do not mark if the player is in creative.
         }
 
@@ -95,7 +96,7 @@ public class GlitchChecker implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBreak(BlockDropItemEvent event) {
         if(this.isMarked(event.getBlockState())) { // block is placed by a player
-            if(this.plugin.getConfig().getBoolean("options.anti-dupe.disable_items_from_placed_block")) {
+            if(Options.DISABLE_ITEMS_FROM_PLACED_BLOCK) {
                 event.getItems().forEach(item -> this.mark(item, event.getPlayer())); // not consider
             }
         }
@@ -103,7 +104,7 @@ public class GlitchChecker implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onEntitySpawn(SpawnerSpawnEvent event) {
-        if(this.plugin.getConfig().getBoolean("options.anti-dupe.disable_spawners_progression")) {
+        if(Options.DISABLE_SPAWNERS_PROGRESSION) {
             this.mark(event.getEntity());
         }
     }

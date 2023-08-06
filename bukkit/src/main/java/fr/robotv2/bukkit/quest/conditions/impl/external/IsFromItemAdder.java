@@ -24,6 +24,11 @@ public class IsFromItemAdder implements Condition {
     @Override
     public boolean matchCondition(Player player, QuestType type, Event event) {
         final Optional<ItemStack> optional = Conditions.getItemStackFor(type, event);
+
+        if(!optional.isPresent()) {
+            return true;
+        }
+
         return optional.
                 filter(itemStack -> Hooks.isItemAdderEnabled() && ItemAdderHook.isCustomItem(itemStack))
                 .isPresent() == fromItemAdder;

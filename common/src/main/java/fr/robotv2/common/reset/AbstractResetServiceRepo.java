@@ -3,10 +3,7 @@ package fr.robotv2.common.reset;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class AbstractResetServiceRepo {
@@ -46,6 +43,7 @@ public abstract class AbstractResetServiceRepo {
     public Collection<String> getServicesNames() {
         return getServices().stream()
                 .map(ResetService::getId)
+                .map(id -> id.toLowerCase(Locale.ROOT))
                 .collect(Collectors.toList());
     }
 

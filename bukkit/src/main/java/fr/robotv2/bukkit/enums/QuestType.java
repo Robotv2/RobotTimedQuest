@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public enum QuestType {
@@ -65,6 +66,6 @@ public enum QuestType {
     @Nullable
     public static QuestType getByName(@Nullable String questType) {
         if(questType == null) return null;
-        return BY_NAME.get(questType.toUpperCase());
+        return BY_NAME.get(questType.toUpperCase(Locale.ROOT));
     }
 }

@@ -1,5 +1,7 @@
 package fr.robotv2.bukkit;
 
+import co.aikar.commands.BukkitCommandIssuer;
+import co.aikar.commands.PaperCommandManager;
 import fr.robotv2.bukkit.bungee.BukkitMessageListener;
 import fr.robotv2.bukkit.bungee.BukkitRedisMessenger;
 import fr.robotv2.bukkit.command.BukkitMainCommand;
@@ -21,37 +23,41 @@ import fr.robotv2.bukkit.quest.conditions.ConditionManager;
 import fr.robotv2.bukkit.reset.BukkitResetPublisher;
 import fr.robotv2.bukkit.reset.BukkitResetServiceRepo;
 import fr.robotv2.bukkit.ui.GuiHandler;
+import fr.robotv2.bukkit.util.Options;
 import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
 import fr.robotv2.common.data.RedisConnector;
+import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.MySqlCredentials;
+import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.data.impl.SqlLiteCredentials;
 import fr.robotv2.common.reset.ResetService;
+import fr.robotv2.placeholderannotation.PAPUtil;
+import fr.robotv2.placeholderannotation.PlaceholderAnnotationProcessor;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import revxrsal.commands.autocomplete.SuggestionProvider;
-import revxrsal.commands.bukkit.BukkitCommandHandler;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class RTQBukkitPlugin extends JavaPlugin {
-
-    private boolean bungeecordMode;
 
     private QuestManager questManager;
     private ConditionManager conditionManager;
 
     private GuiHandler guiHandler;
-    private BukkitCommandHandler commandHandler;
 
     private GlitchChecker glitchChecker;
 
@@ -94,7 +100,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.setupFiles();
         this.setupListeners();
 
-        this.bungeecordMode = getConfig().getBoolean("options.bungeecord.enabled", false);
+        Options.load(getConfig());
 
         if(this.isBungeecordMode()) {
             this.setupBungeeMode();
@@ -111,6 +117,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.setupCommandHandlers();
 
         Hooks.loadHooks(this);
+        this.setupPAP();
 
         Bukkit.getScheduler().runTaskTimer(this,
                 () -> this.databaseManager.savePlayers(true),
@@ -141,6 +148,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         getResetServiceFile().reload();
         getGuiFile().reload();
 
+        Options.load(getConfig());
         this.setupQuests();
 
         this.getBukkitResetServiceRepo().registerServices();
@@ -155,7 +163,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
     // BUNGEE
 
     public boolean isBungeecordMode() {
-        return this.bungeecordMode;
+        return Options.BUNGEECORD_MODE;
     }
 
     private void setupBungeeMode() {
@@ -233,6 +241,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.configurationFile = new BukkitConfigFile(this, "bukkit-config.yml", true);
         this.resetServiceFile = new BukkitConfigFile(this, "reset-service.yml", true);
         this.guiFile = new BukkitConfigFile(this, "gui.yml", true);
+
+        this.configurationFile.updateConfig();
     }
 
     private void setupDefaultFilesQuest() {
@@ -330,15 +340,49 @@ public class RTQBukkitPlugin extends JavaPlugin {
     }
 
     private void setupCommandHandlers() {
-        this.commandHandler = BukkitCommandHandler.create(this);
-        this.commandHandler.registerContextResolver(ResetService.class, (context)
-                -> this.getBukkitResetServiceRepo().getService(context.input().get(0)));
+        PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.getCommandCompletions().registerCompletion("services", context -> getBukkitResetServiceRepo().getServicesNames());
+        commandManager.getCommandCompletions().registerCompletion("player_quests", context -> {
+            final Player player = ((BukkitCommandIssuer) context.getIssuer()).getPlayer();
+            if(player != null) {
+                final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(player.getUniqueId());
+                if(questPlayer != null) {
+                    return questPlayer.getActiveQuests()
+                            .stream()
+                            .map(ActiveQuest::getQuestId)
+                            .collect(Collectors.toList());
+                }
+            }
+            return Collections.emptyList();
+        });
+        commandManager.getCommandCompletions().registerCompletion("target_quests", context -> {
+           final OfflinePlayer offlinePlayer = context.getContextValue(OfflinePlayer.class);
+           final Player player = offlinePlayer.getPlayer();
+           if(player != null && player.isOnline()) {
+               final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(player.getUniqueId());
+               if(questPlayer != null) {
+                   return questPlayer.getActiveQuests()
+                           .stream()
+                           .map(ActiveQuest::getQuestId)
+                           .collect(Collectors.toList());
+               }
+           }
 
-        final SuggestionProvider provider = (args, sender, command) -> this.resetServiceRepo.getServicesNames();
-        this.commandHandler.getAutoCompleter()
-                .registerSuggestion("services", provider);
+            return Collections.emptyList();
+        });
 
-        this.commandHandler.register(new BukkitMainCommand(this));
+        commandManager.getCommandContexts().registerContext(ResetService.class, context -> getBukkitResetServiceRepo().getService(context.popFirstArg()));
+        commandManager.registerCommand(new BukkitMainCommand(this));
+    }
+
+    private void setupPAP() {
+        PAPUtil.debug(true);
+
+        final PlaceholderAnnotationProcessor processor = PlaceholderAnnotationProcessor.create();
+        final ClipPlaceholder clipPlaceholder = new ClipPlaceholder(this, processor);
+
+        processor.register(clipPlaceholder);
+        clipPlaceholder.register();
     }
 
     private void printBeautifulMessage() {
@@ -350,9 +394,6 @@ public class RTQBukkitPlugin extends JavaPlugin {
         logger.info("");
         logger.info("Author(s): " + String.join(", ", description.getAuthors()));
         logger.info("Version: " + description.getVersion());
-        logger.info("");
-        logger.info("Database Type: " + type.name());
-        logger.info("Bungeecord: " + isBungeecordMode());
         logger.info("");
         logger.info("Thanks you for using RTQ !");
     }

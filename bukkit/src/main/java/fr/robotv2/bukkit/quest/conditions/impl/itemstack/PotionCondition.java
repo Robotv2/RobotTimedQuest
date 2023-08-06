@@ -42,7 +42,7 @@ public class PotionCondition implements Condition {
         final Optional<ItemStack> optional = Conditions.getItemStackFor(type, event);
 
         if(!optional.isPresent()) {
-            return false;
+            return true;
         }
 
         final ItemStack stack = optional.get();

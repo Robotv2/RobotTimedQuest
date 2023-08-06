@@ -46,7 +46,7 @@ public class VillagerCondition implements Condition {
         final Optional<Entity> optional = Conditions.getEntityFor(type, event);
 
         if(!optional.isPresent()) {
-            return false;
+            return true;
         }
 
         final Entity entity = optional.get();

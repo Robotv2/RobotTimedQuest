@@ -1,18 +1,15 @@
 package fr.robotv2.bungeecord.command;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.*;
 import fr.robotv2.bungeecord.RTQBungeePlugin;
 import fr.robotv2.bungeecord.util.UUIDFetcher;
 import fr.robotv2.common.reset.ResetService;
 import net.md_5.bungee.api.ChatColor;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Subcommand;
-import revxrsal.commands.annotation.Usage;
-import revxrsal.commands.bungee.BungeeCommandActor;
-import revxrsal.commands.bungee.annotation.CommandPermission;
+import net.md_5.bungee.api.CommandSender;
 
-@Command({"rtq-bungee", "robottimedquest-bungee"})
-public class BungeeMainCommand {
+@CommandAlias("rtq-bunge|robottimedquest-bungee")
+public class BungeeMainCommand extends BaseCommand {
 
     private final RTQBungeePlugin plugin;
 
@@ -21,26 +18,25 @@ public class BungeeMainCommand {
     }
 
     @Subcommand("reload")
-    @Usage("reload")
     @CommandPermission("robottimedquest.command.reload")
-    public void onReload(BungeeCommandActor actor) {
+    public void onReload(CommandSender sender) {
         plugin.onReload();
-        actor.reply(ChatColor.GREEN + "The plugin has been reloaded successfully.");
+        sender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded successfully.");
     }
 
     @Subcommand("reset")
-    @Usage("reset <player> [<reset_id>]")
     @CommandPermission("robottimedquest.command.reset")
-    public void onReset(BungeeCommandActor actor, String playerName, @Optional ResetService service) {
+    @CommandCompletion("@players @services")
+    public void onReset(CommandSender sender, String playerName, @Optional ResetService service) {
         UUIDFetcher.getUUID(playerName, !plugin.isOnlineMode()).thenAccept(uuid -> {
 
             if(uuid == null) {
-                actor.getSender().sendMessage(ChatColor.RED + "This player does not exist.");
+                sender.sendMessage(ChatColor.RED + "This player does not exist.");
                 return;
             }
 
             plugin.getBungeeResetPublisher().reset(uuid, service != null ? service.getId() : null);
-            actor.getSender().sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
+            sender.sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
         });
     }
 }

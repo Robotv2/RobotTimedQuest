@@ -13,12 +13,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.BrewerInventory;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.UUID;
 
 public class PlayerBrewListener extends QuestProgressionEnhancer<Material> {
-
 
     public PlayerBrewListener(RTQBukkitPlugin plugin) {
         super(plugin);
@@ -41,15 +42,13 @@ public class PlayerBrewListener extends QuestProgressionEnhancer<Material> {
         }
 
         switch (event.getAction()) {
+            case MOVE_TO_OTHER_INVENTORY:
             case PICKUP_ALL:
-            case PICKUP_HALF:
-            case PICKUP_ONE:
-            case PICKUP_SOME:
             case DROP_ALL_SLOT:
-            case DROP_ONE_SLOT:
             case HOTBAR_SWAP:
             case COLLECT_TO_CURSOR:
                 this.getGlitchChecker().unMark(stand);
+                this.getPlugin().debug("BREW - UNMARK BREWER");
                 break;
             case PLACE_ALL:
             case PLACE_SOME:
@@ -57,45 +56,75 @@ public class PlayerBrewListener extends QuestProgressionEnhancer<Material> {
             case SWAP_WITH_CURSOR:
                 this.getGlitchChecker().unMark(stand);
                 this.getGlitchChecker().mark(stand, player);
+                this.getPlugin().debug("BREW - UNMARK & MARK BREWER");
                 break;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onInventoryClick1(InventoryClickEvent event) {
+
+        if(!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
+
+        final Player player = (Player) event.getWhoClicked();
+        final Inventory topInventory = player.getOpenInventory().getTopInventory();
+
+        if(topInventory instanceof BrewerInventory
+                && event.getClickedInventory() instanceof PlayerInventory) {
+
+            final ItemStack current = event.getCurrentItem();
+            final ItemStack currentIngredient = topInventory.getItem(3);
+
+            final BrewingStand stand = ((BrewerInventory) topInventory).getHolder();
+
+            if(current == null || stand == null) {
+                return;
+            }
+
+            if(event.isShiftClick() && BrewUtil.isPossibleIngredient(current.getType())) {
+                if(currentIngredient == null || currentIngredient.getType() == Material.AIR) {
+                    this.getGlitchChecker().mark(stand, player);
+                    this.getPlugin().debug("BREW - MARK BREWER");
+                }
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBrew(BrewEvent event) {
 
-        final BrewerInventory brewerInventory = event.getContents();
-        final BrewingStand stand = brewerInventory.getHolder();
+        final BrewingStand stand = event.getContents().getHolder();
 
-        Player player = null;
+        Bukkit.getScheduler().runTaskLater(getPlugin(), () -> {
 
-        if(stand == null && !brewerInventory.getViewers().isEmpty()) {
-            player = (Player) brewerInventory.getViewers().get(0);
-        }
+            Player player = null;
 
-        if(player == null && stand != null) {
-            final UUID uuid = getGlitchChecker().getActivator(stand);
-            if(uuid != null) {
-                player = Bukkit.getPlayer(uuid);
+            if(stand != null) {
+                final UUID uuid = getGlitchChecker().getActivator(stand);
+                if(uuid != null) {
+                    player = Bukkit.getPlayer(uuid);
+                }
             }
-        }
 
-        if(player == null || !player.isOnline()) {
-            return;
-        }
+            if(player == null || !player.isOnline()) {
+                return;
+            }
 
-        final ItemStack stack = BrewUtil.getFirstNonNull(event.getContents());
+            final ItemStack stack = BrewUtil.getFirstNonNull(stand.getInventory());
 
-        if(stack == null) {
-            return;
-        }
+            if(stack == null) {
+                return;
+            }
 
-        this.incrementProgression(
-                player,
-                QuestType.BREW,
-                stack.getType(),
-                event,
-                stack.getAmount()
-        );
+            this.incrementProgression(
+                    player,
+                    QuestType.BREW,
+                    stack.getType(),
+                    event,
+                    BrewUtil.numberOfNonNullSlot(stand.getInventory())
+            );
+        }, 2L);
     }
 }

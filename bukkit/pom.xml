@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
-        <version>0.6-SNAPSHOT</version>
+        <version>0.7-SNAPSHOT</version>
     </parent>
 
     <!-- Artifact Information -->
@@ -37,7 +37,7 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>fr.robotv2.bukkit</shadedPattern>
+                            <shadedPattern>fr.robotv2.bukkit.bstats</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -77,6 +77,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
     </repositories>
 
     <!-- Dependencies -->
@@ -96,11 +100,10 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- Add your specific platform module here -->
         <dependency>
-            <groupId>com.github.Revxrsal.Lamp</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>3.1.5</version>
+            <groupId>co.aikar</groupId>
+            <artifactId>acf-paper</artifactId>
+            <version>0.5.1-SNAPSHOT</version>
         </dependency>
 
         <!-- PLACEHOLDER -->
@@ -109,6 +112,12 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.2</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.Robotv2</groupId>
+            <artifactId>PlaceholderAnnotationProcessor</artifactId>
+            <version>9d097439b3</version>
         </dependency>
 
         <!-- CUSTOM FAST INV -->

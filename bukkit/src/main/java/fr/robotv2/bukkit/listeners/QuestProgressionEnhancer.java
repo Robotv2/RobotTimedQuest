@@ -40,30 +40,32 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
                 .allMatch(condition -> condition.matchCondition(player, type, event));
     }
 
-    public void incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target) {
-        this.incrementProgression(player, type, target, null, 1);
+    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target) {
+        return this.incrementProgression(player, type, target, null, 1);
     }
 
-    public void incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target, @Nullable Event event) {
-        this.incrementProgression(player, type, target, event, 1);
+    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target, @Nullable Event event) {
+        return this.incrementProgression(player, type, target, event, 1);
     }
 
-    public void incrementProgression(@NotNull Player player, @NotNull QuestType type,
+    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type,
                                      @Nullable T target, @Nullable Event event, int amount) {
 
         if(type != QuestType.LOCATION) {
             plugin.debug(type.name() + " has been triggered by " + player.getName() + ".");
         }
 
-        if(amount <= 0) {
-            return;
+        if(amount == 0) {
+            return false;
         }
 
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(player.getUniqueId());
 
         if(questPlayer == null) {
-            return;
+            return false;
         }
+
+        int questAffected = 0;
 
         for (ActiveQuest activeQuest : questPlayer.getActiveQuests()) {
 
@@ -86,6 +88,7 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
                 continue;
             }
 
+            questAffected++;
             activeQuest.incrementProgress(amount);
             Bukkit.getPluginManager().callEvent(new QuestIncrementEvent(activeQuest, amount));
 
@@ -97,5 +100,7 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
                 Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
             }
         }
+
+        return questAffected != 0;
     }
 }

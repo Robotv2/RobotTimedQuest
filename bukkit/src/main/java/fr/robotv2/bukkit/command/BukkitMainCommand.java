@@ -1,22 +1,32 @@
 package fr.robotv2.bukkit.command;
 
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.BukkitCommandIssuer;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
+import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.Default;
+import co.aikar.commands.annotation.Optional;
+import co.aikar.commands.annotation.Subcommand;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.events.QuestDoneEvent;
+import fr.robotv2.bukkit.quest.Quest;
+import fr.robotv2.bukkit.util.StringListProcessor;
+import fr.robotv2.common.data.impl.ActiveQuest;
+import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import revxrsal.commands.annotation.AutoComplete;
-import revxrsal.commands.annotation.Command;
-import revxrsal.commands.annotation.DefaultFor;
-import revxrsal.commands.annotation.Optional;
-import revxrsal.commands.annotation.Subcommand;
-import revxrsal.commands.annotation.Usage;
-import revxrsal.commands.bukkit.BukkitCommandActor;
-import revxrsal.commands.bukkit.annotation.CommandPermission;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-@Command({"rtq", "robottimedquest"})
-public class BukkitMainCommand {
+@CommandAlias("rtq|robottimedquest")
+public class BukkitMainCommand extends BaseCommand {
 
     private final RTQBukkitPlugin plugin;
 
@@ -24,41 +34,82 @@ public class BukkitMainCommand {
         this.plugin = plugin;
     }
 
-    @DefaultFor({"rtq", "robottimedquest"})
-    public void onDefault(BukkitCommandActor actor) {
-        actor.getSender().sendMessage(ChatColor.GREEN + "This server is using RobotTimedQuest with version " + plugin.getDescription().getVersion() + ".");
+    @Default("rtq|robottimedquest")
+    public void onDefault(CommandSender sender) {
+        sender.sendMessage(ChatColor.GREEN + "This server is using RobotTimedQuest with version " + plugin.getDescription().getVersion() + ".");
     }
 
     @Subcommand("reload")
-    @Usage("reload")
     @CommandPermission("robottimedquest.command.reload")
-    public void onReload(BukkitCommandActor actor) {
+    public void onReload(CommandSender sender) {
         plugin.onReload();
-        actor.getSender().sendMessage(ChatColor.GREEN + "The plugin has been reloaded successfully.");
+        sender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded successfully.");
     }
 
     @Subcommand("reset")
-    @Usage("reset <player> [<reset_id>]")
     @CommandPermission("robottimedquest.command.reset")
-    @AutoComplete("@players @services")
-    public void onReset(BukkitCommandActor actor, OfflinePlayer offlinePlayer, @Optional ResetService service) {
+    @CommandCompletion("@players @services")
+    public void onReset(CommandSender sender, OfflinePlayer offlinePlayer, @Optional ResetService service) {
 
         if(!offlinePlayer.isOnline() && plugin.isBungeecordMode()) {
-            actor.getSender().sendMessage(ChatColor.RED + "Please use the bungeecord command to reset an offline player.");
+            sender.sendMessage(ChatColor.RED + "Please use the bungeecord command to reset an offline player.");
             return;
         }
 
         final UUID targetUniqueId = offlinePlayer.getUniqueId();
         final String resetId = service != null ? service.getId() : null;
 
+        this.plugin.debug("RESET-ID -> " + (resetId != null ? resetId : "NULL"));
+
         plugin.getResetPublisher().reset(targetUniqueId, resetId);
-        actor.getSender().sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
+        sender.sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
     }
 
     @Subcommand("quests")
-    @Usage("quests")
     @CommandPermission("robottimedquest.command.quests")
-    public void onQuests(BukkitCommandActor actor) {
-        plugin.getGuiHandler().openMenu(actor.requirePlayer());
+    public void onQuests(CommandSender sender) {
+        if(sender instanceof Player) {
+            plugin.getGuiHandler().openMenu((Player) sender);
+        } else {
+            sender.sendMessage(ChatColor.RED + "Can't do that from console.");
+        }
+    }
+
+    @Subcommand("complete")
+    @CommandPermission("robottimedquest.command.complete")
+    @CommandCompletion("@players @target_quests")
+    public void onComplete(CommandSender sender, OfflinePlayer offlinePlayer, String resetId) {
+
+        final Player player = offlinePlayer.getPlayer();
+        final QuestPlayer questPlayer;
+
+        if(player == null || (questPlayer = QuestPlayer.getQuestPlayer(player.getUniqueId())) == null) {
+            sender.sendMessage(ChatColor.RED + "Player must be online and on the same server than you to do that.");
+            return;
+        }
+
+        final List<ActiveQuest> activeQuests = questPlayer.getActiveQuests();
+        final ActiveQuest activeQuest = activeQuests.stream()
+                .filter(current -> current.getQuestId().equals(resetId))
+                .findFirst().orElse(null);
+
+        if(activeQuest == null) {
+            sender.sendMessage(ChatColor.RED + "Invalid id: the target is not currently doing this quest.");
+            return;
+        }
+
+        if(activeQuest.isDone()) {
+            sender.sendMessage(ChatColor.RED + "This quest is already done.");
+            return;
+        }
+
+        final Quest quest = this.plugin.getQuestManager().fromId(activeQuest.getQuestId());
+
+        if(quest != null) {
+            new StringListProcessor().process(player, quest);
+        }
+
+        activeQuest.setDone(true);
+        Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
     }
 }
