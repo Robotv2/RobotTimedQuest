@@ -4,7 +4,6 @@ import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
-import fr.robotv2.common.reset.ResetService;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -25,17 +24,12 @@ public class RobotTimedQuestAPI {
     }
 
     @Nullable
-    public static ResetService getResetService(@NotNull String identifier) {
-        return INSTANCE.getBukkitResetServiceRepo().getService(identifier);
-    }
-
-    @Nullable
     public static QuestPlayer getQuestPlayer(UUID uuid) {
         return QuestPlayer.getQuestPlayer(uuid);
     }
 
     @UnmodifiableView
-    public static Collection<ActiveQuest> getPlayerQuest(UUID uuid) {
+    public static Collection<ActiveQuest> getPlayerActiveQuests(UUID uuid) {
         QuestPlayer questPlayer;
         return (questPlayer = getQuestPlayer(uuid)) != null ? questPlayer.getActiveQuests() : Collections.emptyList();
     }

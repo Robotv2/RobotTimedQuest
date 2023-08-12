@@ -1,12 +1,10 @@
 package fr.robotv2.common.data;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import redis.clients.jedis.BinaryJedisPubSub;
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
@@ -106,10 +104,17 @@ public class RedisConnector {
         }, 100L, 100L, TimeUnit.MILLISECONDS);
     }
 
-    public void publish(String channel, String message) {
+    public void publish(String channel, byte[] bytes) {
         try(Jedis jedis = getJedis()) {
-            jedis.publish(channel.getBytes(StandardCharsets.UTF_8), message.getBytes(StandardCharsets.UTF_8));
+            jedis.publish(channel.getBytes(StandardCharsets.UTF_8), bytes);
         }
+    }
+
+    public void publish(String channel, String sub, String message) {
+        final ByteArrayDataOutput output =  ByteStreams.newDataOutput();
+        output.writeUTF(sub);
+        output.writeUTF(message);
+        publish(channel, output.toByteArray());
     }
 
     public void subscribe(String... channels) {

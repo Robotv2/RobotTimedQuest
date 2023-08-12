@@ -1,6 +1,5 @@
 package fr.robotv2.bungeecord;
 
-import co.aikar.commands.BungeeCommandManager;
 import fr.robotv2.bungeecord.command.BungeeMainCommand;
 import fr.robotv2.bungeecord.config.BungeeConfigFile;
 import fr.robotv2.bungeecord.listeners.BungeeRedisMessenger;
@@ -11,12 +10,11 @@ import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
 import fr.robotv2.common.data.RedisConnector;
 import fr.robotv2.common.data.impl.MySqlCredentials;
-import fr.robotv2.common.reset.ResetService;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.SQLException;
-import java.util.stream.Collectors;
 
 public class RTQBungeePlugin extends Plugin {
 
@@ -112,9 +110,7 @@ public class RTQBungeePlugin extends Plugin {
             );
             this.redisConnector.setMessenger(new BungeeRedisMessenger(this));
             this.redisConnector.subscribe(
-                    ChannelConstant.RESET_CHANNEL,
-                    ChannelConstant.IS_SAVED_CHANNEL,
-                    ChannelConstant.WAIT_SAVING_CHANNEL
+                    ChannelConstant.BUNGEECORD_CHANNEL
             );
         } catch (Exception exception) {
 
@@ -131,15 +127,7 @@ public class RTQBungeePlugin extends Plugin {
 
     private void setupDatabase() {
 
-        final Configuration configuration = this.getConfigFile().getConfiguration();
-        final String host = configuration.getString("storage.mysql-credentials.host");
-        final String port = configuration.getString("storage.mysql-credentials.port");
-        final String database = configuration.getString("storage.mysql-credentials.database");
-        final String username = configuration.getString("storage.mysql-credentials.username");
-        final String password = configuration.getString("storage.mysql-credentials.password");
-        final boolean ssl = configuration.getBoolean("storage.mysql-credentials.useSSL", false);
-
-        final DatabaseCredentials credentials = new MySqlCredentials(host, port, database, username, password, ssl);
+        final DatabaseCredentials credentials = this.getDatabaseCredentials();
 
         try {
             this.databaseManager = new DatabaseManager(credentials);
@@ -154,6 +142,20 @@ public class RTQBungeePlugin extends Plugin {
         }
     }
 
+    @NotNull
+    private DatabaseCredentials getDatabaseCredentials() {
+        final Configuration configuration = this.getConfigFile().getConfiguration();
+        final String host = configuration.getString("storage.mysql-credentials.host");
+        final String port = configuration.getString("storage.mysql-credentials.port");
+        final String database = configuration.getString("storage.mysql-credentials.database");
+        final String username = configuration.getString("storage.mysql-credentials.username");
+        final String password = configuration.getString("storage.mysql-credentials.password");
+        final boolean ssl = configuration.getBoolean("storage.mysql-credentials.useSSL", false);
+
+        final DatabaseCredentials credentials = new MySqlCredentials(host, port, database, username, password, ssl);
+        return credentials;
+    }
+
     private void disablePlugin() {
         getProxy().getPluginManager().unregisterListeners(this);
         getProxy().getPluginManager().unregisterCommands(this);
@@ -161,9 +163,6 @@ public class RTQBungeePlugin extends Plugin {
     }
 
     private void setupCommandHandlers() {
-        BungeeCommandManager bungeeCommandManager = new BungeeCommandManager(this);
-        bungeeCommandManager.getCommandCompletions().registerCompletion("services", context -> getBungeeResetServiceRepo().getServicesNames());
-        bungeeCommandManager.getCommandContexts().registerContext(ResetService.class, context -> getBungeeResetServiceRepo().getService(context.popFirstArg()));
-        bungeeCommandManager.registerCommand(new BungeeMainCommand(this));
+        this.getProxy().getPluginManager().registerCommand(this, new BungeeMainCommand(this));
     }
 }

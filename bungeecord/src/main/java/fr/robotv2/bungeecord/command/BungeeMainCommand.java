@@ -1,42 +1,42 @@
 package fr.robotv2.bungeecord.command;
 
-import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.*;
 import fr.robotv2.bungeecord.RTQBungeePlugin;
-import fr.robotv2.bungeecord.util.UUIDFetcher;
-import fr.robotv2.common.reset.ResetService;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.plugin.Command;
 
-@CommandAlias("rtq-bunge|robottimedquest-bungee")
-public class BungeeMainCommand extends BaseCommand {
+import java.util.Locale;
+
+public class BungeeMainCommand extends Command {
 
     private final RTQBungeePlugin plugin;
 
     public BungeeMainCommand(RTQBungeePlugin plugin) {
+        super("robottimedquest-bungee", null, "rtq-bungee");
         this.plugin = plugin;
     }
 
-    @Subcommand("reload")
-    @CommandPermission("robottimedquest.command.reload")
-    public void onReload(CommandSender sender) {
-        plugin.onReload();
-        sender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded successfully.");
-    }
+    @Override
+    public void execute(CommandSender sender, String[] args) {
 
-    @Subcommand("reset")
-    @CommandPermission("robottimedquest.command.reset")
-    @CommandCompletion("@players @services")
-    public void onReset(CommandSender sender, String playerName, @Optional ResetService service) {
-        UUIDFetcher.getUUID(playerName, !plugin.isOnlineMode()).thenAccept(uuid -> {
+        if(args.length == 0) {
+            sender.sendMessage(ChatColor.GREEN + "This server is using RobotTimedQuest-Bungee with version " + plugin.getDescription().getVersion() + ".");
+            return;
+        }
 
-            if(uuid == null) {
-                sender.sendMessage(ChatColor.RED + "This player does not exist.");
-                return;
+        final String sub = args[0].toLowerCase(Locale.ROOT);
+
+        if(!sender.hasPermission("robottimedquest.command." + sub)) {
+            sender.sendMessage(ChatColor.RED + "You don't have the required permission to use this command.");
+            return;
+        }
+
+        switch (sub) {
+            case "reload": {
+                plugin.onReload();
+                sender.sendMessage(ChatColor.GREEN + "The plugin has been reloaded successfully.");
+                break;
             }
-
-            plugin.getBungeeResetPublisher().reset(uuid, service != null ? service.getId() : null);
-            sender.sendMessage(ChatColor.GREEN + "The player has been reinitialized successfully. ");
-        });
+        }
     }
 }

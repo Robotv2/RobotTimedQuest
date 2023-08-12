@@ -2,7 +2,6 @@ package fr.robotv2.bukkit;
 
 import co.aikar.commands.BukkitCommandIssuer;
 import co.aikar.commands.PaperCommandManager;
-import fr.robotv2.bukkit.bungee.BukkitMessageListener;
 import fr.robotv2.bukkit.bungee.BukkitRedisMessenger;
 import fr.robotv2.bukkit.command.BukkitMainCommand;
 import fr.robotv2.bukkit.config.BukkitConfigFile;
@@ -33,8 +32,8 @@ import fr.robotv2.common.data.impl.MySqlCredentials;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.data.impl.SqlLiteCredentials;
 import fr.robotv2.common.reset.ResetService;
-import fr.robotv2.placeholderannotation.PAPUtil;
 import fr.robotv2.placeholderannotation.PlaceholderAnnotationProcessor;
+import fr.robotv2.placeholderannotation.util.PAPDebug;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -176,11 +175,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         this.redisConnector.setMessenger(new BukkitRedisMessenger(this, this.playerDataInitListeners));
         this.redisConnector.subscribe(
-                ChannelConstant.RESET_CHANNEL,
-                ChannelConstant.IS_SAVED_CHANNEL,
-                ChannelConstant.WAIT_SAVING_CHANNEL
+                ChannelConstant.BUKKIT_CHANNEL
         );
-        getServer().getMessenger().registerIncomingPluginChannel(this, ChannelConstant.RESET_CHANNEL, new BukkitMessageListener(this));
     }
 
     // GETTERS
@@ -248,6 +244,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private void setupDefaultFilesQuest() {
         new BukkitConfigFile(this, "Qdaily.yml", true);
         new BukkitConfigFile(this, "Qweekly.yml", true);
+        new BukkitConfigFile(this, "Qmonthly.yml", true);
     }
 
     private void setupDatabase() {
@@ -376,12 +373,12 @@ public class RTQBukkitPlugin extends JavaPlugin {
     }
 
     private void setupPAP() {
-        PAPUtil.debug(true);
+        PAPDebug.debugEnabled(true);
 
         final PlaceholderAnnotationProcessor processor = PlaceholderAnnotationProcessor.create();
         final ClipPlaceholder clipPlaceholder = new ClipPlaceholder(this, processor);
 
-        processor.register(clipPlaceholder);
+        processor.registerExpansion(clipPlaceholder);
         clipPlaceholder.register();
     }
 

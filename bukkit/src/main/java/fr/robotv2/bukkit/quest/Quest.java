@@ -52,8 +52,8 @@ public class Quest {
         this.name = section.getString("display");
         this.description = section.getStringList("description");
 
-        final String materialString = section.getString("menu_item", "BOOK");
-        this.material = Objects.requireNonNull(Material.matchMaterial(materialString), "missing menu_item for quest: " + id);
+        final String materialString = section.getString("menu_item");
+        this.material = Objects.requireNonNull(Material.matchMaterial(materialString), "couldn't find a valid menu_item for: " + id);
         this.customModelData = section.getInt("custom_model_data", Integer.MIN_VALUE);
 
         this.resetId = Objects.requireNonNull(section.getString("reset_id"), "missing reset server for quest: " + id);

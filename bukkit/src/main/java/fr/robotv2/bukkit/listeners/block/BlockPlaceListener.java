@@ -31,7 +31,7 @@ public class BlockPlaceListener extends QuestProgressionEnhancer<Material> {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
 
-        if(Options.DISABLE_BLOCK_BREAK_DECREASE) {
+        if(!Options.COUNT_BREAKING_PLACED_BLOCK) {
             return;
         }
 

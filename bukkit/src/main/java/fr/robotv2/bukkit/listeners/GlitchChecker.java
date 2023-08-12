@@ -71,7 +71,7 @@ public class GlitchChecker implements Listener {
     public void onPlace(BlockPlaceEvent event) {
 
         if(event.getPlayer().getGameMode() == GameMode.CREATIVE
-                && Options.DISABLE_BLOCK_MARKING_FROM_CREATIVE) {
+                && !Options.COUNT_BLOCK_FROM_CREATIVE) {
             return; // Do not mark if the player is in creative.
         }
 
@@ -96,7 +96,7 @@ public class GlitchChecker implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onBreak(BlockDropItemEvent event) {
         if(this.isMarked(event.getBlockState())) { // block is placed by a player
-            if(Options.DISABLE_ITEMS_FROM_PLACED_BLOCK) {
+            if(Options.COUNT_ITEMS_FROM_PLACED_BLOCK) {
                 event.getItems().forEach(item -> this.mark(item, event.getPlayer())); // not consider
             }
         }

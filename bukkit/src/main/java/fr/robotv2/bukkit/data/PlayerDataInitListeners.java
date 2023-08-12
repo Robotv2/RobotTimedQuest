@@ -55,8 +55,7 @@ public class PlayerDataInitListeners implements Listener {
         final OrmData<ActiveQuest, Integer> ormData = plugin.getDatabaseManager().getActiveQuestOrmData();
 
         if(this.plugin.isBungeecordMode() && plugin.getRedisConnector() != null) {
-            plugin.getRedisConnector()
-                    .publish(ChannelConstant.WAIT_SAVING_CHANNEL, playerUniqueId.toString());
+            plugin.getRedisConnector().publish(ChannelConstant.BUKKIT_CHANNEL, "WAIT_SAVING", playerUniqueId.toString());
         }
 
         ormData.removeWhere(where -> { // Remove expired quest.
@@ -123,12 +122,12 @@ public class PlayerDataInitListeners implements Listener {
                                     plugin.getLogger().info(String.format("The quest(s) of player %s has been successfully saved to the database.", player.getName()));
 
                                     if(this.plugin.isBungeecordMode()) {
-                                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.IS_SAVED_CHANNEL, playerUUID.toString());
+                                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.BUKKIT_CHANNEL, "IS_SAVED", playerUUID.toString());
                                     }
                                 }).exceptionally(exception -> {
                                     exception.printStackTrace();
                                     if(this.plugin.isBungeecordMode()) {
-                                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.IS_SAVED_CHANNEL, playerUUID.toString());
+                                        Objects.requireNonNull(plugin.getRedisConnector()).publish(ChannelConstant.BUKKIT_CHANNEL, "IS_SAVED", playerUUID.toString());
                                         // Mark the player as being saved or else he will get blocked while switching server
                                     }
                                     return null;

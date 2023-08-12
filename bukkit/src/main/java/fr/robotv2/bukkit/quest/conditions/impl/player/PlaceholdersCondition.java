@@ -8,7 +8,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 
-import java.math.BigInteger;
 import java.util.*;
 import java.util.function.BiFunction;
 

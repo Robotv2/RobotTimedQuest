@@ -1,13 +1,18 @@
 package fr.robotv2.bukkit.util;
 
+import com.google.common.base.Enums;
+import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.VaultHook;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class StringListProcessor {
@@ -23,7 +28,7 @@ public class StringListProcessor {
             argument = PlaceholderUtil.PLAYER_PLACEHOLDER.parse(player, argument);
             argument = PlaceholderUtil.parsePlaceholders(player, argument);
 
-            switch (prefix) {
+            switch (prefix.toUpperCase(Locale.ROOT)) {
 
                 case "[CLOSE]":
                     player.closeInventory();
@@ -59,6 +64,14 @@ public class StringListProcessor {
                     final String message = ColorUtil.color(argument);
                     player.sendMessage(message);
                     break;
+
+                case "[SOUND]":
+                    final Sound sound = Enums.getIfPresent(Sound.class, argument.toUpperCase(Locale.ROOT)).orNull();
+                    if(sound == null) {
+                        RTQBukkitPlugin.getPluginLogger().warning("Unknown song: " + argument);
+                        break;
+                    }
+                    player.playSound(player.getLocation(), sound, 1, 1);
 
                 default:
                     throw new IllegalArgumentException(prefix + " isn't a valid prefix.");

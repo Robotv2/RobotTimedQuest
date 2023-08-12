@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
-        <version>0.7-SNAPSHOT</version>
+        <version>0.8-SNAPSHOT</version>
     </parent>
 
     <!-- Artifact Information -->
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>com.github.Robotv2</groupId>
             <artifactId>PlaceholderAnnotationProcessor</artifactId>
-            <version>9d097439b3</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
 
         <!-- CUSTOM FAST INV -->

@@ -1,0 +1,149 @@
+quests:
+  qmonthly_bargainer:
+    display: "&cVillage Bargainer"
+    description:
+      - "&4Trade with villagers more often."
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&780x Wheat"
+    menu_item: WHEAT
+
+    reset_id: MONTHLY
+    quest_type: VILLAGER_TRADE
+    required_amount: 80
+    required_targets:
+      - WHEAT
+    rewards:
+      - "[COMMAND] eco give %player% 1500"
+      - "[MESSAGE] &cExcellent job %player%, you've completed the quest %quest_display%!"
+  qmonthly_adventurer:
+    display: "&aEnd Adventurer"
+    description:
+      - "&4Go to the center of the end"
+      - ""
+      - "&eRequiremement"
+      - " &8| &r&7Center of the end"
+    menu_item: ENDER_PEARL
+    reset_id: MONTHLY
+    quest_type: LOCATION
+    required_location:
+      world: "world_the_end"
+      x: 0
+      y: 100
+      z: 0
+      distance_from_location: 20
+    rewards:
+      - "[COMMAND] eco give %player% 1500"
+      - "[MESSAGE] &cExcellent job %player%, you've completed the quest %quest_display%!"
+  qmonthly_breeder:
+    display: "&aBreeder"
+    description:
+      - "&2Help to increase the population!"
+      - "&eRequirement:"
+      - " &8| &r&7200x Cows"
+    menu_item: WHEAT
+
+    reset_id: MONTHLY
+    quest_type: BREED
+    required_amount: 200
+    required_targets:
+      - COW
+    rewards:
+      - "[COMMAND] eco give %player% 1500"
+      - "[MESSAGE] &aGreat performance %player%, you've completed the quest %quest_display%!"
+  qmonthly_WolfWhisperer:
+    display: "&dWolf Whisperer"
+    description:
+      - "&5Befriend the wolves!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&710x Wolf"
+    menu_item: WOLF_SPAWN_EGG
+
+    reset_id: MONTHLY
+    quest_type: TAME
+    required_amount: 10
+    required_targets:
+      - WOLF
+    rewards:
+      - "[COMMAND] eco give %player% 1500"
+      - "[MESSAGE] &dWell done %player%, you've completed the quest %quest_display%!"
+  qmonthly_dungeondiver:
+    display: "&6Dungeon Diver"
+    description:
+      - "&6Explore and conquer the dungeons!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&730x Spawner"
+    menu_item: MOSSY_COBBLESTONE
+
+    reset_id: MONTHLY
+    quest_type: BREAK
+    required_amount: 30
+    required_targets:
+      - SPAWNER
+    rewards:
+      - "[COMMAND] eco give %player% 2000"
+      - "[MESSAGE] &6Bravo %player%, you've completed the quest %quest_display%!"
+  qmonthly_masterchef:
+    display: "&eMasterchef"
+    description:
+      - "&eCook all the food!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&7500x Any Food Items"
+    menu_item: COOKED_BEEF
+    reset_id: MONTHLY
+    quest_type: COOK
+    required_amount: 500
+    required_targets:
+      - COOKED_CHICKEN
+      - COOKED_BEEF
+      - COOKED_MUTTON
+      - COOKED_RABBIT
+      - COOKED_PORKCHOP
+      - BAKED_POTATO
+      - BREAD
+    rewards:
+      - "[COMMAND] eco give %player% 2500"
+      - "[MESSAGE] &eCongrats %player%, you've completed the quest %quest_display%!"
+  qmonthly_exoticfisherman:
+    display: "&bExotic Fisherman"
+    description:
+      - "&9Catch different kinds of fish!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&725x Any Fish Items"
+    menu_item: SALMON
+    reset_id: MONTHLY
+    quest_type: FISH_ITEM
+    required_amount: 25
+    required_targets:
+      - SALMON
+      - COOKED_SALMON
+      - TROPICAL_FISH
+      - PUFFERFISH
+    rewards:
+      - "[COMMAND] eco give %player% 1800"
+      - "[MESSAGE] &bGood catch, %player%! You've completed the quest %quest_display%!"
+  qmonthly_nethernavigator:
+    display: "&4Nether Navigator"
+    description:
+      - "&cExplore the dangerous nether!"
+      - ""
+      - "&eRequirement:"
+      - " &8| &r&7100x Nether Blocks"
+    menu_item: NETHER_BRICK
+    reset_id: MONTHLY
+    quest_type: BREAK
+    required_amount: 100
+    required_targets:
+      - NETHERRACK
+      - NETHER_BRICK
+      - NETHER_QUARTZ_ORE
+      - SOUL_SAND
+      - MAGMA_BLOCK
+
+    rewards:
+      - "[COMMAND] eco give %player% 2500"
+      - "[MESSAGE] &4Great survival skills, %player%! You've completed the quest %quest_display%!"

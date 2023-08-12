@@ -1,10 +1,16 @@
 options:
   debug: false
   anti-dupe:
-    disable_spawners_progression: false
-    disable_block_marking_from_creative: false
-    disable_items_from_placed_block: false
-    disable_block_break_decrease: false
+    #should entity from spawner be able to increment entity quest ? (KILL, TAME, etc...)
+    disable_spawners_progression: true
+    #should placed block by creative player be able to increment block quest ? (BREAK etc...)
+    count_block_from_creative: false
+    #should items dropping from a previously placed block should be able to increment item quest (PICKUP etc...)
+    count_items_from_placed_block: true
+    # This option only work with PLACE type quest.
+    # With this option to 'true', every broken block that match the specific PLACE quest AND that
+    # have been previously placed by the player will DECREMENT the quest.
+    count_breaking_placed_block: false
   bungeecord:
     enabled: false
     redis_address: 127.0.0.1
@@ -23,20 +29,27 @@ storage:
     password: your-password
     useSSL: false
 
-quest-files: # paths to quest files
+# paths to quest files
+# File separator are supported.
+quest-files:
   - "Qdaily.yml"
   - "Qweekly.yml"
   - "Qmonthly.yml"
 
+# Represent the number of quest a player MUST have for each reset id.
+# Players may need to reconnect to see their quest numbers changed.
+# You may need to reset players while changing this to a lower number during game.
 quest-assignment:
   DAILY: 1
   WEEKLY: 5
   MONTHLY: 3
 
 cosmetics:
+  # actionbar when the player increments a quest.
   actionbar:
     enabled: true
     progression_message: "%quest_display% &8| %quest_progressbar% &8| &7%quest_progression% &8/ &7%quest_required%"
+  # title when the player finishes a quest.
   title:
     enabled: true
     fade-in: 10

@@ -1,7 +1,10 @@
 package fr.robotv2.bukkit.reset;
 
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.DelayQuestResetEvent;
+import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetPublisher;
 import fr.robotv2.common.reset.ResetService;
@@ -45,6 +48,12 @@ public class BukkitResetPublisher implements ResetPublisher {
 
     @Override
     public void reset(@NotNull UUID ownerUniqueId, @Nullable String resetId) {
+
+        if(this.plugin.isBungeecordMode()) {
+            this.sendRequestToBungeecord(ownerUniqueId, resetId);
+            return;
+        }
+
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(ownerUniqueId);
 
         if(questPlayer != null) {
@@ -70,5 +79,20 @@ public class BukkitResetPublisher implements ResetPublisher {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    private void sendRequestToBungeecord(@NotNull UUID ownerUniqueId, @Nullable String resetId) {
+        final ByteArrayDataOutput output = ByteStreams.newDataOutput();
+
+        if(resetId == null) {
+            output.writeUTF("BUNGEECORD_PLAYER_RESET_ALL");
+            output.writeUTF(ownerUniqueId.toString());
+        } else {
+            output.writeUTF("BUNGEECORD_PLAYER_RESET_ID");
+            output.writeUTF(ownerUniqueId.toString());
+            output.writeUTF(resetId);
+        }
+
+        plugin.getRedisConnector().publish(ChannelConstant.BUNGEECORD_CHANNEL, output.toByteArray());
     }
 }
