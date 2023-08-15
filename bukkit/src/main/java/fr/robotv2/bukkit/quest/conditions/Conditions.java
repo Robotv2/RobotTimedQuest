@@ -33,7 +33,8 @@ public class Conditions {
             QuestType.PLACE, // BlockPlaceEvent, BlockBreakEvent
             QuestType.FARMING, // MultipleCropsBreakEvent, PlayerHarvestBlockEvent, BlockBreakEvent
             QuestType.ENCHANT, // EnchantItemEvent
-            QuestType.BREW // BrewEvent
+            QuestType.BREW, // BrewEvent
+            QuestType.COOK
     );
 
     public static final EnumSet<QuestType> ENTITY_RELATED_TYPES = EnumSet.of(
@@ -131,6 +132,7 @@ public class Conditions {
         Block block = null;
 
         switch (type) {
+            case COOK:
             case BREAK:
             case PLACE:
             case BREW:
