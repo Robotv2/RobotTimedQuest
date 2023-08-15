@@ -2,6 +2,7 @@ package fr.robotv2.bukkit.util.comparator;
 
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
+import fr.robotv2.bukkit.hook.OraxenHook;
 import fr.robotv2.bukkit.util.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 public class ItemStackSectionComparator extends SectionComparator<ItemStack> {
 
     private final String itemAdder;
+    private final String oraxen;
 
     private final String name;
     private final int customModelData;
@@ -22,6 +24,7 @@ public class ItemStackSectionComparator extends SectionComparator<ItemStack> {
     public ItemStackSectionComparator(ConfigurationSection parent) {
         super(parent);
         this.itemAdder = parent.getString("item_adder");
+        this.oraxen = parent.getString("oraxen");
         this.name = parent.getString("name");
         this.customModelData = parent.getInt("custom_model_data");
         this.materials = parent.getStringList("materials")
@@ -36,6 +39,10 @@ public class ItemStackSectionComparator extends SectionComparator<ItemStack> {
 
         if(itemAdder != null && Hooks.isItemAdderEnabled()) {
             return ItemAdderHook.isCustomItem(value, itemAdder);
+        }
+
+        if(oraxen != null && Hooks.isOraxenEnabled()) {
+            return OraxenHook.isCustomItem(value, oraxen);
         }
 
         if(name != null) { // The target itemstack NEED a custom name

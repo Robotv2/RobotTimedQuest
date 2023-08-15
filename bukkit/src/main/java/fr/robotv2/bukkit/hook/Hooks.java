@@ -16,6 +16,10 @@ public class Hooks {
         if(Hooks.isItemAdderEnabled() && ItemAdderHook.initialize(plugin)) {
             plugin.getLogger().info("HOOK - Item Adder successfully hooked into this plugin.");
         }
+
+        if(Hooks.isOraxenEnabled() && OraxenHook.initialize(plugin)) {
+
+        }
     }
 
     public static boolean isVaultEnabled() {
@@ -24,5 +28,9 @@ public class Hooks {
 
     public static boolean isItemAdderEnabled() {
         return Bukkit.getPluginManager().isPluginEnabled("ItemAdder");
+    }
+
+    public static boolean isOraxenEnabled() {
+        return Bukkit.getPluginManager().isPluginEnabled("Oraxen");
     }
 }

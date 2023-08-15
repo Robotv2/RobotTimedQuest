@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.util;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
+import fr.robotv2.bukkit.hook.OraxenHook;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Material;
@@ -57,24 +58,18 @@ public class ItemUtil {
 
     @Nullable
     public static ItemStack toItemStack(ConfigurationSection parent, @Nullable Player player) {
-        final String itemAdder = parent.getString("item_adder");
-        if(itemAdder != null && Hooks.isItemAdderEnabled()) {
-
-            if(!ItemAdderHook.isValidItemRegistry(itemAdder)) {
-                RTQBukkitPlugin.getPluginLogger().warning( itemAdder + " is not a valid item adder id.");
-                return null;
-            }
-
-            return ItemAdderHook.getCustomStack(itemAdder);
-        }
 
         final Material material = Material.matchMaterial(parent.getString("material", "BOOK"));
+
+        final ItemStack customItem = getCustomItem(parent);
+        final ItemStack stack = customItem == null ? new ItemStack(Objects.requireNonNull(material)) : customItem;
+
+        final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
+
         final String name = parent.getString("name");
         final List<String> lore = parent.getStringList("lore");
-        final int customModelData = parent.getInt("custom_model_data", Integer.MIN_VALUE);
 
-        final ItemStack stack = new ItemStack(Objects.requireNonNull(material));
-        final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
+        final int customModelData = parent.getInt("custom_model_data", Integer.MIN_VALUE);
 
         if(name != null) {
             meta.setDisplayName(ColorUtil.color(name));
@@ -94,5 +89,32 @@ public class ItemUtil {
         stack.setItemMeta(meta);
 
         return stack;
+    }
+
+    @Nullable
+    private static ItemStack getCustomItem(ConfigurationSection parent) {
+
+        final String itemAdder = parent.getString("item_adder");
+        final String oraxen = parent.getString("oraxen");
+
+        if(itemAdder != null && Hooks.isItemAdderEnabled()) {
+
+            if(!ItemAdderHook.isValidItemRegistry(itemAdder)) {
+                RTQBukkitPlugin.getPluginLogger().warning( itemAdder + " is not a valid item adder id.");
+                return null;
+            }
+
+            return ItemAdderHook.getCustomStack(itemAdder);
+        } else if(oraxen != null && Hooks.isOraxenEnabled()) {
+
+            if(!OraxenHook.isValidItemRegistry(oraxen)) {
+                RTQBukkitPlugin.getPluginLogger().warning( oraxen + " is not a valid oraxen item id.");
+                return null;
+            }
+
+            return OraxenHook.getCustomStack(oraxen);
+        }
+
+        return null;
     }
 }
