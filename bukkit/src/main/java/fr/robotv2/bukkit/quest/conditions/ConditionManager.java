@@ -4,6 +4,7 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.SheepColorCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.VillagerCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.external.IsFromItemAdder;
+import fr.robotv2.bukkit.quest.conditions.impl.external.IsFromOraxen;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.EnchantCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.IsCustomItem;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.PotionCondition;
@@ -59,8 +60,9 @@ public class ConditionManager {
         registerCondition("required_potions", PotionCondition.class);
 
         //ITEM
-        registerCondition("is_custom_item", IsCustomItem.class);
+        registerCondition("is_item", IsCustomItem.class);
         registerCondition("is_from_itemadder", IsFromItemAdder.class);
+        registerCondition("is_from_oraxen", IsFromOraxen.class);
 
         //ENTITY
         registerCondition("sheep-color", SheepColorCondition.class);
