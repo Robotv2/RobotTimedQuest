@@ -1,5 +1,6 @@
 package fr.robotv2.bukkit.config;
 
+import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.common.config.ConfigFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -82,7 +83,7 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
         }
 
         final YamlConfiguration configuration = this.getConfiguration();
-        InputStream defaultFileStream = plugin.getResource("config.yml");
+        InputStream defaultFileStream = plugin.getResource(this.fileName);
 
         if(defaultFileStream == null) {
             return;
@@ -106,6 +107,7 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
         boolean modified = false;
 
         for (String key : source.getKeys(true)) {
+
             if (!target.isSet(key)) {
                 target.set(key, source.get(key));
                 modified = true;

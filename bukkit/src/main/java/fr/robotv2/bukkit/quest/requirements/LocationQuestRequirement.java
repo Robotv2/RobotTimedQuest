@@ -33,6 +33,9 @@ public class LocationQuestRequirement extends QuestRequirement<Location> {
 
     @Override
     public boolean isTarget(@NotNull Location targetLocation) {
+        if(targetLocation == null || targetLocation.getWorld().getUID().equals(location.getWorld().getUID())) {
+            return false;
+        }
         return targetLocation.distance(location) < distanceFromLocation;
     }
 }

@@ -48,6 +48,7 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
     }
 
     @RequireOnlinePlayer
+    @Placeholder(identifier = "done")
     public String onDone(RequestIssuer issuer) {
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
         return String.valueOf(
