@@ -1,5 +1,7 @@
 package fr.robotv2.bukkit.util.text;
 
+import fr.robotv2.bukkit.hook.Hooks;
+import fr.robotv2.bukkit.hook.placeholderapi.PlaceholderAPIHook;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import me.clip.placeholderapi.PlaceholderAPI;
@@ -14,7 +16,7 @@ public class PlaceholderUtil {
     private PlaceholderUtil() { }
 
     public static String parsePlaceholders(OfflinePlayer offlinePlayer, String input) {
-        return Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI") ? PlaceholderAPI.setPlaceholders(offlinePlayer, input) : input;
+        return Hooks.isPlaceholderAPIEnabled() ? PlaceholderAPIHook.parsePlaceholders(offlinePlayer, input) : input;
     }
 
     public static InternalPlaceholder<Player> PLAYER_PLACEHOLDER = ((value, input) -> input

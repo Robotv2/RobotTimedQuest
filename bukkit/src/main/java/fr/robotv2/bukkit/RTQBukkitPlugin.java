@@ -8,6 +8,7 @@ import fr.robotv2.bukkit.config.BukkitConfigFile;
 import fr.robotv2.bukkit.data.BukkitDatabaseManager;
 import fr.robotv2.bukkit.data.PlayerDataInitListeners;
 import fr.robotv2.bukkit.hook.Hooks;
+import fr.robotv2.bukkit.hook.placeholderapi.ClipPlaceholder;
 import fr.robotv2.bukkit.listeners.GlitchChecker;
 import fr.robotv2.bukkit.listeners.block.BlockBreakListener;
 import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
@@ -116,7 +117,6 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.setupCommandHandlers();
 
         Hooks.loadHooks(this);
-        this.setupPAP();
 
         Bukkit.getScheduler().runTaskTimer(this,
                 () -> this.databaseManager.savePlayers(true),
@@ -370,16 +370,6 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         commandManager.getCommandContexts().registerContext(ResetService.class, context -> getBukkitResetServiceRepo().getService(context.popFirstArg()));
         commandManager.registerCommand(new BukkitMainCommand(this));
-    }
-
-    private void setupPAP() {
-        PAPDebug.debugEnabled(true);
-
-        final PlaceholderAnnotationProcessor processor = PlaceholderAnnotationProcessor.create();
-        final ClipPlaceholder clipPlaceholder = new ClipPlaceholder(this, processor);
-
-        processor.registerExpansion(clipPlaceholder);
-        clipPlaceholder.register();
     }
 
     private void printBeautifulMessage() {

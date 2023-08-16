@@ -1,5 +1,6 @@
-package fr.robotv2.bukkit;
+package fr.robotv2.bukkit.hook.placeholderapi;
 
+import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.DateUtil;
 import fr.robotv2.bukkit.util.text.ProgressUtil;
