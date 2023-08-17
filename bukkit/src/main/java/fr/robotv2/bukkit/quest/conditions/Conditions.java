@@ -25,6 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Conditions {
 
@@ -156,5 +157,9 @@ public class Conditions {
         }
 
         return Optional.ofNullable(block);
+    }
+
+    public static <T> boolean simpleConditionChecker(Optional<T> optional, Predicate<T> predicate) {
+        return !optional.isPresent() || predicate.test(optional.get());
     }
 }

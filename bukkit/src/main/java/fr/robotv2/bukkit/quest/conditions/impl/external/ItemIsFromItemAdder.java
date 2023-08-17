@@ -13,25 +13,21 @@ import org.bukkit.inventory.ItemStack;
 import java.util.EnumSet;
 import java.util.Optional;
 
-public class IsFromOraxen implements Condition {
+public class ItemIsFromItemAdder implements Condition {
 
-    private final boolean isFromOraxen;
+    private final boolean fromItemAdder;
 
-    public IsFromOraxen(ConfigurationSection parent, String key) {
-        this.isFromOraxen = parent.getBoolean(key);
+    public ItemIsFromItemAdder(ConfigurationSection parent, String key) {
+        this.fromItemAdder = parent.getBoolean(key);
     }
 
     @Override
     public boolean matchCondition(Player player, QuestType type, Event event) {
         final Optional<ItemStack> optional = Conditions.getItemStackFor(type, event);
-
-        if(!optional.isPresent()) {
-            return true;
-        }
-
-        return optional.
-                filter(itemStack -> Hooks.isItemAdderEnabled() && ItemAdderHook.isCustomItem(itemStack))
-                .isPresent() == isFromOraxen;
+        return Conditions.simpleConditionChecker(
+                optional,
+                itemStack -> Hooks.ITEM_ADDER.isInitialized() && ItemAdderHook.isCustomItem(itemStack)
+        ) == fromItemAdder;
     }
 
     @Override
