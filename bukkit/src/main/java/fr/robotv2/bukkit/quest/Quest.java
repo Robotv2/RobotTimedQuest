@@ -52,7 +52,7 @@ public class Quest {
         this.name = section.getString("display");
         this.description = section.getStringList("description");
 
-        final String materialString = section.getString("menu_item");
+        final String materialString = section.getString("menu_item", "NULL");
         this.material = Objects.requireNonNull(Material.matchMaterial(materialString), "couldn't find a valid menu_item for: " + id);
         this.customModelData = section.getInt("custom_model_data", Integer.MIN_VALUE);
 
@@ -129,8 +129,8 @@ public class Quest {
                 .map(line -> PlaceholderUtil.ACTIVE_QUEST_RELATIONAL_PLACEHOLDER.parse(this, activeQuest, line))
                 .collect(Collectors.toList())
         );
-        itemStack.setItemMeta(meta);
 
+        itemStack.setItemMeta(meta);
         return itemStack;
     }
 
