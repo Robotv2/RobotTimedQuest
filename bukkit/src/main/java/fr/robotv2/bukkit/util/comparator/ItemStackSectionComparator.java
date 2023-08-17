@@ -37,11 +37,11 @@ public class ItemStackSectionComparator extends SectionComparator<ItemStack> {
     @Override
     public boolean isSame(ItemStack value) {
 
-        if(itemAdder != null && Hooks.isItemAdderEnabled()) {
+        if(itemAdder != null && Hooks.ITEM_ADDER.isInitialized()) {
             return ItemAdderHook.isCustomItem(value, itemAdder);
         }
 
-        if(oraxen != null && Hooks.isOraxenEnabled()) {
+        if(oraxen != null && Hooks.ORAXEN.isInitialized()) {
             return OraxenHook.isCustomItem(value, oraxen);
         }
 

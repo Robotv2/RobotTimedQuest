@@ -4,13 +4,8 @@ import io.th0rgal.oraxen.api.OraxenBlocks;
 import io.th0rgal.oraxen.api.OraxenItems;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class OraxenHook {
-
-    public static boolean initialize(JavaPlugin plugin) {
-        return Hooks.isOraxenEnabled();
-    }
 
     public static boolean isValidItemRegistry(String namespaceID) {
         return OraxenItems.exists(namespaceID);

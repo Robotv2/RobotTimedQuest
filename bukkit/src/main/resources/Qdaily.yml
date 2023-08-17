@@ -27,17 +27,14 @@ quests:
       - "&eRequirement:"
       - " &8| &r&820x Sheep"
     menu_item: PINK_WOOL
-
     reset_id: DAILY
     quest_type: SHEAR
     required_amount: 20
     required_targets:
       - "SHEEP"
-
     rewards:
       - "[COMMAND] eco give %player% 100"
       - "[MESSAGE] &aCongrats %player%, you've ended the quest %quest_display%!"
-
   qdaily_farmingfrenzy:
     display: "&aFarming Frenzy"
     description:
@@ -224,7 +221,6 @@ quests:
     required_amount: 3
     required_targets:
       - "*"
-
     rewards:
       - "[COMMAND] eco give %player% 300"
       - "[MESSAGE] &dGreat job %player%, you've completed the quest %quest_display%!"

@@ -6,15 +6,10 @@ import dev.lone.itemsadder.api.CustomStack;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 
 public class ItemAdderHook {
 
     private ItemAdderHook() { }
-
-    public static boolean initialize(Plugin plugin) {
-        return Hooks.isItemAdderEnabled();
-    }
 
     public static boolean isValidItemRegistry(String namespaceID) {
         return CustomStack.isInRegistry(namespaceID);

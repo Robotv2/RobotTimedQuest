@@ -97,7 +97,7 @@ public class ItemUtil {
         final String itemAdder = parent.getString("item_adder");
         final String oraxen = parent.getString("oraxen");
 
-        if(itemAdder != null && Hooks.isItemAdderEnabled()) {
+        if(itemAdder != null && Hooks.ITEM_ADDER.isInitialized()) {
 
             if(!ItemAdderHook.isValidItemRegistry(itemAdder)) {
                 RTQBukkitPlugin.getPluginLogger().warning( itemAdder + " is not a valid item adder id.");
@@ -105,7 +105,7 @@ public class ItemUtil {
             }
 
             return ItemAdderHook.getCustomStack(itemAdder);
-        } else if(oraxen != null && Hooks.isOraxenEnabled()) {
+        } else if(oraxen != null && Hooks.ORAXEN.isInitialized()) {
 
             if(!OraxenHook.isValidItemRegistry(oraxen)) {
                 RTQBukkitPlugin.getPluginLogger().warning( oraxen + " is not a valid oraxen item id.");

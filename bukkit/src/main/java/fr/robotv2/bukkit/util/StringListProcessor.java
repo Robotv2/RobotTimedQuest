@@ -43,7 +43,7 @@ public class StringListProcessor {
                     break;
 
                 case "[MONEY]":
-                    if(!Hooks.isVaultEnabled()) {
+                    if(!Hooks.VAULT.isInitialized()) {
                        throw new IllegalStateException("Vault's missing. Please install vault in order to use the [MONEY] prefix");
                     }
                     final double bal = Double.parseDouble(argument);

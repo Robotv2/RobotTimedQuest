@@ -81,6 +81,12 @@
             <id>aikar</id>
             <url>https://repo.aikar.co/content/groups/aikar/</url>
         </repository>
+        <repository>
+            <id>nexus</id>
+            <name>Lumine Releases</name>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+
     </repositories>
 
     <!-- Dependencies -->
@@ -180,5 +186,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- MYTHIC MOBS -->
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>5.3.5</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 </project>
