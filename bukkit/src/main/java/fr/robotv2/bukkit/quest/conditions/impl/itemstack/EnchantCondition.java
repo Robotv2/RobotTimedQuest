@@ -4,7 +4,6 @@ import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.conditions.Conditions;
 import org.apache.commons.lang.Validate;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -22,8 +21,7 @@ public class EnchantCondition implements Condition {
     public EnchantCondition(ConfigurationSection parent, String key) {
         this.requiredLevel = parent.getInt(key + ".required_level", Integer.MIN_VALUE);
         for(String enchantString : parent.getStringList(key + ".required_types")) {
-            final NamespacedKey namespacedKey = NamespacedKey.minecraft(enchantString);
-            final Enchantment enchantment = Enchantment.getByKey(namespacedKey);
+            final Enchantment enchantment = Enchantment.getByName(enchantString);
             Validate.notNull(enchantment, enchantString + " is not a valid enchantment key.");
             enchants.add(enchantment);
         }
