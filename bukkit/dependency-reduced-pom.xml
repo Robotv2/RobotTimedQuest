@@ -3,7 +3,7 @@
   <parent>
     <artifactId>RobotTimedQuest</artifactId>
     <groupId>fr.robotv2</groupId>
-    <version>0.8.1-SNAPSHOT</version>
+    <version>0.8.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>robottimedquest-bukkit</artifactId>
@@ -67,6 +67,11 @@
       <id>aikar</id>
       <url>https://repo.aikar.co/content/groups/aikar/</url>
     </repository>
+    <repository>
+      <id>nexus</id>
+      <name>Lumine Releases</name>
+      <url>https://mvn.lumine.io/repository/maven-public/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
@@ -120,6 +125,12 @@
           <groupId>com.jeff_media</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.lumine</groupId>
+      <artifactId>Mythic-Dist</artifactId>
+      <version>5.3.5</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>
