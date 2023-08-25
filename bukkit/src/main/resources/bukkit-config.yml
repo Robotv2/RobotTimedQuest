@@ -1,5 +1,6 @@
 options:
   debug: false
+  player_move_event_threshold: 5
   anti-dupe:
     #should entity from spawner be able to increment entity quest ? (KILL, TAME, etc...)
     disable_spawners_progression: true

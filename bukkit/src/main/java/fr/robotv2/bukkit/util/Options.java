@@ -9,6 +9,8 @@ public class Options {
 
     public static boolean DEBUG;
 
+    public static int PLAYER_MOVE_EVENT_THRESHOLD;
+
     public static boolean DISABLE_SPAWNERS_PROGRESSION;
     public static boolean COUNT_BLOCK_FROM_CREATIVE;
     public static boolean COUNT_ITEMS_FROM_PLACED_BLOCK;
@@ -21,6 +23,8 @@ public class Options {
         Objects.requireNonNull(section, "options' section");
 
         DEBUG = section.getBoolean("debug", false);
+
+        PLAYER_MOVE_EVENT_THRESHOLD = section.getInt("player_move_event_threshold", 5);
 
         DISABLE_SPAWNERS_PROGRESSION = section.getBoolean("anti-dupe.disable_spawners_progression", false);
         COUNT_BLOCK_FROM_CREATIVE = section.getBoolean("anti-dupe.count_block_from_creative", false);
