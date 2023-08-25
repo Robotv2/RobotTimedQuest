@@ -2,6 +2,7 @@ package fr.robotv2.bukkit.enums;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,26 +15,27 @@ public enum QuestType {
     BREAK(true, Material.class),
     PLACE(true, Material.class),
     FARMING(true, Material.class),
-
     FISH(true, EntityType.class),
     FISH_ITEM(true, Material.class),
-
     BREED(true, EntityType.class),
     KILL(true, EntityType.class),
     SHEAR(true, EntityType.class),
     TAME(true, EntityType.class),
-
     CONSUME(true, Material.class),
     COOK(true, Material.class),
     CRAFT(true, Material.class),
     ENCHANT(true, Material.class),
     PICKUP(true, Material.class),
     BREW(true, Material.class),
-
     LAUNCH(true, Material.class),
     LOCATION(false, Location.class),
     VILLAGER_TRADE(true, Material.class),
+    GATHER_ITEM(true, Material.class),
+    CARVE(true, Material.class),
+    PLAYER_DEATH(true, null),
+    WALK(true, null),
 
+    $EXPLORE(true, Biome.class),
     CUSTOM(false, null),
     ;
 
