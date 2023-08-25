@@ -1,7 +1,7 @@
 package fr.robotv2.bukkit.listeners.quest;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
-import fr.robotv2.bukkit.events.QuestIncrementEvent;
+import fr.robotv2.bukkit.events.quest.QuestIncrementEvent;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;

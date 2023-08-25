@@ -2,6 +2,7 @@ package fr.robotv2.bukkit;
 
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.quest.conditions.Condition;
+import fr.robotv2.bukkit.quest.custom.CustomType;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import org.bukkit.entity.Player;
@@ -44,5 +45,9 @@ public class RobotTimedQuestAPI {
 
     public static void registerCondition(String key, Class<? extends Condition> condition) {
         INSTANCE.getConditionManager().registerCondition(key, condition);
+    }
+
+    public static void registerCustomType(String name, CustomType customType) {
+        INSTANCE.getCustomTypeManager().registerCustomType(name, customType);
     }
 }

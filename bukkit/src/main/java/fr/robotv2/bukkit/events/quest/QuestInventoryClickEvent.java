@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.events;
+package fr.robotv2.bukkit.events.quest;
 
 import fr.robotv2.bukkit.RobotTimedQuestAPI;
 import fr.robotv2.bukkit.quest.Quest;

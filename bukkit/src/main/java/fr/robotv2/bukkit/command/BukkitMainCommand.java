@@ -3,7 +3,7 @@ package fr.robotv2.bukkit.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
-import fr.robotv2.bukkit.events.QuestDoneEvent;
+import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.StringListProcessor;
 import fr.robotv2.common.data.impl.ActiveQuest;

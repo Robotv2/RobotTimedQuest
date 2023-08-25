@@ -1,5 +1,6 @@
-package fr.robotv2.bukkit.events;
+package fr.robotv2.bukkit.events.quest;
 
+import fr.robotv2.bukkit.events.quest.ActiveQuestEvent;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,14 +9,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public class QuestDoneEvent extends ActiveQuestEvent {
+public class QuestIncrementEvent extends ActiveQuestEvent {
 
-    private final Player player;
     private final static HandlerList HANDLER_LIST = new HandlerList();
 
-    public QuestDoneEvent(ActiveQuest activeQuest) {
+    private final Player player;
+    private final int amountIncremented;
+
+    public QuestIncrementEvent(ActiveQuest activeQuest, int amountIncremented) {
         super(activeQuest);
-        this.player = Objects.requireNonNull(Bukkit.getPlayer(activeQuest.getOwner()));
+        this.player = Objects.requireNonNull(Bukkit.getPlayer(getActiveQuest().getOwner()));
+        this.amountIncremented = amountIncremented;
     }
 
     @NotNull
@@ -31,5 +35,9 @@ public class QuestDoneEvent extends ActiveQuestEvent {
     @NotNull
     public Player getPlayer() {
         return this.player;
+    }
+
+    public int getAmountIncremented() {
+        return this.amountIncremented;
     }
 }

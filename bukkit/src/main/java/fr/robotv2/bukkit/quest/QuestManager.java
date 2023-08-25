@@ -15,12 +15,11 @@ import org.jetbrains.annotations.UnmodifiableView;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class QuestManager {
 
-    private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();
+    private static final SplittableRandom RANDOM = new SplittableRandom();
 
     private final RTQBukkitPlugin plugin;
     private final Map<String, Quest> quests = new HashMap<>();

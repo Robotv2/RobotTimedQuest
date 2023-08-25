@@ -2,6 +2,7 @@ package fr.robotv2.bukkit.quest.conditions;
 
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.events.MultipleCropsBreakEvent;
+import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
 import fr.robotv2.bukkit.events.VillagerTradeEvent;
 import fr.robotv2.bukkit.util.BrewUtil;
 import org.bukkit.block.Block;
@@ -18,6 +19,7 @@ import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerHarvestBlockEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -35,7 +37,9 @@ public class Conditions {
             QuestType.FARMING, // MultipleCropsBreakEvent, PlayerHarvestBlockEvent, BlockBreakEvent
             QuestType.ENCHANT, // EnchantItemEvent
             QuestType.BREW, // BrewEvent
-            QuestType.COOK
+            QuestType.COOK, // FurnaceExtractEvent
+            QuestType.CARVE, // PlayerInteractEvent
+            QuestType.CUSTOM
     );
 
     public static final EnumSet<QuestType> ENTITY_RELATED_TYPES = EnumSet.of(
@@ -54,7 +58,9 @@ public class Conditions {
             QuestType.ENCHANT, // EnchantItemEvent
             QuestType.PICKUP, // EntityPickupItemEvent
             QuestType.BREW, // BrewEvent
-            QuestType.VILLAGER_TRADE // VillagerTradeEvent
+            QuestType.VILLAGER_TRADE, // VillagerTradeEvent
+            QuestType.GATHER_ITEM, // QuestInventoryClickEvent
+            QuestType.CUSTOM
     );
 
     private static <T, U> U processEventFunction(Class<? extends T> eventClass, Event event, Function<T, U> function) {
@@ -62,6 +68,10 @@ public class Conditions {
     }
 
     public static Optional<Entity> getEntityFor(QuestType type, Event event) {
+
+        if(event == null) {
+            return Optional.empty();
+        }
 
         Entity entity = null;
 
@@ -94,6 +104,10 @@ public class Conditions {
 
     public static Optional<ItemStack> getItemStackFor(QuestType type, Event event) {
 
+        if(event == null) {
+            return Optional.empty();
+        }
+
         ItemStack itemStack = null;
 
         switch (type) {
@@ -121,6 +135,9 @@ public class Conditions {
             case VILLAGER_TRADE:
                 itemStack = Conditions.processEventFunction(VillagerTradeEvent.class, event, (VillagerTradeEvent::getResult));
                 break;
+            case GATHER_ITEM:
+                itemStack = Conditions.processEventFunction(QuestInventoryClickEvent.class, event, questInventoryClickEvent -> questInventoryClickEvent.getInventoryClickEvent().getCursor());
+                break;
             default:
                 break;
         }
@@ -129,6 +146,10 @@ public class Conditions {
     }
 
     public static Optional<Block> getBlockFor(QuestType type, Event event) {
+
+        if(event == null) {
+            return Optional.empty();
+        }
 
         Block block = null;
 
@@ -147,6 +168,9 @@ public class Conditions {
             }
             case ENCHANT:
                 block = Conditions.processEventFunction(EnchantItemEvent.class, event, EnchantItemEvent::getEnchantBlock);
+                break;
+            case CARVE:
+                block = Conditions.processEventFunction(PlayerInteractEvent.class, event, (PlayerInteractEvent::getClickedBlock));
                 break;
             default:
                 break;

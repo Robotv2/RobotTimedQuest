@@ -2,8 +2,8 @@ package fr.robotv2.bukkit.listeners;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.events.QuestDoneEvent;
-import fr.robotv2.bukkit.events.QuestIncrementEvent;
+import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
+import fr.robotv2.bukkit.events.quest.QuestIncrementEvent;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.util.StringListProcessor;
@@ -89,18 +89,50 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
             }
 
             questAffected++;
-            activeQuest.incrementProgress(amount);
-            Bukkit.getPluginManager().callEvent(new QuestIncrementEvent(activeQuest, amount));
-
-            if(activeQuest.getProgress() >= quest.getRequiredAmount()) {
-
-                activeQuest.setDone(true);
-                new StringListProcessor().process(player, quest);
-
-                Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
-            }
+            this.incrementQuest(quest, activeQuest, player, amount);
         }
 
         return questAffected != 0;
+    }
+
+    public boolean incrementProgressionFor(Player player, ActiveQuest activeQuest, T target, Event event, int amount) {
+
+        if(activeQuest.hasEnded() || activeQuest.isDone()) {
+            return false;
+        }
+
+        final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(player.getUniqueId());
+        final Quest quest = this.plugin.getQuestManager().fromId(activeQuest.getQuestId());
+
+        if(questPlayer == null || !questPlayer.hasQuest(activeQuest.getQuestId())) {
+            return false;
+        }
+
+        if(quest == null || !quest.isTarget(target)) {
+            return false;
+        }
+
+        if(!quest.getConditions().isEmpty() // Check if conditions are empty.
+                && !this.allConditionsMatch(quest.getConditions(), player, event, quest.getType())) // Does all the conditions are met ?
+        {
+            return false;
+        }
+
+        this.incrementQuest(quest, activeQuest, player, amount);
+        return true;
+    }
+
+    public void incrementQuest(Quest quest, ActiveQuest activeQuest, Player player, int amount) {
+
+        activeQuest.incrementProgress(amount);
+        Bukkit.getPluginManager().callEvent(new QuestIncrementEvent(activeQuest, amount));
+
+        if(activeQuest.getProgress() >= quest.getRequiredAmount()) {
+
+            activeQuest.setDone(true);
+            new StringListProcessor().process(player, quest);
+
+            Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
+        }
     }
 }

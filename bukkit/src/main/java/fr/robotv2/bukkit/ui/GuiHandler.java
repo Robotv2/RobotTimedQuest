@@ -4,7 +4,7 @@ import fr.mrmicky.fastinv.FastInv;
 import fr.mrmicky.fastinv.FastInvManager;
 import fr.mrmicky.fastinv.InventoryScheme;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
-import fr.robotv2.bukkit.events.QuestInventoryClickEvent;
+import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.ItemUtil;
 import fr.robotv2.bukkit.util.StringListProcessor;

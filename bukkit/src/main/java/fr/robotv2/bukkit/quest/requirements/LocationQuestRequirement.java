@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.quest.requirements;
 import fr.robotv2.bukkit.quest.Quest;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 public class LocationQuestRequirement extends QuestRequirement<Location> {
@@ -33,9 +34,13 @@ public class LocationQuestRequirement extends QuestRequirement<Location> {
 
     @Override
     public boolean isTarget(@NotNull Location targetLocation) {
-        if(targetLocation == null || targetLocation.getWorld().getUID().equals(location.getWorld().getUID())) {
+        final World world = location.getWorld();
+        final World targetWorld = targetLocation.getWorld();
+
+        if (world != targetWorld) {
             return false;
         }
-        return targetLocation.distance(location) < distanceFromLocation;
+
+        return targetLocation.distanceSquared(location) < (distanceFromLocation * distanceFromLocation);
     }
 }
