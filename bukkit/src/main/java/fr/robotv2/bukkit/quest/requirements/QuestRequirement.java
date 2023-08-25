@@ -13,7 +13,7 @@ public abstract class QuestRequirement<T> {
     public QuestRequirement(Quest quest) {
         this.quest = quest;
         this.type = quest.getType();
-        this.amount = this.type.isNumerical() ? quest.getSection().getInt("required_amount") : 1;
+        this.amount = quest.isNumerical() ? quest.getSection().getInt("required_amount") : 1;
     }
 
     public Quest getQuest() {

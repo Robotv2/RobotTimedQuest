@@ -8,18 +8,20 @@ import fr.robotv2.bukkit.config.BukkitConfigFile;
 import fr.robotv2.bukkit.data.BukkitDatabaseManager;
 import fr.robotv2.bukkit.data.PlayerDataInitListeners;
 import fr.robotv2.bukkit.hook.Hooks;
-import fr.robotv2.bukkit.hook.placeholderapi.ClipPlaceholder;
 import fr.robotv2.bukkit.listeners.GlitchChecker;
+import fr.robotv2.bukkit.listeners.SystemListeners;
 import fr.robotv2.bukkit.listeners.block.BlockBreakListener;
 import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
 import fr.robotv2.bukkit.listeners.block.HarvestBlockListener;
 import fr.robotv2.bukkit.listeners.entity.*;
 import fr.robotv2.bukkit.listeners.item.*;
+import fr.robotv2.bukkit.listeners.player.PlayerInventoryListener;
 import fr.robotv2.bukkit.listeners.player.PlayerMoveListener;
 import fr.robotv2.bukkit.listeners.quest.QuestDoneListener;
 import fr.robotv2.bukkit.listeners.quest.QuestIncrementListener;
 import fr.robotv2.bukkit.quest.QuestManager;
 import fr.robotv2.bukkit.quest.conditions.ConditionManager;
+import fr.robotv2.bukkit.quest.custom.CustomTypeManager;
 import fr.robotv2.bukkit.reset.BukkitResetPublisher;
 import fr.robotv2.bukkit.reset.BukkitResetServiceRepo;
 import fr.robotv2.bukkit.ui.GuiHandler;
@@ -33,8 +35,6 @@ import fr.robotv2.common.data.impl.MySqlCredentials;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.data.impl.SqlLiteCredentials;
 import fr.robotv2.common.reset.ResetService;
-import fr.robotv2.placeholderannotation.PlaceholderAnnotationProcessor;
-import fr.robotv2.placeholderannotation.util.PAPDebug;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -56,6 +56,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
     private QuestManager questManager;
     private ConditionManager conditionManager;
+    private CustomTypeManager customTypeManager;
 
     private GuiHandler guiHandler;
 
@@ -69,7 +70,6 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private BukkitConfigFile guiFile;
 
     private BukkitDatabaseManager databaseManager;
-    private DatabaseManager.DatabaseType type;
 
     private RedisConnector redisConnector;
     private PlayerDataInitListeners playerDataInitListeners;
@@ -111,6 +111,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.questManager = new QuestManager(this);
         this.glitchChecker = new GlitchChecker(this);
         this.guiHandler = new GuiHandler(this);
+        this.customTypeManager = new CustomTypeManager();
 
         this.setupDatabase();
         this.setupQuests();
@@ -154,7 +155,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
     }
 
     public void debug(String message) {
-        if(this.getConfig().getBoolean("options.debug")) {
+        if(Options.DEBUG) {
             getLogger().info("[DEBUG] " + message);
         }
     }
@@ -231,6 +232,10 @@ public class RTQBukkitPlugin extends JavaPlugin {
         return this.redisConnector;
     }
 
+    public CustomTypeManager getCustomTypeManager() {
+        return this.customTypeManager;
+    }
+
     // LOADERS
 
     private void setupFiles() {
@@ -286,7 +291,6 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         try {
             this.databaseManager = new BukkitDatabaseManager(credentials);
-            this.type = type;
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
@@ -302,8 +306,9 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private void setupListeners() {
         final PluginManager pm = getServer().getPluginManager();
 
-        // DATA
+        // DATA & SYSTEM
         pm.registerEvents((this.playerDataInitListeners = new PlayerDataInitListeners(this)), this);
+        pm.registerEvents(new SystemListeners(), this);
 
         // BLOCK
         pm.registerEvents(new BlockBreakListener(this), this);
@@ -329,6 +334,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
         //player
         pm.registerEvents(new PlayerMoveListener(this), this);
+        pm.registerEvents(new PlayerInventoryListener(this), this);
 
         // QUEST
         // pm.registerEvents(new QuestResetListener(this), this);

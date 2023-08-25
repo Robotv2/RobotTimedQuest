@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.quest;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.quest.conditions.Condition;
+import fr.robotv2.bukkit.quest.custom.CustomType;
 import fr.robotv2.bukkit.quest.requirements.QuestRequirement;
 import fr.robotv2.bukkit.quest.requirements.QuestRequirements;
 import fr.robotv2.bukkit.util.text.ColorUtil;
@@ -42,7 +43,7 @@ public class Quest {
 
     private final List<String> rewards;
 
-    private final QuestRequirement<?> questRequirement;
+    private QuestRequirement<?> questRequirement = null;
     private final List<Condition> conditions = new ArrayList<>();
 
     public Quest(ConfigurationSection section) {
@@ -61,9 +62,16 @@ public class Quest {
         this.customType = section.getString("custom_type");
         this.rewards = section.getStringList("rewards");
 
-        this.questRequirement = type.getRequiredClass() == null
-                ? null
-                : QuestRequirements.toQuestRequirement(type.getRequiredClass(), this);
+        if(type.getRequiredClass() != null) {
+            this.questRequirement = QuestRequirements.toQuestRequirement(type.getRequiredClass(), this);
+        } else if(type == QuestType.CUSTOM) {
+            final CustomType customType = PLUGIN.getCustomTypeManager().getCustomType(this.customType);
+            if(customType != null) {
+                this.questRequirement = customType.toQuestRequirement(this);
+            }
+        } else {
+            this.questRequirement = null;
+        }
 
         final ConfigurationSection conditionSection = section.getConfigurationSection("conditions");
         if(conditionSection != null) {
@@ -115,7 +123,7 @@ public class Quest {
             meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
             meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
             description.add("&aYou have successfully done this quest.");
-        } else if(type.isNumerical()) {
+        } else if(this.isNumerical()) {
             description.add("&7Progress: &e" + activeQuest.getProgress() + "&8/&e" + this.getRequiredAmount());
         } else {
             description.add("&cThis quest is not done yet.");
@@ -136,6 +144,10 @@ public class Quest {
 
     public QuestType getType() {
         return this.type;
+    }
+
+    public String getCustomType() {
+        return this.customType;
     }
 
     public String getResetId() {
@@ -177,6 +189,15 @@ public class Quest {
     public boolean isTarget(Object object) {
         return getQuestRequirement() == null
                 || getQuestRequirement().isTarget0(object);
+    }
+
+    public boolean isNumerical() {
+        if(type != QuestType.CUSTOM) {
+            return type.isNumerical();
+        } else {
+            final CustomType customType = PLUGIN.getCustomTypeManager().getCustomType(this.customType);
+            return customType != null && customType.isNumerical();
+        }
     }
 
     @Override
