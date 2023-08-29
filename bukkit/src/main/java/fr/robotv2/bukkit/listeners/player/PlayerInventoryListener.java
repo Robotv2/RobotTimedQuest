@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerInventoryListener extends QuestProgressionEnhancer<Material> {
@@ -41,11 +42,22 @@ public class PlayerInventoryListener extends QuestProgressionEnhancer<Material> 
         final boolean result = this.incrementProgressionFor(player, activeQuest, cursor.getType(), event, itemToTake);
 
         if(result) {
+
+            final Inventory inventory = event.getInventoryClickEvent().getClickedInventory();
+
+            if(inventory != null) {
+                inventory.setItem(
+                        event.getInventoryClickEvent().getSlot(),
+                        quest.getGuiItem(activeQuest, player)
+                );
+            }
+
             if(requiredAmount >= cursor.getAmount()) {
                 player.setItemOnCursor(new ItemStack(Material.AIR));
             } else {
                 final ItemStack replacement = cursor.clone();
                 replacement.setAmount(cursor.getAmount() - requiredAmount);
+                player.setItemOnCursor(replacement);
             }
         }
     }
