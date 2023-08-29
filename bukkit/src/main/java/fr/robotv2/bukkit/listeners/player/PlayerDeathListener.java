@@ -9,7 +9,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class PlayerDeathListener extends QuestProgressionEnhancer<Void> {
 
-    protected PlayerDeathListener(RTQBukkitPlugin plugin) {
+    public PlayerDeathListener(RTQBukkitPlugin plugin) {
         super(plugin);
     }
 

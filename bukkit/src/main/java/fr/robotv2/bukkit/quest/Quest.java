@@ -159,7 +159,7 @@ public class Quest {
     }
 
     public int getRequiredAmount() {
-        return getQuestRequirement() != null ? getQuestRequirement().getRequiredAmount() : 1;
+        return this.isNumerical() ? getSection().getInt("required_amount") : 1;
     }
 
     public boolean hasCustomModelData() {

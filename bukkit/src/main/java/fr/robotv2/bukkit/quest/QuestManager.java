@@ -1,6 +1,7 @@
 package fr.robotv2.bukkit.quest;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
@@ -32,7 +33,7 @@ public class QuestManager {
         this.quests.clear();
     }
 
-    public void cacheQuest(@NotNull Quest quest) {
+    private void cacheQuest(@NotNull Quest quest) {
         this.quests.put(quest.getId(), quest);
     }
 

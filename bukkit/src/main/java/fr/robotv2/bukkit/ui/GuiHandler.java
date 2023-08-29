@@ -125,7 +125,10 @@ public class GuiHandler {
                         fastInv.setItem(
                                 slot,
                                 quest.getGuiItem(activeQuest, player),
-                                inventoryClickEvent -> Bukkit.getPluginManager().callEvent(new QuestInventoryClickEvent(inventoryClickEvent, activeQuest))
+                                inventoryClickEvent -> {
+                                    Bukkit.getPluginManager().callEvent(new QuestInventoryClickEvent(inventoryClickEvent, activeQuest));
+                                    GuiHandler.this.plugin.debug("PLAYER CLICKED ON QUEST : " + quest.getId());
+                                }
                         );
 
                     } catch (NumberFormatException exception) {

@@ -30,6 +30,7 @@ public enum QuestType {
     LAUNCH(true, Material.class),
     LOCATION(false, Location.class),
     VILLAGER_TRADE(true, Material.class),
+
     GATHER_ITEM(true, Material.class),
     CARVE(true, Material.class),
     PLAYER_DEATH(true, null),
