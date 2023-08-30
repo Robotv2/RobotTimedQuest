@@ -74,6 +74,5 @@
             <version>31.1-jre</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

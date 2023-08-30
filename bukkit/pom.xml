@@ -86,7 +86,11 @@
             <name>Lumine Releases</name>
             <url>https://mvn.lumine.io/repository/maven-public/</url>
         </repository>
-
+        <repository>
+            <id>mojang</id>
+            <name>Mojang's Repository</name>
+            <url>https://libraries.minecraft.net/</url>
+        </repository>
     </repositories>
 
     <!-- Dependencies -->
@@ -131,6 +135,13 @@
             <groupId>com.github.Robotv2</groupId>
             <artifactId>FastInv</artifactId>
             <version>75dea8599c</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mojang</groupId>
+            <artifactId>authlib</artifactId>
+            <version>1.5.25</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- BSTATS -->

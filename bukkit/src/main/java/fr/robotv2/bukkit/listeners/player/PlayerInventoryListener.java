@@ -44,12 +44,15 @@ public class PlayerInventoryListener extends QuestProgressionEnhancer<Material> 
         if(result) {
 
             final Inventory inventory = event.getInventoryClickEvent().getClickedInventory();
+            final ItemStack current = event.getInventoryClickEvent().getCurrentItem();
 
-            if(inventory != null) {
-                inventory.setItem(
-                        event.getInventoryClickEvent().getSlot(),
-                        quest.getGuiItem(activeQuest, player)
-                );
+            if(inventory != null && current != null) {
+                quest.getGuiItem(activeQuest, player).thenAccept(itemStack -> {
+                    inventory.setItem(
+                            event.getInventoryClickEvent().getSlot(),
+                            itemStack
+                    );
+                });
             }
 
             if(requiredAmount >= cursor.getAmount()) {
@@ -57,7 +60,6 @@ public class PlayerInventoryListener extends QuestProgressionEnhancer<Material> 
             } else {
                 final ItemStack replacement = cursor.clone();
                 replacement.setAmount(cursor.getAmount() - requiredAmount);
-                player.setItemOnCursor(replacement);
             }
         }
     }

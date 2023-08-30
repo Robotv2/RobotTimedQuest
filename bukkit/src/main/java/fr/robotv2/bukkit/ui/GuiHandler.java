@@ -19,8 +19,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class GuiHandler {
@@ -57,7 +59,7 @@ public class GuiHandler {
         return new Pair<>(result, actions.isEmpty() ? null : (ignored) -> new StringListProcessor().process(player, actions));
     }
 
-    public FastInv getGuiOf(Player player) {
+    public CompletableFuture<FastInv> getGuiOf(Player player) {
 
         final QuestPlayer questPlayer = Objects.requireNonNull(QuestPlayer.getQuestPlayer(player.getUniqueId()));
         final ConfigurationSection section = plugin.getGuiFile().getConfiguration().getConfigurationSection("quest-gui");
@@ -93,6 +95,8 @@ public class GuiHandler {
         scheme.apply(fastInv);
         final ConfigurationSection resetServices = section.getConfigurationSection("services");
 
+        final List<CompletableFuture<Void>> futures = new ArrayList<>();
+
         if(resetServices != null) {
             for(String serviceId : resetServices.getKeys(false)) {
                 final ResetService service = plugin.getBukkitResetServiceRepo().getService(serviceId);
@@ -122,14 +126,13 @@ public class GuiHandler {
                             continue;
                         }
 
-                        fastInv.setItem(
+                        final CompletableFuture<Void> future = quest.getGuiItem(activeQuest, player).thenAccept(itemStack -> fastInv.setItem(
                                 slot,
-                                quest.getGuiItem(activeQuest, player),
-                                inventoryClickEvent -> {
-                                    Bukkit.getPluginManager().callEvent(new QuestInventoryClickEvent(inventoryClickEvent, activeQuest));
-                                    GuiHandler.this.plugin.debug("PLAYER CLICKED ON QUEST : " + quest.getId());
-                                }
-                        );
+                                itemStack,
+                                inventoryClickEvent -> Bukkit.getPluginManager().callEvent(new QuestInventoryClickEvent(inventoryClickEvent, activeQuest))
+                        ));
+
+                        futures.add(future);
 
                     } catch (NumberFormatException exception) {
                         plugin.getLogger().warning(slotString + " is not a valid slot.");
@@ -142,10 +145,12 @@ public class GuiHandler {
             }
         }
 
-        return fastInv;
+        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenApply(ignored -> fastInv);
     }
 
     public void openMenu(Player player) {
-        this.getGuiOf(player).open(player);
+        this.getGuiOf(player).thenAccept(fastInv -> {
+            fastInv.open(player);
+        });
     }
 }

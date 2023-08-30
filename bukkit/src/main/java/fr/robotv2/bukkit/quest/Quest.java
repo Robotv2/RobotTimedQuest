@@ -6,6 +6,7 @@ import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.custom.CustomType;
 import fr.robotv2.bukkit.quest.requirements.QuestRequirement;
 import fr.robotv2.bukkit.quest.requirements.QuestRequirements;
+import fr.robotv2.bukkit.util.HeadUtil;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import fr.robotv2.common.data.impl.ActiveQuest;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Quest {
@@ -36,6 +39,12 @@ public class Quest {
     private final List<String> description;
     private final Material material;
     private final int customModelData;
+
+    // head
+    @Nullable
+    private String headTexture;
+    @Nullable
+    private String headOwner;
 
     private final String resetId;
     private final QuestType type;
@@ -55,6 +64,12 @@ public class Quest {
 
         final String materialString = section.getString("menu_item", "NULL");
         this.material = Objects.requireNonNull(Material.matchMaterial(materialString), "couldn't find a valid menu_item for: " + id);
+
+        if(material == Material.PLAYER_HEAD) {
+            this.headTexture = section.getString("head_texture");
+            this.headOwner = section.getString("head_owner");
+        }
+
         this.customModelData = section.getInt("custom_model_data", Integer.MIN_VALUE);
 
         this.resetId = Objects.requireNonNull(section.getString("reset_id"), "missing reset server for quest: " + id);
@@ -99,47 +114,63 @@ public class Quest {
         return this.material;
     }
 
-    public ItemStack getGuiItem(ActiveQuest activeQuest, OfflinePlayer offlinePlayer) {
+    public CompletableFuture<ItemStack> getGuiItem(ActiveQuest activeQuest, OfflinePlayer offlinePlayer) {
 
-        final ItemStack itemStack = new ItemStack(this.getMaterial());
-        final ItemMeta meta = Objects.requireNonNull(itemStack.getItemMeta());
-        final List<String> description = new ArrayList<>(this.description);
+        final Function<ItemStack, ItemStack> itemStackConsumer = itemStack -> {
 
-        meta.setDisplayName(
-                this.name != null && !this.name.isEmpty()
-                        ? ColorUtil.color(this.name)
-                        : this.name
-        );
+            final ItemMeta meta = Objects.requireNonNull(itemStack.getItemMeta());
+            final List<String> description = new ArrayList<>(this.description);
 
-        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
+            meta.setDisplayName(
+                    this.name != null && !this.name.isEmpty()
+                            ? ColorUtil.color(this.name)
+                            : this.name
+            );
 
-        if(hasCustomModelData()) {
-            meta.setCustomModelData(this.getCustomModelData());
-        }
+            meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_POTION_EFFECTS);
 
-        description.add(" ");
+            if(hasCustomModelData()) {
+                meta.setCustomModelData(this.getCustomModelData());
+            }
 
-        if(activeQuest.isDone()) {
-            meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-            meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-            description.add("&aYou have successfully done this quest.");
-        } else if(this.isNumerical()) {
-            description.add("&7Progress: &e" + activeQuest.getProgress() + "&8/&e" + this.getRequiredAmount());
+            description.add(" ");
+
+            if(activeQuest.isDone()) {
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
+                description.add("&aYou have successfully done this quest.");
+            } else if(this.isNumerical()) {
+                description.add("&7Progress: &e" + activeQuest.getProgress() + "&8/&e" + this.getRequiredAmount());
+            } else {
+                description.add("&cThis quest is not done yet.");
+            }
+
+            meta.setLore(description.stream()
+                    .map(line -> !line.isEmpty() ? ColorUtil.color(line) : line)
+                    .map(line -> PlaceholderUtil.parsePlaceholders(offlinePlayer, line))
+                    .map(line -> PlaceholderUtil.QUEST_PLACEHOLDER.parse(this, line))
+                    .map(line -> PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, line))
+                    .map(line -> PlaceholderUtil.ACTIVE_QUEST_RELATIONAL_PLACEHOLDER.parse(this, activeQuest, line))
+                    .collect(Collectors.toList())
+            );
+
+            itemStack.setItemMeta(meta);
+            return itemStack;
+        };
+
+        CompletableFuture<ItemStack> future;
+
+        if(headTexture != null) {
+            future =  HeadUtil.createSkull(this.headTexture);
+        } else if(headOwner != null) {
+            future = HeadUtil.getPlayerHead(this.headOwner);
         } else {
-            description.add("&cThis quest is not done yet.");
+            future = CompletableFuture.completedFuture(new ItemStack(this.getMaterial()));
         }
 
-        meta.setLore(description.stream()
-                .map(line -> !line.isEmpty() ? ColorUtil.color(line) : line)
-                .map(line -> PlaceholderUtil.parsePlaceholders(offlinePlayer, line))
-                .map(line -> PlaceholderUtil.QUEST_PLACEHOLDER.parse(this, line))
-                .map(line -> PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, line))
-                .map(line -> PlaceholderUtil.ACTIVE_QUEST_RELATIONAL_PLACEHOLDER.parse(this, activeQuest, line))
-                .collect(Collectors.toList())
-        );
+        future.thenApply(itemStackConsumer);
 
-        itemStack.setItemMeta(meta);
-        return itemStack;
+        return future;
     }
 
     public QuestType getType() {
