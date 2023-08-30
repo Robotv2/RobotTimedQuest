@@ -2,8 +2,8 @@ package fr.robotv2.bukkit.quest.conditions;
 
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.events.MultipleCropsBreakEvent;
-import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
 import fr.robotv2.bukkit.events.VillagerTradeEvent;
+import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
 import fr.robotv2.bukkit.util.BrewUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -17,11 +17,7 @@ import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.BrewEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerHarvestBlockEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.EnumSet;

@@ -11,7 +11,6 @@ import fr.robotv2.placeholderannotation.BasePlaceholderExpansion;
 import fr.robotv2.placeholderannotation.PlaceholderAnnotationProcessor;
 import fr.robotv2.placeholderannotation.RequestIssuer;
 import fr.robotv2.placeholderannotation.annotations.DefaultPlaceholder;
-import fr.robotv2.placeholderannotation.annotations.Optional;
 import fr.robotv2.placeholderannotation.annotations.Placeholder;
 import fr.robotv2.placeholderannotation.annotations.RequireOnlinePlayer;
 import org.jetbrains.annotations.NotNull;

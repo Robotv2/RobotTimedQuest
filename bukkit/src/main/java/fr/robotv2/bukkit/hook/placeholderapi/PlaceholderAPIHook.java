@@ -5,7 +5,6 @@ import fr.robotv2.placeholderannotation.PlaceholderAnnotationProcessor;
 import fr.robotv2.placeholderannotation.util.PAPDebug;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class PlaceholderAPIHook {
 

@@ -1,6 +1,5 @@
 package fr.robotv2.bukkit.config;
 
-import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.common.config.ConfigFile;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

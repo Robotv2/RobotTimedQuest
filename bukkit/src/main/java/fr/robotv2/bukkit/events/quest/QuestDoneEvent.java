@@ -1,6 +1,5 @@
 package fr.robotv2.bukkit.events.quest;
 
-import fr.robotv2.bukkit.events.quest.ActiveQuestEvent;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
