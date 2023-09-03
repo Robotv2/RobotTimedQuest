@@ -3,7 +3,7 @@
   <parent>
     <artifactId>RobotTimedQuest</artifactId>
     <groupId>fr.robotv2</groupId>
-    <version>0.8.3.1-SNAPSHOT</version>
+    <version>0.8.4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>robottimedquest-bukkit</artifactId>
@@ -54,6 +54,10 @@
     <repository>
       <id>sonatype</id>
       <url>https://oss.sonatype.org/content/groups/public/</url>
+    </repository>
+    <repository>
+      <id>sonatype-snapshot</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
     </repository>
     <repository>
       <id>placeholderapi</id>
@@ -141,6 +145,12 @@
       <groupId>io.lumine</groupId>
       <artifactId>Mythic-Dist</artifactId>
       <version>5.3.5</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.magmaguy</groupId>
+      <artifactId>EliteMobs</artifactId>
+      <version>8.4.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
