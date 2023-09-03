@@ -4,14 +4,7 @@ import fr.mrmicky.fastinv.FastInv;
 import fr.mrmicky.fastinv.FastInvManager;
 import fr.mrmicky.fastinv.InventoryScheme;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
-import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
-import fr.robotv2.bukkit.quest.Quest;
-import fr.robotv2.bukkit.util.ItemUtil;
-import fr.robotv2.bukkit.util.StringListProcessor;
 import fr.robotv2.bukkit.util.text.ColorUtil;
-import fr.robotv2.common.data.impl.ActiveQuest;
-import fr.robotv2.common.data.impl.QuestPlayer;
-import fr.robotv2.common.reset.ResetService;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -20,9 +13,7 @@ import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
 public class GuiHandler {
 
