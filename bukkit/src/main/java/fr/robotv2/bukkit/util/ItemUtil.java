@@ -87,7 +87,7 @@ public class ItemUtil {
         if(parent.isSet("head_texture")) {
             return HeadUtil.createSkull(parent.getString("head_texture"));
         } else if(parent.isSet("head_owner")) {
-            return HeadUtil.getPlayerHead("head_owner");
+            return HeadUtil.getPlayerHead(parent.getString("head_owner"));
         } else {
             return null;
         }
