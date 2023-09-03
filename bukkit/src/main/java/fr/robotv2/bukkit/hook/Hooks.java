@@ -11,6 +11,7 @@ public enum Hooks {
     ITEM_ADDER("ItemAdder"),
     ORAXEN("Oraxen"),
     MYTHIC_MOB("MythicMob"),
+    ELITE_MOB("EliteMobs")
     ;
 
     private final String pluginName;
@@ -45,6 +46,11 @@ public enum Hooks {
         if(Hooks.MYTHIC_MOB.isPluginEnabled() && MythicMobHook.initialize(plugin)) {
             plugin.getLogger().info("HOOK - MythicMob has been successfully hooked into this plugin.");
             Hooks.MYTHIC_MOB.setInitialized();
+        }
+
+        if(Hooks.ELITE_MOB.isPluginEnabled()) {
+            plugin.getLogger().info("HOOK - EliteMobs has been successfully hooked into this plugin.");
+            Hooks.ELITE_MOB.setInitialized();
         }
     }
 
