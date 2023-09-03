@@ -9,7 +9,7 @@ import org.bukkit.OfflinePlayer;
 public class PlaceholderAPIHook {
 
     public static boolean initialize() {
-        PAPDebug.debugEnabled(true);
+        PAPDebug.debugEnabled(false);
         final PlaceholderAnnotationProcessor processor = PlaceholderAnnotationProcessor.create();
         final ClipPlaceholder clipPlaceholder = new ClipPlaceholder(RTQBukkitPlugin.getInstance(), processor);
         processor.registerExpansion(clipPlaceholder);
