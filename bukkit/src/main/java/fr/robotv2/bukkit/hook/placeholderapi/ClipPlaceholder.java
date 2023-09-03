@@ -59,6 +59,25 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
         );
     }
 
+    @RequireOnlinePlayer
+    @Placeholder(identifier = "remaining")
+    public String onRemaining(RequestIssuer issuer) {
+        final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+        return String.valueOf(
+                questPlayer.getActiveQuests()
+                        .stream()
+                        .filter(activeQuest -> !activeQuest.isDone())
+                        .count()
+        );
+    }
+
+    @RequireOnlinePlayer
+    @Placeholder(identifier = "total")
+    public String onTotal(RequestIssuer issuer) {
+        final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+        return String.valueOf(questPlayer.getActiveQuests().size());
+    }
+
     @DefaultPlaceholder
     @Placeholder(identifier = "quest")
     @RequireOnlinePlayer
