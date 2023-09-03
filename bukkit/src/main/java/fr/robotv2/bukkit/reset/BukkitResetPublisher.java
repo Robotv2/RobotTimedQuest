@@ -9,10 +9,12 @@ import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetPublisher;
 import fr.robotv2.common.reset.ResetService;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class BukkitResetPublisher implements ResetPublisher {
@@ -44,6 +46,12 @@ public class BukkitResetPublisher implements ResetPublisher {
         if(service != null) {
             service.calculateNextExecution();
         }
+
+        Bukkit.getOnlinePlayers()
+                .stream()
+                .map(player -> QuestPlayer.getQuestPlayer(player.getUniqueId()))
+                .filter(Objects::nonNull)
+                .forEach(questPlayer -> plugin.getQuestManager().fillPlayer(questPlayer, resetId));
     }
 
     @Override
