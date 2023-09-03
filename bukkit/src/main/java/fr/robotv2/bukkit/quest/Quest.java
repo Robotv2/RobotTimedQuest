@@ -168,9 +168,7 @@ public class Quest {
             future = CompletableFuture.completedFuture(new ItemStack(this.getMaterial()));
         }
 
-        future.thenApply(itemStackConsumer);
-
-        return future;
+        return future.thenApply(itemStackConsumer);
     }
 
     public QuestType getType() {

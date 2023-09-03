@@ -4,8 +4,7 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
 import fr.robotv2.bukkit.hook.OraxenHook;
-import fr.robotv2.bukkit.util.text.ColorUtil;
-import fr.robotv2.bukkit.util.text.PlaceholderUtil;
+import fr.robotv2.bukkit.util.item.ItemSectionCreator;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -13,11 +12,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.concurrent.CompletableFuture;
 
 public class ItemUtil {
 
@@ -51,48 +47,16 @@ public class ItemUtil {
         return false;
     }
 
-    @Nullable
-    public static ItemStack toItemStack(ConfigurationSection parent) {
+    public static CompletableFuture<ItemStack> toItemStack(ConfigurationSection parent) {
         return toItemStack(parent, null);
     }
 
-    @Nullable
-    public static ItemStack toItemStack(ConfigurationSection parent, @Nullable Player player) {
-
-        final Material material = Material.matchMaterial(parent.getString("material", "BOOK"));
-
-        final ItemStack customItem = getCustomItem(parent);
-        final ItemStack stack = customItem == null ? new ItemStack(Objects.requireNonNull(material)) : customItem;
-
-        final ItemMeta meta = Objects.requireNonNull(stack.getItemMeta());
-
-        final String name = parent.getString("name");
-        final List<String> lore = parent.getStringList("lore");
-
-        final int customModelData = parent.getInt("custom_model_data", Integer.MIN_VALUE);
-
-        if(name != null) {
-            meta.setDisplayName(ColorUtil.color(name));
-        }
-
-        if(customModelData != Integer.MIN_VALUE) {
-            meta.setCustomModelData(customModelData);
-        }
-
-        Stream<String> stream = lore.stream().map(ColorUtil::color);
-
-        if(player != null) {
-            stream = stream.map(line -> PlaceholderUtil.parsePlaceholders(player, line));
-        }
-
-        meta.setLore(stream.collect(Collectors.toList()));
-        stack.setItemMeta(meta);
-
-        return stack;
+    public static CompletableFuture<ItemStack> toItemStack(ConfigurationSection parent, @Nullable Player player) {
+        return new ItemSectionCreator(parent).getFutureItem(player);
     }
 
     @Nullable
-    private static ItemStack getCustomItem(ConfigurationSection parent) {
+    public static ItemStack getCustomItem(ConfigurationSection parent) {
 
         final String itemAdder = parent.getString("item_adder");
         final String oraxen = parent.getString("oraxen");
@@ -116,5 +80,16 @@ public class ItemUtil {
         }
 
         return null;
+    }
+
+    @Nullable
+    public static CompletableFuture<ItemStack> getCustomHead(ConfigurationSection parent) {
+        if(parent.isSet("head_texture")) {
+            return HeadUtil.createSkull(parent.getString("head_texture"));
+        } else if(parent.isSet("head_owner")) {
+            return HeadUtil.getPlayerHead("head_owner");
+        } else {
+            return null;
+        }
     }
 }

@@ -2,11 +2,13 @@ package fr.robotv2.bukkit.util;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import fr.robotv2.bukkit.RTQBukkitPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class HeadUtil {
 
     public static CompletableFuture<ItemStack> getPlayerHead(OfflinePlayer offlinePlayer) {
 
-        final CompletableFuture<ItemStack> future = CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta meta = Objects.requireNonNull((SkullMeta) head.getItemMeta());
 
@@ -33,15 +35,16 @@ public class HeadUtil {
             head.setItemMeta(meta);
 
             return head;
-        });
+        }).thenApply(itemStack -> {
 
-        future.thenAccept(itemStack -> {
             if(!heads.containsKey(offlinePlayer.getUniqueId().toString())) {
+                heads.put(offlinePlayer.getName(), itemStack);
                 heads.put(offlinePlayer.getUniqueId().toString(), itemStack);
             }
-        });
 
-        return future;
+            JavaPlugin.getPlugin(RTQBukkitPlugin.class).debug("Head Owner " + offlinePlayer.getName() + " has been cached.");
+            return itemStack;
+        });
     }
 
     public static CompletableFuture<ItemStack> getPlayerHead(UUID playerUUID) {
@@ -68,7 +71,7 @@ public class HeadUtil {
             return CompletableFuture.completedFuture(HeadUtil.getCachedHeads().get(value));
         }
 
-        final CompletableFuture<ItemStack> future = CompletableFuture.supplyAsync(() -> {
+        return CompletableFuture.supplyAsync(() -> {
             final ItemStack head = new ItemStack(Material.PLAYER_HEAD);
 
             if (value.isEmpty()) {
@@ -89,15 +92,15 @@ public class HeadUtil {
 
             head.setItemMeta(headMeta);
             return head;
-        });
+        }).thenApply(itemStack -> {
 
-        future.thenAccept(itemStack -> {
             if(!heads.containsKey(value)) {
                 heads.put(value, itemStack);
             }
-        });
 
-        return future;
+            JavaPlugin.getPlugin(RTQBukkitPlugin.class).debug("Head value " + value + " has been cached.");
+            return itemStack;
+        });
     };
 
 }
