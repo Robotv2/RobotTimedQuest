@@ -5,6 +5,7 @@ import co.aikar.commands.PaperCommandManager;
 import fr.robotv2.bukkit.bungee.BukkitRedisMessenger;
 import fr.robotv2.bukkit.command.BukkitMainCommand;
 import fr.robotv2.bukkit.config.BukkitConfigFile;
+import fr.robotv2.bukkit.config.impl.QuestGuiMessages;
 import fr.robotv2.bukkit.data.BukkitDatabaseManager;
 import fr.robotv2.bukkit.data.PlayerDataInitListeners;
 import fr.robotv2.bukkit.hook.Hooks;
@@ -246,6 +247,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.guiFile = new BukkitConfigFile(this, "gui.yml", true);
 
         this.configurationFile.updateConfig();
+        getGuiFile().updator(new QuestGuiMessages());
     }
 
     private void setupDefaultFilesQuest() {

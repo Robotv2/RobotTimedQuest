@@ -135,14 +135,24 @@ public class Quest {
 
             description.add(" ");
 
-            if(activeQuest.isDone()) {
-                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-                meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-                description.add("&aYou have successfully done this quest.");
-            } else if(this.isNumerical()) {
-                description.add("&7Progress: &e" + activeQuest.getProgress() + "&8/&e" + this.getRequiredAmount());
-            } else {
-                description.add("&cThis quest is not done yet.");
+            final ConfigurationSection guiMessages = PLUGIN.getGuiFile().getConfiguration().getConfigurationSection("quest-gui.messages");
+            if(guiMessages != null) {
+
+                String toAdd;
+
+                if(activeQuest.isDone()) {
+                    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+                    meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
+                    toAdd = guiMessages.getString("quest_done");
+                } else if(this.isNumerical()) {
+                    toAdd = guiMessages.getString("quest_progression");
+                } else {
+                    toAdd = guiMessages.getString("quest_not_done");
+                }
+
+                if(toAdd != null && !toAdd.trim().isEmpty()) {
+                    description.add(toAdd);
+                }
             }
 
             meta.setLore(description.stream()

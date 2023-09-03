@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.logging.Level;
 
 public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
 
@@ -74,6 +75,23 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
         }
     }
 
+    public void updator(FileUpdator updator) {
+
+        final YamlConfiguration configuration = this.getConfiguration();
+
+        if(updator.reason(configuration)) {
+
+            updator.update(configuration);
+
+            try {
+                save();
+                plugin.getLogger().info("File " + fileName + " has been added new keys.");
+            } catch (IOException exception) {
+                plugin.getLogger().log(Level.SEVERE, "Could not save updated configuration", exception);
+            }
+        }
+    }
+
     public void updateConfig() {
 
         if(!this.file.exists()) {
@@ -91,14 +109,11 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
         final YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultFileStream));
         final boolean modified = this.mergeConfigs(defaultConfig, configuration);
 
-        if (modified) {
-            try {
-                save();
-                plugin.getLogger().info("File " + fileName + " has been updated to newest version.");
-            } catch (IOException e) {
-                plugin.getLogger().severe("Could not save updated configuration!");
-                e.printStackTrace();
-            }
+        try {
+            save();
+            plugin.getLogger().info("File " + fileName + " has been updated to newest version.");
+        } catch (IOException exception) {
+            plugin.getLogger().log(Level.SEVERE, "Could not save updated configuration", exception);
         }
     }
 
