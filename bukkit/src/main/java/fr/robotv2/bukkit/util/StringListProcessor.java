@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class StringListProcessor {
@@ -74,7 +75,7 @@ public class StringListProcessor {
                     player.playSound(player.getLocation(), sound, 1, 1);
 
                 default:
-                    throw new IllegalArgumentException(prefix + " isn't a valid prefix.");
+                    RTQBukkitPlugin.getPluginLogger().log(Level.WARNING, String.format("'%s' is not a valid prefix.", prefix));
             }
         }
     }

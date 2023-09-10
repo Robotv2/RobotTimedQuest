@@ -25,7 +25,7 @@ public class IsCustomEntity implements Condition {
     @Override
     public boolean matchCondition(Player player, QuestType type, Event event) {
         final Optional<Entity> optional = Conditions.getEntityFor(type, event);
-        return !optional.isPresent() || entitySectionComparator.isSame(optional.get());
+        return optional.isEmpty() || entitySectionComparator.isSame(optional.get());
     }
 
     @Override
