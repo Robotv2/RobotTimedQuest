@@ -16,10 +16,7 @@ import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
 import fr.robotv2.bukkit.listeners.block.HarvestBlockListener;
 import fr.robotv2.bukkit.listeners.entity.*;
 import fr.robotv2.bukkit.listeners.item.*;
-import fr.robotv2.bukkit.listeners.player.PlayerDeathListener;
-import fr.robotv2.bukkit.listeners.player.PlayerInventoryListener;
-import fr.robotv2.bukkit.listeners.player.PlayerMoveListener;
-import fr.robotv2.bukkit.listeners.player.PlayerWalkListener;
+import fr.robotv2.bukkit.listeners.player.*;
 import fr.robotv2.bukkit.listeners.quest.QuestDoneListener;
 import fr.robotv2.bukkit.listeners.quest.QuestIncrementListener;
 import fr.robotv2.bukkit.quest.QuestManager;
@@ -341,6 +338,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new PlayerInventoryListener(this), this);
         pm.registerEvents(new PlayerDeathListener(this), this);
         pm.registerEvents(new PlayerWalkListener(this), this);
+        pm.registerEvents(new PlayerOnlineListener(this), this);
 
         // QUEST
         // pm.registerEvents(new QuestResetListener(this), this);
