@@ -116,13 +116,10 @@ quests:
       - " &8| &r&725x Any Fish Items"
     menu_item: SALMON
     reset_id: MONTHLY
-    quest_type: FISH_ITEM
+    quest_type: FISH
     required_amount: 25
     required_targets:
-      - SALMON
-      - COOKED_SALMON
-      - TROPICAL_FISH
-      - PUFFERFISH
+      - "*"
     rewards:
       - "[COMMAND] eco give %player% 1800"
       - "[MESSAGE] &bGood catch, %player%! You've completed the quest %quest_display%!"
