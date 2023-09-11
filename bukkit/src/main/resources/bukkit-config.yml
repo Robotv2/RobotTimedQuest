@@ -58,3 +58,6 @@ cosmetics:
     fade-out: 10
     title: "&a&lCONGRATULATION %player%"
     subtitle: "&aYou have successfully done the quest: %quest_display%"
+  bossbar:
+    enabled: true
+    progression_message: "%quest_display% &8| %quest_progressbar% &8| &7%quest_progression% &8/ &7%quest_required%"

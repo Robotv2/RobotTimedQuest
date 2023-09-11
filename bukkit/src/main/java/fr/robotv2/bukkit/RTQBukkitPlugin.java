@@ -17,6 +17,7 @@ import fr.robotv2.bukkit.listeners.block.HarvestBlockListener;
 import fr.robotv2.bukkit.listeners.entity.*;
 import fr.robotv2.bukkit.listeners.item.*;
 import fr.robotv2.bukkit.listeners.player.*;
+import fr.robotv2.bukkit.listeners.quest.QuestBossBarListener;
 import fr.robotv2.bukkit.listeners.quest.QuestDoneListener;
 import fr.robotv2.bukkit.listeners.quest.QuestIncrementListener;
 import fr.robotv2.bukkit.quest.QuestManager;
@@ -25,6 +26,7 @@ import fr.robotv2.bukkit.quest.custom.CustomTypeManager;
 import fr.robotv2.bukkit.reset.BukkitResetPublisher;
 import fr.robotv2.bukkit.reset.BukkitResetServiceRepo;
 import fr.robotv2.bukkit.ui.GuiHandler;
+import fr.robotv2.bukkit.util.cosmetic.CosmeticUtil;
 import fr.robotv2.bukkit.util.Options;
 import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.DatabaseCredentials;
@@ -38,6 +40,7 @@ import fr.robotv2.common.reset.ResetService;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Statistic;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -73,6 +76,8 @@ public class RTQBukkitPlugin extends JavaPlugin {
 
     private RedisConnector redisConnector;
     private PlayerDataInitListeners playerDataInitListeners;
+
+    private CosmeticUtil cosmeticUtil;
 
     public static RTQBukkitPlugin getInstance() {
         return JavaPlugin.getPlugin(RTQBukkitPlugin.class);
@@ -112,6 +117,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.glitchChecker = new GlitchChecker(this);
         this.guiHandler = new GuiHandler(this);
         this.customTypeManager = new CustomTypeManager();
+        this.cosmeticUtil = new CosmeticUtil();
 
         this.setupDatabase();
         this.setupQuests();
@@ -236,6 +242,10 @@ public class RTQBukkitPlugin extends JavaPlugin {
         return this.customTypeManager;
     }
 
+    public CosmeticUtil getCosmeticUtil() {
+        return this.cosmeticUtil;
+    }
+
     // LOADERS
 
     private void setupFiles() {
@@ -343,6 +353,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         // QUEST
         // pm.registerEvents(new QuestResetListener(this), this);
         pm.registerEvents(new QuestIncrementListener(this), this);
+        pm.registerEvents(new QuestBossBarListener(this), this);
         pm.registerEvents(new QuestDoneListener(this), this);
     }
 

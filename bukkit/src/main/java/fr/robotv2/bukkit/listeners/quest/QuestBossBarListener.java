@@ -3,44 +3,51 @@ package fr.robotv2.bukkit.listeners.quest;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.quest.QuestIncrementEvent;
 import fr.robotv2.bukkit.quest.Quest;
+import fr.robotv2.bukkit.util.cosmetic.BossBarUtil;
 import fr.robotv2.bukkit.util.cosmetic.CosmeticUtil;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import fr.robotv2.common.data.impl.ActiveQuest;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-public class QuestIncrementListener implements Listener {
+public class QuestBossBarListener implements Listener {
 
     private final RTQBukkitPlugin plugin;
 
-    public QuestIncrementListener(RTQBukkitPlugin plugin) {
+    public QuestBossBarListener(RTQBukkitPlugin plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
     public void onIncrement(QuestIncrementEvent event) {
 
-        final ActiveQuest activeQuest = event.getActiveQuest();
+        final Player player = event.getPlayer();
         final Quest quest = event.getQuest();
+        final ActiveQuest activeQuest = event.getActiveQuest();
 
-        if(!plugin.getConfig().getBoolean("cosmetics.actionbar.enabled")) {
+        if(!plugin.getConfig().getBoolean("cosmetics.bossbar.enabled")) {
             return;
         }
 
-        if(plugin.getCosmeticUtil().isDisabled(event.getPlayer().getUniqueId(), CosmeticUtil.CosmeticType.ACTIONBAR)) {
+        if(plugin.getCosmeticUtil().isDisabled(player.getUniqueId(), CosmeticUtil.CosmeticType.BOSS_BAR)) {
             return;
         }
 
-        String progressMessage = this.plugin.getConfig().getString("cosmetics.actionbar.progression_message", "&8");
+        String progressMessage = this.plugin.getConfig().getString("cosmetics.bossbar.progression_message", "&8");
 
         progressMessage = PlaceholderUtil.QUEST_PLACEHOLDER.parse(quest, progressMessage);
         progressMessage = PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, progressMessage);
         progressMessage = PlaceholderUtil.ACTIVE_QUEST_RELATIONAL_PLACEHOLDER.parse(quest, activeQuest, progressMessage);
         progressMessage = ColorUtil.color(progressMessage);
 
-        event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(progressMessage));
+        final BossBar bossBar = BossBarUtil.getCurrent(player);
+        bossBar.setTitle(progressMessage);
+
+        if(!bossBar.isVisible()) {
+            bossBar.setVisible(true);
+        }
     }
 }

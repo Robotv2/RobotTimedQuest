@@ -6,6 +6,8 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.StringListProcessor;
+import fr.robotv2.bukkit.util.cosmetic.BossBarUtil;
+import fr.robotv2.bukkit.util.cosmetic.CosmeticUtil;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetService;
@@ -105,5 +107,28 @@ public class BukkitMainCommand extends BaseCommand {
 
         activeQuest.setDone(true);
         Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
+    }
+
+    @Subcommand("toggle")
+    public void onToggle(CommandSender sender, CosmeticUtil.CosmeticType type) {
+
+        if(!(sender instanceof Player)) {
+            sender.sendMessage(ChatColor.RED + "Can't do that from console.");
+            return;
+        }
+
+        final Player player = (Player) sender;
+        final boolean isDisabled = plugin.getCosmeticUtil().toggleDisabled(player.getUniqueId(), type);
+        final String message = isDisabled ? ChatColor.RED + "%s is now DISABLED" : ChatColor.GREEN + "%s is now ENABLED";
+
+        if(type == CosmeticUtil.CosmeticType.BOSS_BAR) {
+            if(isDisabled) {
+                BossBarUtil.removeBar(player);
+            } else {
+                BossBarUtil.getCurrent(player).addPlayer(player);
+            }
+        }
+
+        player.sendMessage(String.format(message, type.name()));
     }
 }

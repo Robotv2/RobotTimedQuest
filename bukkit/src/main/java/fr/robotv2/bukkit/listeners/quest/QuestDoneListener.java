@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.listeners.quest;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
 import fr.robotv2.bukkit.quest.Quest;
+import fr.robotv2.bukkit.util.cosmetic.CosmeticUtil;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.entity.Player;
@@ -43,7 +44,8 @@ public class QuestDoneListener implements Listener {
         final Player player = event.getPlayer();
         final Quest quest = event.getQuest();
 
-        if(this.plugin.getConfig().getBoolean("cosmetics.title.enabled")) {
+        if(this.plugin.getConfig().getBoolean("cosmetics.title.enabled")
+                && !plugin.getCosmeticUtil().isDisabled(player.getUniqueId(), CosmeticUtil.CosmeticType.TITLE)) {
             this.sendCongratulationTitle(player, quest);
         }
     }
