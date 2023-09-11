@@ -6,7 +6,7 @@ import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.custom.CustomType;
 import fr.robotv2.bukkit.quest.requirements.QuestRequirement;
 import fr.robotv2.bukkit.quest.requirements.QuestRequirements;
-import fr.robotv2.bukkit.util.HeadUtil;
+import fr.robotv2.bukkit.util.item.HeadUtil;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import fr.robotv2.common.data.impl.ActiveQuest;

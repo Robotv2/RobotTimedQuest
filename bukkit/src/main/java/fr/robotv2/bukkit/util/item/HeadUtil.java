@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.util;
+package fr.robotv2.bukkit.util.item;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;

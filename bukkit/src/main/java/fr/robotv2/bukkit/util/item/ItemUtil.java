@@ -1,9 +1,10 @@
-package fr.robotv2.bukkit.util;
+package fr.robotv2.bukkit.util.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
 import fr.robotv2.bukkit.hook.OraxenHook;
+import fr.robotv2.bukkit.util.item.HeadUtil;
 import fr.robotv2.bukkit.util.item.ItemSectionCreator;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

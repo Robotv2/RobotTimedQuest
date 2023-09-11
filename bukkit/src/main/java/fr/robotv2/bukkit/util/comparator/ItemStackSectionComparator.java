@@ -3,7 +3,7 @@ package fr.robotv2.bukkit.util.comparator;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
 import fr.robotv2.bukkit.hook.OraxenHook;
-import fr.robotv2.bukkit.util.ItemUtil;
+import fr.robotv2.bukkit.util.item.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;

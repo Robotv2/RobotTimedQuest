@@ -1,6 +1,5 @@
 package fr.robotv2.bukkit.util.item;
 
-import fr.robotv2.bukkit.util.ItemUtil;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Material;
