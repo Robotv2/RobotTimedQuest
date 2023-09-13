@@ -110,6 +110,7 @@ public class BukkitMainCommand extends BaseCommand {
     }
 
     @Subcommand("toggle")
+    @CommandPermission("robottimedquest.command.toggle")
     public void onToggle(CommandSender sender, CosmeticUtil.CosmeticType type) {
 
         if(!(sender instanceof Player)) {
