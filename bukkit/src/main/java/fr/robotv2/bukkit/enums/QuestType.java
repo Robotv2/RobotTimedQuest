@@ -35,6 +35,7 @@ public enum QuestType {
     CARVE(true, Material.class),
     PLAYER_DEATH(true, null),
     WALK(true, null),
+    SWIM(true, null),
     STAY_ONLINE(true, null),
 
     $EXPLORE(true, Biome.class),

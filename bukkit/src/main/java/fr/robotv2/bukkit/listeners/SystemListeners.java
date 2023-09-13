@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.listeners;
 import fr.mrmicky.fastinv.FastInv;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.ActualPlayerMoveEvent;
+import fr.robotv2.bukkit.events.PlayerSwimEvent;
 import fr.robotv2.bukkit.events.PlayerWalkEvent;
 import fr.robotv2.bukkit.util.Options;
 import org.bukkit.Bukkit;
@@ -24,10 +25,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class SystemListeners implements Listener {
 
     private final Map<UUID, Integer> walkMeter = new ConcurrentHashMap<>();
+    private final Map<UUID, Integer> swimMeter = new ConcurrentHashMap<>();
+
     private final Map<UUID, Integer> moveCounts = new HashMap<>();
 
     public SystemListeners() {
@@ -94,27 +101,58 @@ public class SystemListeners implements Listener {
         return player.getStatistic(Statistic.WALK_ONE_CM) + player.getStatistic(Statistic.SPRINT_ONE_CM);
     }
 
+    private int totalSwimMeter(Player player) {
+        return player.getStatistic(Statistic.SWIM_ONE_CM);
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        this.walkMeter.put(event.getPlayer().getUniqueId(), this.totalWalkMeter(event.getPlayer()));
+
+        final Player player = event.getPlayer();
+        final UUID playerUUID = player.getUniqueId();
+
+        this.walkMeter.put(playerUUID, this.totalWalkMeter(player));
+        this.swimMeter.put(playerUUID, this.totalSwimMeter(player));
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        this.walkMeter.remove(event.getPlayer().getUniqueId());
+
+        final Player player = event.getPlayer();
+        final UUID playerUUID = player.getUniqueId();
+
+        this.walkMeter.remove(playerUUID);
+        this.swimMeter.remove(playerUUID);
+    }
+
+    private void updatePlayer(Supplier<Integer> beforeSupplier, Supplier<Integer> nowSupplier, Consumer<Integer> refresh, BiConsumer<Integer, Integer> callEvent) {
+
+        final int before = beforeSupplier.get();
+        final int now = nowSupplier.get();
+
+        refresh.accept(now);
+
+        if((now - before) > 1) {
+            callEvent.accept(before, now);
+        }
     }
 
     private void updatePlayersCount() {
         for(Player player : Bukkit.getOnlinePlayers()) {
 
-            final int before = this.walkMeter.get(player.getUniqueId());
-            final int now = this.totalWalkMeter(player) / 100;
+            updatePlayer(
+                    () -> this.walkMeter.get(player.getUniqueId()),
+                    () -> this.totalWalkMeter(player) / 100,
+                    (now) -> walkMeter.put(player.getUniqueId(), now),
+                    (before, now) -> Bukkit.getScheduler().runTask(RTQBukkitPlugin.getInstance(), () -> Bukkit.getPluginManager().callEvent(new PlayerWalkEvent(player, before, now)))
+            );
 
-            walkMeter.put(player.getUniqueId(), now);
-
-            if((now - before) > 1) {
-                Bukkit.getScheduler().runTask(RTQBukkitPlugin.getInstance(), () -> Bukkit.getPluginManager().callEvent(new PlayerWalkEvent(player, before, now)));
-            }
+            updatePlayer(
+                    () -> this.swimMeter.get(player.getUniqueId()),
+                    () -> this.totalSwimMeter(player) / 100,
+                    (now) -> swimMeter.put(player.getUniqueId(), now),
+                    (before, now) -> Bukkit.getScheduler().runTask(RTQBukkitPlugin.getInstance(), () -> Bukkit.getPluginManager().callEvent(new PlayerSwimEvent(player, before, now)))
+            );
         }
     }
 }
