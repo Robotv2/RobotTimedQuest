@@ -11,6 +11,7 @@ import fr.robotv2.placeholderannotation.BasePlaceholderExpansion;
 import fr.robotv2.placeholderannotation.PlaceholderAnnotationProcessor;
 import fr.robotv2.placeholderannotation.RequestIssuer;
 import fr.robotv2.placeholderannotation.annotations.DefaultPlaceholder;
+import fr.robotv2.placeholderannotation.annotations.Optional;
 import fr.robotv2.placeholderannotation.annotations.Placeholder;
 import fr.robotv2.placeholderannotation.annotations.RequireOnlinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -113,8 +114,8 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
 
     // %robottimedquest_time_DAILY_until%
     @Placeholder(identifier = "time")
-    public String onTime(String resetId, String param) {
-        final ResetService service = plugin.getBukkitResetServiceRepo().getService(resetId.toUpperCase());
+    public String onTime(String resetId, @Optional(defaultParameter = "until") String param) {
+        final ResetService service = plugin.getBukkitResetServiceRepo().getService(resetId);
 
         if(service == null) {
             return null;
