@@ -32,11 +32,11 @@ public class BukkitDatabaseManager extends DatabaseManager {
                     futures.add(
                             getActiveQuestOrmData()
                             .saveAsync(activeQuest)
-                            .thenAccept(ignored -> activeQuest.markDirty(true))
+                            .thenAccept(ignored -> activeQuest.markDirty(false))
                     );
                 } else {
                     getActiveQuestOrmData().save(activeQuest);
-                    activeQuest.markDirty(true);
+                    activeQuest.markDirty(false);
                     futures.add(CompletableFuture.completedFuture(null));
                 }
             }
