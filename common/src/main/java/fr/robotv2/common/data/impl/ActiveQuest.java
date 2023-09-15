@@ -4,10 +4,11 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import fr.robotv2.common.reset.ResetService;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 @DatabaseTable(tableName = "rtq_activequests")
-public class ActiveQuest {
+public class ActiveQuest implements Serializable {
 
     @DatabaseField(columnName = "id", unique = true, generatedId = true)
     private int id;
@@ -30,7 +31,7 @@ public class ActiveQuest {
     @DatabaseField(columnName = "next_reset")
     private long nextReset;
 
-    private boolean dirty = false;
+    private transient boolean dirty = false;
 
     public ActiveQuest() {
         // Empty constructor. Necessary for orm-lite to work.
@@ -88,7 +89,7 @@ public class ActiveQuest {
     }
 
     public void incrementProgress(int value) {
-        progress += value;
+        progress++;
         markDirty(true);
     }
 
