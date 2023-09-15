@@ -12,6 +12,14 @@ public class ColorUtil {
     private ColorUtil() { }
 
     private final static Pattern HEX_PATTERN = Pattern.compile("#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})");
+    private final static Pattern COLOR_CODE_PATTERN = Pattern.compile("&([A-Fa-fK-Ok-oRr0-9])");
+
+    private final static Pattern COLOR_FORMAT_PATTERN = Pattern.compile(HEX_PATTERN.pattern() + "|" + COLOR_CODE_PATTERN.pattern());
+
+    public static boolean hasColorFormat(String text) {
+        Matcher matcher = COLOR_FORMAT_PATTERN.matcher(text);
+        return matcher.find();
+    }
 
     public static String color(String text) {
         text = ChatColor.translateAlternateColorCodes('&', text);
