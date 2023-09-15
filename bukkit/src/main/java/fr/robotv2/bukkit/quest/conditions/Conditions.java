@@ -4,7 +4,7 @@ import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.events.MultipleCropsBreakEvent;
 import fr.robotv2.bukkit.events.VillagerTradeEvent;
 import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
-import fr.robotv2.bukkit.util.BrewUtil;
+import fr.robotv2.bukkit.util.item.BrewUtil;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
