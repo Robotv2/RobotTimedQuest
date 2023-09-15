@@ -29,6 +29,10 @@ public class StringListProcessor {
             argument = PlaceholderUtil.PLAYER_PLACEHOLDER.parse(player, argument);
             argument = PlaceholderUtil.parsePlaceholders(player, argument);
 
+            if(ColorUtil.hasColorFormat(argument)) {
+                argument = ColorUtil.color(argument);
+            }
+
             switch (prefix.toUpperCase(Locale.ROOT)) {
 
                 case "[CLOSE]":
@@ -62,8 +66,7 @@ public class StringListProcessor {
                     break;
 
                 case "[MESSAGE]":
-                    final String message = ColorUtil.color(argument);
-                    player.sendMessage(message);
+                    player.sendMessage(argument);
                     break;
 
                 case "[SOUND]":
