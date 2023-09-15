@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.util;
+package fr.robotv2.bukkit.util.item;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.BrewerInventory;

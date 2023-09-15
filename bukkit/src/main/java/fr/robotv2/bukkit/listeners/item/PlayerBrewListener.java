@@ -3,7 +3,7 @@ package fr.robotv2.bukkit.listeners.item;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
-import fr.robotv2.bukkit.util.BrewUtil;
+import fr.robotv2.bukkit.util.item.BrewUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.BrewingStand;

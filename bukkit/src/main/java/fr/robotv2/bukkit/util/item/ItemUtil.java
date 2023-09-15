@@ -4,8 +4,6 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
 import fr.robotv2.bukkit.hook.OraxenHook;
-import fr.robotv2.bukkit.util.item.HeadUtil;
-import fr.robotv2.bukkit.util.item.ItemSectionCreator;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -53,7 +51,7 @@ public class ItemUtil {
     }
 
     public static CompletableFuture<ItemStack> toItemStack(ConfigurationSection parent, @Nullable Player player) {
-        return new ItemSectionCreator(parent).getFutureItem(player);
+        return new ItemStackSectionCreator(parent).getFutureItem(player);
     }
 
     @Nullable

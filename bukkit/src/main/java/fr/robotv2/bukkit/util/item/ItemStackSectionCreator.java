@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ItemSectionCreator {
+public class ItemStackSectionCreator {
 
     private final ConfigurationSection section;
 
@@ -28,7 +28,7 @@ public class ItemSectionCreator {
     boolean isCustomHead;
     boolean isCustomItem;
 
-    public ItemSectionCreator(ConfigurationSection section) {
+    public ItemStackSectionCreator(ConfigurationSection section) {
         this.section = section;
 
         final String materialString = section.getString("material");

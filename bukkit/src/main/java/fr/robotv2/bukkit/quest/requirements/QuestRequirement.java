@@ -8,12 +8,10 @@ public abstract class QuestRequirement<T> {
 
     private final Quest quest;
     private final QuestType type;
-    private final int amount;
 
     public QuestRequirement(Quest quest) {
         this.quest = quest;
         this.type = quest.getType();
-        this.amount = quest.getRequiredAmount();
     }
 
     public Quest getQuest() {
@@ -22,10 +20,6 @@ public abstract class QuestRequirement<T> {
 
     public QuestType getType() {
         return this.type;
-    }
-
-    public int getRequiredAmount() {
-        return this.amount;
     }
 
     // internal use only.
