@@ -109,11 +109,13 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
         final YamlConfiguration defaultConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defaultFileStream));
         final boolean modified = this.mergeConfigs(defaultConfig, configuration);
 
-        try {
-            save();
-            plugin.getLogger().info("File " + fileName + " has been updated to newest version.");
-        } catch (IOException exception) {
-            plugin.getLogger().log(Level.SEVERE, "Could not save updated configuration", exception);
+        if(modified) {
+            try {
+                save();
+                plugin.getLogger().info("File " + fileName + " has been updated to newest version.");
+            } catch (IOException exception) {
+                plugin.getLogger().log(Level.SEVERE, "Could not save updated configuration", exception);
+            }
         }
     }
 
