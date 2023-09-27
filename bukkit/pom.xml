@@ -32,7 +32,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.1</version>
+                <version>3.1.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
@@ -40,11 +40,10 @@
                             <shadedPattern>fr.robotv2.bukkit.bstats</shadedPattern>
                         </relocation>
                         <relocation>
-                            <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>fr.robotv2.bukkit.hikari</shadedPattern>
+                            <pattern>co.aikar</pattern>
+                            <shadedPattern>fr.robotv2.bukkit.aikar</shadedPattern>
                         </relocation>
                     </relocations>
-                    <minimizeJar>true</minimizeJar>
                 </configuration>
                 <executions>
                     <execution>
@@ -121,6 +120,13 @@
 
         <dependency>
             <groupId>co.aikar</groupId>
+            <artifactId>acf-core</artifactId>
+            <version>0.5.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
             <version>0.5.1-SNAPSHOT</version>
             <scope>compile</scope>
@@ -137,7 +143,7 @@
         <dependency>
             <groupId>com.github.Robotv2</groupId>
             <artifactId>PlaceholderAnnotationProcessor</artifactId>
-            <version>v1.3.1</version>
+            <version>19dd25702e</version>
             <scope>compile</scope>
         </dependency>
 

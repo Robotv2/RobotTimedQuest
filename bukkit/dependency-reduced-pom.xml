@@ -26,7 +26,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.4.1</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <phase>package</phase>
@@ -42,11 +42,10 @@
               <shadedPattern>fr.robotv2.bukkit.bstats</shadedPattern>
             </relocation>
             <relocation>
-              <pattern>com.zaxxer.hikari</pattern>
-              <shadedPattern>fr.robotv2.bukkit.hikari</shadedPattern>
+              <pattern>co.aikar</pattern>
+              <shadedPattern>fr.robotv2.bukkit.aikar</shadedPattern>
             </relocation>
           </relocations>
-          <minimizeJar>true</minimizeJar>
         </configuration>
       </plugin>
     </plugins>
@@ -93,30 +92,120 @@
       <artifactId>spigot-api</artifactId>
       <version>1.16.5-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>commons-lang</artifactId>
+          <groupId>commons-lang</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>gson</artifactId>
+          <groupId>com.google.code.gson</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>bungeecord-chat</artifactId>
+          <groupId>net.md-5</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>snakeyaml</artifactId>
+          <groupId>org.yaml</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>fr.robotv2</groupId>
       <artifactId>robottimedquest-common</artifactId>
       <version>0.8.5-SNAPSHOT</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>annotations</artifactId>
+          <groupId>org.jetbrains</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>cron4j</artifactId>
+          <groupId>it.sauronsoftware.cron4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>ormlite-jdbc</artifactId>
+          <groupId>com.j256.ormlite</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>ormlite-core</artifactId>
+          <groupId>com.j256.ormlite</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>jedis</artifactId>
+          <groupId>redis.clients</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>me.clip</groupId>
       <artifactId>placeholderapi</artifactId>
       <version>2.11.2</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>annotations</artifactId>
+          <groupId>org.jetbrains</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.mojang</groupId>
       <artifactId>authlib</artifactId>
       <version>1.5.25</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>jsr305</artifactId>
+          <groupId>com.google.code.findbugs</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-codec</artifactId>
+          <groupId>commons-codec</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-io</artifactId>
+          <groupId>commons-io</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-lang3</artifactId>
+          <groupId>org.apache.commons</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>log4j-api</artifactId>
+          <groupId>org.apache.logging.log4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>log4j-core</artifactId>
+          <groupId>org.apache.logging.log4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>gson</artifactId>
+          <groupId>com.google.code.gson</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>guava</artifactId>
+          <groupId>com.google.guava</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.github.MilkBowl</groupId>
       <artifactId>VaultAPI</artifactId>
       <version>1.7</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>bukkit</artifactId>
+          <groupId>org.bukkit</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.github.LoneDev6</groupId>
@@ -150,6 +239,26 @@
           <artifactId>*</artifactId>
           <groupId>com.jeff_media</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>triumph-gui</artifactId>
+          <groupId>dev.triumphteam</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>protectionlib</artifactId>
+          <groupId>com.github.oraxen</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>IF</artifactId>
+          <groupId>com.github.stefvanschie.inventoryframework</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>java</artifactId>
+          <groupId>gs.mclo</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>annotations</artifactId>
+          <groupId>org.jetbrains</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -163,6 +272,37 @@
       <artifactId>EliteMobs</artifactId>
       <version>8.4.0-SNAPSHOT</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>cloud-paper</artifactId>
+          <groupId>cloud.commandframework</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>cloud-minecraft-extras</artifactId>
+          <groupId>cloud.commandframework</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>adventure-platform-bukkit</artifactId>
+          <groupId>net.kyori</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>geantyref</artifactId>
+          <groupId>io.leangen.geantyref</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-math3</artifactId>
+          <groupId>org.apache.commons</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>reflections</artifactId>
+          <groupId>org.reflections</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-io</artifactId>
+          <groupId>commons-io</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>
+
