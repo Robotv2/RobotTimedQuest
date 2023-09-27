@@ -26,8 +26,8 @@ import fr.robotv2.bukkit.quest.custom.CustomTypeManager;
 import fr.robotv2.bukkit.reset.BukkitResetPublisher;
 import fr.robotv2.bukkit.reset.BukkitResetServiceRepo;
 import fr.robotv2.bukkit.ui.GuiHandler;
-import fr.robotv2.bukkit.util.cosmetic.CosmeticUtil;
 import fr.robotv2.bukkit.util.Options;
+import fr.robotv2.bukkit.util.cosmetic.CosmeticUtil;
 import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
@@ -40,7 +40,6 @@ import fr.robotv2.common.reset.ResetService;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -348,6 +347,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new PlayerInventoryListener(this), this);
         pm.registerEvents(new PlayerDeathListener(this), this);
         pm.registerEvents(new PlayerWalkListener(this), this);
+        pm.registerEvents(new PlayerSwimListener(this), this);
         pm.registerEvents(new PlayerOnlineListener(this), this);
 
         // QUEST

@@ -9,7 +9,6 @@ import fr.robotv2.common.data.impl.QuestPlayer;
 import fr.robotv2.common.reset.ResetPublisher;
 import fr.robotv2.common.reset.ResetService;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
