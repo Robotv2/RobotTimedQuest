@@ -157,7 +157,7 @@ public class Quest {
 
             meta.setLore(description.stream()
                     .map(line -> !line.isEmpty() ? ColorUtil.color(line) : line)
-                    .map(line -> PlaceholderUtil.parsePlaceholders(offlinePlayer, line))
+                    .map(line -> PlaceholderUtil.withPlayerPlaceholders(offlinePlayer, line))
                     .map(line -> PlaceholderUtil.QUEST_PLACEHOLDER.parse(this, line))
                     .map(line -> PlaceholderUtil.ACTIVE_QUEST_PLACEHOLDER.parse(activeQuest, line))
                     .map(line -> PlaceholderUtil.ACTIVE_QUEST_RELATIONAL_PLACEHOLDER.parse(this, activeQuest, line))
@@ -173,7 +173,8 @@ public class Quest {
         if(headTexture != null) {
             future =  HeadUtil.createSkull(this.headTexture);
         } else if(headOwner != null) {
-            future = HeadUtil.getPlayerHead(this.headOwner);
+            String temp = PlaceholderUtil.withPlayerPlaceholders(offlinePlayer, headOwner);
+            future = HeadUtil.getPlayerHead(temp);
         } else {
             future = CompletableFuture.completedFuture(new ItemStack(this.getMaterial()));
         }
