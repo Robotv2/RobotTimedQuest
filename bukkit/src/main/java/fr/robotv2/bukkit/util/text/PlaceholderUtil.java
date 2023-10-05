@@ -5,7 +5,6 @@ import fr.robotv2.bukkit.hook.placeholderapi.PlaceholderAPIHook;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.common.data.impl.ActiveQuest;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 
 public class PlaceholderUtil {
 
