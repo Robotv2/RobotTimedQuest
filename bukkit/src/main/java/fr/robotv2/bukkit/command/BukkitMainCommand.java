@@ -123,10 +123,8 @@ public class BukkitMainCommand extends BaseCommand {
         final String message = isDisabled ? ChatColor.RED + "%s is now DISABLED" : ChatColor.GREEN + "%s is now ENABLED";
 
         if(type == CosmeticUtil.CosmeticType.BOSS_BAR) {
-            if(isDisabled) {
-                BossBarUtil.removeBar(player);
-            } else {
-                BossBarUtil.getCurrent(player).addPlayer(player);
+            if (isDisabled) {
+                BossBarUtil.hide(player);
             }
         }
 
