@@ -2,6 +2,7 @@ package fr.robotv2.bukkit.listeners;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
+import fr.robotv2.bukkit.events.quest.BulkQuestDoneEvent;
 import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
 import fr.robotv2.bukkit.events.quest.QuestIncrementEvent;
 import fr.robotv2.bukkit.quest.Quest;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 public abstract class QuestProgressionEnhancer<T> implements Listener {
 
@@ -32,12 +34,6 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
 
     public GlitchChecker getGlitchChecker() {
         return this.plugin.getGlitchChecker();
-    }
-
-    public boolean allConditionsMatch(List<Condition> conditions, Player player, Event event, QuestType type) {
-        return conditions.stream()
-                .filter(condition -> condition.referencedType().contains(type))
-                .allMatch(condition -> condition.matchCondition(player, type, event));
     }
 
     public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target) {
@@ -122,7 +118,7 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
         return true;
     }
 
-    public void incrementQuest(Quest quest, ActiveQuest activeQuest, Player player, int amount) {
+     protected void incrementQuest(Quest quest, ActiveQuest activeQuest, Player player, int amount) {
 
         activeQuest.incrementProgress(amount);
         Bukkit.getPluginManager().callEvent(new QuestIncrementEvent(activeQuest, amount));
@@ -131,8 +127,20 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
 
             activeQuest.setDone(true);
             new StringListProcessor().process(player, quest);
-
             Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
+
+            final QuestPlayer questPlayer = Objects.requireNonNull(QuestPlayer.getQuestPlayer(player.getUniqueId()));
+            final String resetId = activeQuest.getResetId();
+
+            if(questPlayer.getActiveQuests(resetId).stream().allMatch(ActiveQuest::isDone)) {
+                Bukkit.getPluginManager().callEvent(new BulkQuestDoneEvent(activeQuest, player, resetId));
+            }
         }
+    }
+
+    protected boolean allConditionsMatch(List<Condition> conditions, Player player, Event event, QuestType type) {
+        return conditions.stream()
+                .filter(condition -> condition.referencedType().contains(type))
+                .allMatch(condition -> condition.matchCondition(player, type, event));
     }
 }
