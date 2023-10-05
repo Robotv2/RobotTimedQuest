@@ -50,33 +50,34 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
 
     @RequireOnlinePlayer
     @Placeholder(identifier = "done")
-    public String onDone(RequestIssuer issuer) {
+    public String onDone(RequestIssuer issuer, @Optional String resetId) {
+
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+        final List<ActiveQuest> quests = resetId != null ? questPlayer.getActiveQuests(resetId) : questPlayer.getActiveQuests();
+
         return String.valueOf(
-                questPlayer.getActiveQuests()
-                        .stream()
-                        .filter(ActiveQuest::isDone)
-                        .count()
+                quests.stream().filter(ActiveQuest::isDone).count()
         );
     }
 
     @RequireOnlinePlayer
     @Placeholder(identifier = "remaining")
-    public String onRemaining(RequestIssuer issuer) {
+    public String onRemaining(RequestIssuer issuer, @Optional String resetId) {
+
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+        final List<ActiveQuest> quests = resetId != null ? questPlayer.getActiveQuests(resetId) : questPlayer.getActiveQuests();
+
         return String.valueOf(
-                questPlayer.getActiveQuests()
-                        .stream()
-                        .filter(activeQuest -> !activeQuest.isDone())
-                        .count()
+                quests.stream().filter(activeQuest -> !activeQuest.isDone()).count()
         );
     }
 
     @RequireOnlinePlayer
     @Placeholder(identifier = "total")
-    public String onTotal(RequestIssuer issuer) {
+    public String onTotal(RequestIssuer issuer, @Optional String resetId) {
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
-        return String.valueOf(questPlayer.getActiveQuests().size());
+        final List<ActiveQuest> quests = resetId != null ? questPlayer.getActiveQuests(resetId) : questPlayer.getActiveQuests();
+        return String.valueOf(quests.size());
     }
 
     @DefaultPlaceholder
