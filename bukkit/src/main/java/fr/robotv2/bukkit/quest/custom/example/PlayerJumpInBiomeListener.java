@@ -11,10 +11,8 @@ import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 
 public class PlayerJumpInBiomeListener extends CustomQuestProgressionEnhancer<Biome> implements Listener {
 
-    public final static String TYPE_NAME = "JUMP";
-
     public PlayerJumpInBiomeListener() {
-        RobotTimedQuestAPI.registerCustomType(TYPE_NAME, new JumpCustomType());
+        RobotTimedQuestAPI.registerCustomType(new JumpCustomType());
     }
 
     @EventHandler
@@ -27,6 +25,6 @@ public class PlayerJumpInBiomeListener extends CustomQuestProgressionEnhancer<Bi
         final Player player = event.getPlayer();
         final Biome biome = player.getLocation().getBlock().getBiome();
 
-        this.trigger(player, TYPE_NAME, biome, event, event.getNewValue() - event.getPreviousValue());
+        this.trigger(player, "JUMP", biome, event, event.getNewValue() - event.getPreviousValue());
     }
 }

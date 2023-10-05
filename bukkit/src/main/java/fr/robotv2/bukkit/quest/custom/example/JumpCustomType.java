@@ -7,6 +7,11 @@ import fr.robotv2.bukkit.quest.requirements.QuestRequirement;
 public class JumpCustomType implements CustomType {
 
     @Override
+    public String getCustomTypeName() {
+        return "JUMP";
+    }
+
+    @Override
     public boolean isNumerical() {
         return true;
     }

@@ -47,7 +47,7 @@ public class RobotTimedQuestAPI {
         INSTANCE.getConditionManager().registerCondition(key, condition);
     }
 
-    public static void registerCustomType(String name, CustomType customType) {
-        INSTANCE.getCustomTypeManager().registerCustomType(name, customType);
+    public static void registerCustomType(CustomType customType) {
+        INSTANCE.getCustomTypeManager().registerCustomType(customType.getCustomTypeName(), customType);
     }
 }
