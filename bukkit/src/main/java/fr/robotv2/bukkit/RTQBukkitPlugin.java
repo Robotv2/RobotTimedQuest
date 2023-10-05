@@ -320,6 +320,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         // DATA & SYSTEM
         pm.registerEvents((this.playerDataInitListeners = new PlayerDataInitListeners(this)), this);
         pm.registerEvents(new SystemListeners(), this);
+        pm.registerEvents(new GlitchChecker(this), this);
 
         // BLOCK
         pm.registerEvents(new BlockBreakListener(this), this);
