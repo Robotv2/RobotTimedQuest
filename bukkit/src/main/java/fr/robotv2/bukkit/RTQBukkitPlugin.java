@@ -18,6 +18,7 @@ import fr.robotv2.bukkit.listeners.entity.*;
 import fr.robotv2.bukkit.listeners.item.*;
 import fr.robotv2.bukkit.listeners.player.*;
 import fr.robotv2.bukkit.listeners.quest.QuestBossBarListener;
+import fr.robotv2.bukkit.listeners.quest.QuestBulkDoneListener;
 import fr.robotv2.bukkit.listeners.quest.QuestDoneListener;
 import fr.robotv2.bukkit.listeners.quest.QuestIncrementListener;
 import fr.robotv2.bukkit.quest.QuestManager;
@@ -332,6 +333,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new EntityKillListener(this), this);
         pm.registerEvents(new EntityShearListener(this), this);
         pm.registerEvents(new EntityTameListener(this), this);
+        pm.registerEvents(new VillagerTradeListener(this), this);
 
         // ITEM
         pm.registerEvents(new PlayerBrewListener(this), this);
@@ -355,6 +357,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new QuestIncrementListener(this), this);
         pm.registerEvents(new QuestBossBarListener(this), this);
         pm.registerEvents(new QuestDoneListener(this), this);
+        pm.registerEvents(new QuestBulkDoneListener(this), this);
     }
 
     private void setupCommandHandlers() {

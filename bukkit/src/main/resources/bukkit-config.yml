@@ -1,3 +1,5 @@
+# support is available on the discord server: https://discord.gg/nafAPKfC5M
+
 options:
   debug: false
   player_move_event_threshold: 5
@@ -45,6 +47,24 @@ quest-assignment:
   WEEKLY: 5
   MONTHLY: 3
 
+# commands to be executed for a player when
+# this one finish all quest in a reset service.
+# get a list of reward here: https://robotv2.gitbook.io/wiki-rtq-robottimedquest/misc/reward-processor
+quest-bulk-done:
+  DAILY:
+    - "[MESSAGE] Congratulations, you have done all the daily quest !"
+    - "[COMMAND] give %player% gold_ingot 2"
+    - "[EXP_LEVEL] 3"
+  WEEKLY:
+    - "[MESSAGE] Congratulations, you have done all the daily quest !"
+    - "[COMMAND] give %player% gold_ingot 6"
+    - "[EXP_LEVEL] 5"
+  MONTHLY:
+    - "[MESSAGE] Congratulations, you have done all the daily quest !"
+    - "[COMMAND] give %player% gold_ingot 16"
+    - "[EXP_LEVEL] 20"
+
+
 cosmetics:
   # actionbar when the player increments a quest.
   actionbar:
@@ -61,3 +81,5 @@ cosmetics:
   bossbar:
     enabled: true
     progression_message: "%quest_display% &8| %quest_progressbar% &8| &7%quest_progression% &8/ &7%quest_required%"
+    color: "WHITE"
+    delay: 5
