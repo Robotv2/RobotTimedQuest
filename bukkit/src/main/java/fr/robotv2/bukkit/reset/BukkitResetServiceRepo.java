@@ -36,7 +36,6 @@ public class BukkitResetServiceRepo extends AbstractResetServiceRepo {
         for(String serviceId : serviceSection.getKeys(false)) {
             final String cronSyntax = serviceSection.getString(serviceId);
             final ResetService service = new ResetService(serviceId, cronSyntax, timeZone);
-            service.calculateNextExecution();
             this.registerService(service);
         }
 
