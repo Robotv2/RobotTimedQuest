@@ -115,6 +115,7 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
 
     // %robottimedquest_time_DAILY_until%
     @Placeholder(identifier = "time")
+    @RequireOnlinePlayer
     public String onTime(String resetId, @Optional(defaultParameter = "until") String param) {
         final ResetService service = plugin.getBukkitResetServiceRepo().getService(resetId);
 
