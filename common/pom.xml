@@ -7,7 +7,7 @@
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
-        <version>0.8.6-SNAPSHOT</version>
+        <version>0.8.7-SNAPSHOT</version>
     </parent>
 
     <artifactId>robottimedquest-common</artifactId>
@@ -101,7 +101,7 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>5.0.1</version>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
         <!-- ORMLITE -->

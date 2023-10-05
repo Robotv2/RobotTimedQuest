@@ -3,7 +3,7 @@
   <parent>
     <artifactId>RobotTimedQuest</artifactId>
     <groupId>fr.robotv2</groupId>
-    <version>0.8.5-SNAPSHOT</version>
+    <version>0.8.7-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>robottimedquest-bukkit</artifactId>
@@ -118,7 +118,7 @@
     <dependency>
       <groupId>fr.robotv2</groupId>
       <artifactId>robottimedquest-common</artifactId>
-      <version>0.8.5-SNAPSHOT</version>
+      <version>0.8.7-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -128,6 +128,10 @@
         <exclusion>
           <artifactId>cron4j</artifactId>
           <groupId>it.sauronsoftware.cron4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>HikariCP</artifactId>
+          <groupId>com.zaxxer</groupId>
         </exclusion>
         <exclusion>
           <artifactId>ormlite-jdbc</artifactId>
