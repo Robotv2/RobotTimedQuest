@@ -26,11 +26,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class SystemListeners implements Listener {
+
+    private static final int UPDATE_DELAY = 2;
 
     private final Map<UUID, Integer> walkMeter = new ConcurrentHashMap<>();
     private final Map<UUID, Integer> swimMeter = new ConcurrentHashMap<>();
@@ -41,8 +42,8 @@ public class SystemListeners implements Listener {
         final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
         service.scheduleAtFixedRate(
                 this::updatePlayersCount,
-                2,
-                2,
+                UPDATE_DELAY,
+                UPDATE_DELAY,
                 TimeUnit.SECONDS
         );
     }
