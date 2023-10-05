@@ -13,11 +13,13 @@ import fr.robotv2.common.reset.ResetService;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class GuiHelper {
 
@@ -54,8 +56,12 @@ public class GuiHelper {
             }
 
             final List<String> actions = itemSection.getStringList("on_click");
-            final CompletableFuture<Void> future = ItemUtil.toItemStack(itemSection, player)
-                    .thenAccept(completedItem -> scheme.bindItem(character, completedItem, actions.isEmpty() ? null : ignored -> new StringListProcessor().process(player, actions)));
+            final Consumer<InventoryClickEvent> consumer = actions.isEmpty() ? null : (ignored) -> new StringListProcessor().process(player, actions);
+
+            final CompletableFuture<Void> future = ItemUtil
+                    .toItemStack(itemSection, player)
+                    .thenAccept(completedItem -> scheme.bindItem(character, completedItem, consumer));
+
             futuresItems.add(future);
         }
 
@@ -123,6 +129,4 @@ public class GuiHelper {
 
         return allOf(futures);
     }
-
-
 }
