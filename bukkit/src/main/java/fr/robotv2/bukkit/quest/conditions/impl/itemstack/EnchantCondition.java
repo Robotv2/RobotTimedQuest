@@ -64,6 +64,6 @@ public class EnchantCondition implements Condition {
 
     @Override
     public EnumSet<QuestType> referencedType() {
-        return EnumSet.of(QuestType.ENCHANT);
+        return Conditions.ITEMSTACK_RELATED_TYPES;
     }
 }
