@@ -53,8 +53,8 @@ public class GuiHelper {
                 continue;
             }
 
-            final List<String> actions = section.getStringList("on_click");
-            final CompletableFuture<Void> future = ItemUtil.toItemStack(itemSection)
+            final List<String> actions = itemSection.getStringList("on_click");
+            final CompletableFuture<Void> future = ItemUtil.toItemStack(itemSection, player)
                     .thenAccept(completedItem -> scheme.bindItem(character, completedItem, actions.isEmpty() ? null : ignored -> new StringListProcessor().process(player, actions)));
             futuresItems.add(future);
         }
