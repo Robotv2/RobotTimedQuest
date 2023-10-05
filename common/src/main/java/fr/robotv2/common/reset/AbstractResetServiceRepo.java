@@ -11,7 +11,7 @@ public abstract class AbstractResetServiceRepo {
     private final Map<String, ResetService> services = new HashMap<>();
 
     protected void registerService(ResetService service) {
-        services.put(service.getId().toLowerCase(), service);
+        services.put(service.getId().toUpperCase(Locale.ROOT), service);
     }
 
     protected void clearServices() {
@@ -31,7 +31,7 @@ public abstract class AbstractResetServiceRepo {
 
     @Nullable
     public ResetService getService(String id) {
-        return services.get(id.toLowerCase());
+        return services.get(id.toUpperCase(Locale.ROOT));
     }
 
     @UnmodifiableView
@@ -43,7 +43,7 @@ public abstract class AbstractResetServiceRepo {
     public Collection<String> getServicesNames() {
         return getServices().stream()
                 .map(ResetService::getId)
-                .map(id -> id.toLowerCase(Locale.ROOT))
+                .map(id -> id.toUpperCase(Locale.ROOT))
                 .collect(Collectors.toList());
     }
 
