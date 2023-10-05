@@ -75,7 +75,7 @@ public class ItemStackSectionCreator {
         CompletableFuture<ItemStack> future = null;
 
         if(isCustomHead()) {
-            future = ItemUtil.getCustomHead(section);
+            future = ItemUtil.getCustomHead(player, section);
         }
 
         if(isCustomItem()) {
@@ -90,9 +90,10 @@ public class ItemStackSectionCreator {
         return future.thenApply(consumerItemstack(player));
     }
 
-    private void applyCustomName(ItemMeta meta) {
+    private void applyCustomName(Player player, ItemMeta meta) {
         if(hasCustomName()) {
-            meta.setDisplayName(ColorUtil.color(getName()));
+            final String name = PlaceholderUtil.withPlayerPlaceholders(player, getName());
+            meta.setDisplayName(ColorUtil.color(name));
         }
     }
 
@@ -106,13 +107,13 @@ public class ItemStackSectionCreator {
         return itemStack -> {
             final ItemMeta meta = Objects.requireNonNull(itemStack.getItemMeta());
 
-            applyCustomName(meta);
+            applyCustomName(player, meta);
             applyCustomModelData(meta);
 
             Stream<String> stream = lore.stream();
 
             if(player != null) {
-                stream = stream.map(line -> PlaceholderUtil.parsePlaceholders(player, line));
+                stream = stream.map(line -> PlaceholderUtil.withPlayerPlaceholders(player, line));
             }
 
             meta.setLore(stream.map(ColorUtil::color).collect(Collectors.toList()));

@@ -4,6 +4,7 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.hook.ItemAdderHook;
 import fr.robotv2.bukkit.hook.OraxenHook;
+import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -82,11 +83,12 @@ public class ItemUtil {
     }
 
     @Nullable
-    public static CompletableFuture<ItemStack> getCustomHead(ConfigurationSection parent) {
+    public static CompletableFuture<ItemStack> getCustomHead(Player player, ConfigurationSection parent) {
         if(parent.isSet("head_texture")) {
             return HeadUtil.createSkull(parent.getString("head_texture"));
         } else if(parent.isSet("head_owner")) {
-            return HeadUtil.getPlayerHead(parent.getString("head_owner"));
+            final String headOwner = PlaceholderUtil.withPlayerPlaceholders(player, parent.getString("head_owner"));
+            return HeadUtil.getPlayerHead(headOwner);
         } else {
             return null;
         }

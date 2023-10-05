@@ -17,8 +17,8 @@ public class PlaceholderUtil {
         return Hooks.PLACEHOLDER_API.isInitialized() ? PlaceholderAPIHook.parsePlaceholders(offlinePlayer, input) : input;
     }
 
-    public static InternalPlaceholder<Player> PLAYER_PLACEHOLDER = ((value, input) -> input
-            .replace("%player%", value.getName())
+    public static InternalPlaceholder<OfflinePlayer> PLAYER_PLACEHOLDER = ((value, input) -> input
+            .replace("%player%", value != null && value.getName() != null ? value.getName() : "UNKNOWN")
     );
 
     public static InternalPlaceholder<Quest> QUEST_PLACEHOLDER = ((value, input) -> input
@@ -46,5 +46,11 @@ public class PlaceholderUtil {
     @FunctionalInterface
     public interface RelationalInternalPlaceholder<A, B> {
         String parse(A value1, B value2, String input);
+    }
+
+    public static String withPlayerPlaceholders(OfflinePlayer offlinePlayer, String input) {
+        input = parsePlaceholders(offlinePlayer, input);
+        input = PLAYER_PLACEHOLDER.parse(offlinePlayer, input);
+        return input;
     }
 }

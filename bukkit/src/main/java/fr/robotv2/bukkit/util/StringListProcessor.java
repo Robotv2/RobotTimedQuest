@@ -25,9 +25,7 @@ public class StringListProcessor {
             final String prefix = reward.split(" ")[0];
 
             String argument = reward.length() == prefix.length() ? reward.trim() : reward.substring(prefix.length() + 1).trim();
-
-            argument = PlaceholderUtil.PLAYER_PLACEHOLDER.parse(player, argument);
-            argument = PlaceholderUtil.parsePlaceholders(player, argument);
+            argument = PlaceholderUtil.withPlayerPlaceholders(player, argument);
 
             if(ColorUtil.hasColorFormat(argument)) {
                 argument = ColorUtil.color(argument);
