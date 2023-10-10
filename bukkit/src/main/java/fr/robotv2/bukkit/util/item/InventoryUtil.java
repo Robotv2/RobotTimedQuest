@@ -1,5 +1,6 @@
 package fr.robotv2.bukkit.util.item;
 
+import fr.robotv2.bukkit.RTQBukkitPlugin;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryAction;
@@ -37,6 +38,8 @@ public interface InventoryUtil {
         if (initiator == null || itemStack == null || action == null) {
             return 0;
         }
+
+        RTQBukkitPlugin.getInstance().debug("AMOUNT_FROM_ACTION - action = %s", action.name());
 
         int amount = 0;
 
@@ -88,6 +91,8 @@ public interface InventoryUtil {
             default:
                 break;
         }
+
+        RTQBukkitPlugin.getInstance().debug("AMOUNT_FROM_ACTION - amount = %d", amount);
 
         // Ensure the return value is never below 0.
         return Math.max(amount, 0);
