@@ -27,7 +27,7 @@ public enum QuestType {
     ENCHANT(true, Material.class),
     PICKUP(true, Material.class),
     BREW(true, Material.class),
-    LAUNCH(true, Material.class),
+    LAUNCH(true, EntityType.class),
     LOCATION(false, Location.class),
     VILLAGER_TRADE(true, Material.class),
 
