@@ -26,7 +26,7 @@ public class PumpkinCarveListener extends QuestProgressionEnhancer<Material> {
             return;
         }
 
-        if(event.getClickedBlock() == null && event.getClickedBlock().getType() != Material.PUMPKIN) {
+        if(event.getClickedBlock() == null || event.getClickedBlock().getType() != Material.PUMPKIN) {
             return;
         }
 

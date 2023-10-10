@@ -14,6 +14,7 @@ import fr.robotv2.bukkit.listeners.SystemListeners;
 import fr.robotv2.bukkit.listeners.block.BlockBreakListener;
 import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
 import fr.robotv2.bukkit.listeners.block.HarvestBlockListener;
+import fr.robotv2.bukkit.listeners.block.PumpkinCarveListener;
 import fr.robotv2.bukkit.listeners.entity.*;
 import fr.robotv2.bukkit.listeners.item.*;
 import fr.robotv2.bukkit.listeners.player.*;
@@ -71,6 +72,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
     private BukkitConfigFile configurationFile;
     private BukkitConfigFile resetServiceFile;
     private BukkitConfigFile guiFile;
+    private BukkitConfigFile messageFile;
 
     private BukkitDatabaseManager databaseManager;
 
@@ -153,6 +155,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         getConfigurationFile().reload();
         getResetServiceFile().reload();
         getGuiFile().reload();
+        getMessageFile().reload();
 
         Options.load(getConfig());
         this.setupQuests();
@@ -163,6 +166,12 @@ public class RTQBukkitPlugin extends JavaPlugin {
     public void debug(String message) {
         if(Options.DEBUG) {
             getLogger().info("[DEBUG] " + message);
+        }
+    }
+
+    public void debug(String message, Object... objects) {
+        if(Options.DEBUG) {
+            getLogger().info("[DEBUG] " + String.format(message, objects));
         }
     }
 
@@ -213,6 +222,10 @@ public class RTQBukkitPlugin extends JavaPlugin {
         return this.guiFile;
     }
 
+    public BukkitConfigFile getMessageFile() {
+        return this.messageFile;
+    }
+
     public BukkitDatabaseManager getDatabaseManager() {
         return this.databaseManager;
     }
@@ -249,11 +262,15 @@ public class RTQBukkitPlugin extends JavaPlugin {
     // LOADERS
 
     private void setupFiles() {
+
         this.configurationFile = new BukkitConfigFile(this, "bukkit-config.yml", true);
         this.resetServiceFile = new BukkitConfigFile(this, "reset-service.yml", true);
         this.guiFile = new BukkitConfigFile(this, "gui.yml", true);
+        this.messageFile = new BukkitConfigFile(this, "bukkit-messages.yml", true);
 
         this.configurationFile.updateConfig();
+        this.messageFile.updateConfig();
+
         getGuiFile().updator(new QuestGuiMessages());
     }
 
@@ -326,6 +343,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new BlockBreakListener(this), this);
         pm.registerEvents(new BlockPlaceListener(this), this);
         pm.registerEvents(new HarvestBlockListener(this), this);
+        pm.registerEvents(new PumpkinCarveListener(this), this);
 
         // ENTITY
         pm.registerEvents(new EntityBreedListener(this), this);
