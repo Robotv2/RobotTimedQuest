@@ -53,6 +53,11 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
     public String onDone(RequestIssuer issuer, @Optional String resetId) {
 
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+
+        if(questPlayer == null) {
+            return "";
+        }
+
         final List<ActiveQuest> quests = resetId != null ? questPlayer.getActiveQuests(resetId) : questPlayer.getActiveQuests();
 
         return String.valueOf(
@@ -65,6 +70,11 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
     public String onRemaining(RequestIssuer issuer, @Optional String resetId) {
 
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+
+        if(questPlayer == null) {
+            return "";
+        }
+
         final List<ActiveQuest> quests = resetId != null ? questPlayer.getActiveQuests(resetId) : questPlayer.getActiveQuests();
 
         return String.valueOf(
@@ -76,6 +86,11 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
     @Placeholder(identifier = "total")
     public String onTotal(RequestIssuer issuer, @Optional String resetId) {
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+
+        if(questPlayer == null) {
+            return "";
+        }
+
         final List<ActiveQuest> quests = resetId != null ? questPlayer.getActiveQuests(resetId) : questPlayer.getActiveQuests();
         return String.valueOf(quests.size());
     }
@@ -88,6 +103,11 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
         index = index - 1;
 
         final QuestPlayer questPlayer = QuestPlayer.getQuestPlayer(issuer.getPlayer().getUniqueId());
+
+        if(questPlayer == null) {
+            return "";
+        }
+
         final List<ActiveQuest> activeQuests = questPlayer.getActiveQuests(serviceId);
 
         if(activeQuests.size() <= index) {
