@@ -89,7 +89,7 @@ public class ActiveQuest implements Serializable {
     }
 
     public void incrementProgress(int value) {
-        progress++;
+        progress += value;
         markDirty(true);
     }
 

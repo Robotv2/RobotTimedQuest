@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.inventory.FurnaceExtractEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.BlockInventoryHolder;
@@ -22,7 +23,7 @@ public class PlayerCookListener extends QuestProgressionEnhancer<Material> imple
         super(plugin);
     }
 
-    @EventHandler(ignoreCancelled = true)
+    // @EventHandler(ignoreCancelled = true) not working, may need it later lol
     public void onFurnaceClick(InventoryClickEvent event) {
 
         final Player player = (Player) event.getWhoClicked();
@@ -54,13 +55,8 @@ public class PlayerCookListener extends QuestProgressionEnhancer<Material> imple
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onFurnaceExtract(ActualFurnaceExtractEvent event) {
-        final ItemStack result = event.getStack();
-
-        if(result == null || result.getType() == Material.AIR) {
-            return;
-        }
-
-        this.incrementProgression(event.getPlayer(), QuestType.COOK, result.getType(), event, event.getAmount());
+    public void onFurnaceExtract(FurnaceExtractEvent event) {
+        this.getPlugin().debug("FurnaceExtractEvent - %d", event.getItemAmount());
+        this.incrementProgression(event.getPlayer(), QuestType.COOK, event.getItemType(), event, event.getItemAmount());
     }
 }

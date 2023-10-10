@@ -30,7 +30,7 @@ public class ActualFurnaceExtractEvent extends BlockEvent {
         return stack;
     }
 
-    public int getAmount() {
+    public int getItemAmount() {
         return amount;
     }
 
