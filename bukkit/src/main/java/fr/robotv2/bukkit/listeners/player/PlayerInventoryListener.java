@@ -6,12 +6,15 @@ import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.common.data.impl.ActiveQuest;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.function.Consumer;
 
 public class PlayerInventoryListener extends QuestProgressionEnhancer<Material> {
 
@@ -44,15 +47,15 @@ public class PlayerInventoryListener extends QuestProgressionEnhancer<Material> 
         if(result) {
 
             final Inventory inventory = event.getInventoryClickEvent().getClickedInventory();
-            final ItemStack current = event.getInventoryClickEvent().getCurrentItem();
 
-            if(inventory != null && current != null) {
-                quest.getGuiItem(activeQuest, player).thenAccept(itemStack -> {
-                    inventory.setItem(
-                            event.getInventoryClickEvent().getSlot(),
-                            itemStack
-                    );
-                });
+            if(inventory != null) {
+                final Consumer<ItemStack> refreshOnBukkit = item -> Bukkit.getScheduler().runTask(getPlugin(),
+                        () -> inventory.setItem(
+                                event.getInventoryClickEvent().getSlot(),
+                                item
+                        ));
+
+                quest.getGuiItem(activeQuest, player).thenAccept(refreshOnBukkit);
             }
 
             if(requiredAmount >= cursor.getAmount()) {
@@ -60,6 +63,7 @@ public class PlayerInventoryListener extends QuestProgressionEnhancer<Material> 
             } else {
                 final ItemStack replacement = cursor.clone();
                 replacement.setAmount(cursor.getAmount() - requiredAmount);
+                player.setItemOnCursor(replacement);
             }
         }
     }
