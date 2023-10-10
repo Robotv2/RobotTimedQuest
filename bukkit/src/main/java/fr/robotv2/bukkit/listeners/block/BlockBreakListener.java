@@ -16,7 +16,7 @@ public class BlockBreakListener extends QuestProgressionEnhancer<Material> {
         super(plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBreak(BlockBreakEvent event) {
 
         final Player player = event.getPlayer();

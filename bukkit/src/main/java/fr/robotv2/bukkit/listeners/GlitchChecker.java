@@ -14,6 +14,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.metadata.Metadatable;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 public class GlitchChecker implements Listener {
 
-    private static final String METADATA_KEY = "robot_timed_quest_marked:";
+    private static final String METADATA_KEY = "robot_timed_quest:marked";
 
     private final RTQBukkitPlugin plugin;
 
@@ -31,14 +32,15 @@ public class GlitchChecker implements Listener {
     }
 
     public void mark(Metadatable source, Player activator) {
-        source.setMetadata(METADATA_KEY,
-                new FixedMetadataValue(plugin, activator.getUniqueId().toString()));
+        mark(source, new FixedMetadataValue(plugin, activator.getUniqueId().toString()));
     }
 
     public void mark(Metadatable source) {
-        source.setMetadata(METADATA_KEY,
-                new FixedMetadataValue(plugin, METADATA_KEY)
-        );
+        mark(source, new FixedMetadataValue(plugin, METADATA_KEY));
+    }
+
+    public void mark(Metadatable source, MetadataValue value) {
+        source.setMetadata(METADATA_KEY, value);
     }
 
     public void unMark(Metadatable source) {
@@ -70,22 +72,11 @@ public class GlitchChecker implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlace(BlockPlaceEvent event) {
 
-        if(event.getPlayer().getGameMode() == GameMode.CREATIVE
-                && !Options.COUNT_BLOCK_FROM_CREATIVE) {
+        if(event.getPlayer().getGameMode() == GameMode.CREATIVE && Options.COUNT_BLOCK_FROM_CREATIVE) {
             return; // Do not mark if the player is in creative.
         }
 
         this.mark(event.getBlock(), event.getPlayer());
-    }
-
-    @EventHandler
-    public void onBreak(BlockBreakEvent event) {
-
-        final Block block = event.getBlock();
-
-        if(this.isMarked(block)) {
-            this.unMark(block);
-        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
