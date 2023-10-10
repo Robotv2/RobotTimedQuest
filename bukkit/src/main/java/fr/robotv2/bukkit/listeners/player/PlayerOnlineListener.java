@@ -36,10 +36,7 @@ public class PlayerOnlineListener extends QuestProgressionEnhancer<Void> {
 
         final long triggerTime = System.currentTimeMillis() + Duration.ofMinutes(1).toMillis();
         final Pair<UUID, Long> pair = new Pair<>(player.getUniqueId(), triggerTime);
-
-        getPlugin().debug("ONLINE -> preparing next service for " + player.getName());
         this.queue.addLast(pair);
-        getPlugin().debug("ONLINE -> scheduling size " + queue.size());
     }
 
     private void scheduleNext() {
@@ -47,7 +44,6 @@ public class PlayerOnlineListener extends QuestProgressionEnhancer<Void> {
         final Pair<UUID, Long> pair = queue.pollFirst();
 
         if(pair == null) {
-            getPlugin().debug("ONLINE -> no pair found, stopping ...");
             inProgress.set(false);
             return;
         }
