@@ -1,5 +1,7 @@
 package fr.robotv2.bukkit.util.item;
 
+import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.util.BukkitFuture;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Material;
@@ -87,7 +89,10 @@ public class ItemStackSectionCreator {
             future = CompletableFuture.completedFuture(new ItemStack(this.material));
         }
 
-        return future.thenApply(consumerItemstack(player));
+        // return future.thenApply(consumerItemstack(player));
+        return BukkitFuture.from(future, RTQBukkitPlugin.getInstance())
+                .thenApplyBukkit(consumerItemstack(player))
+                .getFuture();
     }
 
     private void applyCustomName(Player player, ItemMeta meta) {

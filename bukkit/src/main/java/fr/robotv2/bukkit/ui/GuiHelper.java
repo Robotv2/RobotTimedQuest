@@ -5,6 +5,7 @@ import fr.mrmicky.fastinv.InventoryScheme;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.quest.QuestInventoryClickEvent;
 import fr.robotv2.bukkit.quest.Quest;
+import fr.robotv2.bukkit.util.BukkitFuture;
 import fr.robotv2.bukkit.util.StringListProcessor;
 import fr.robotv2.bukkit.util.item.ItemUtil;
 import fr.robotv2.common.data.impl.ActiveQuest;
@@ -58,9 +59,11 @@ public class GuiHelper {
             final List<String> actions = itemSection.getStringList("on_click");
             final Consumer<InventoryClickEvent> consumer = actions.isEmpty() ? null : (ignored) -> new StringListProcessor().process(player, actions);
 
-            final CompletableFuture<Void> future = ItemUtil
-                    .toItemStack(itemSection, player)
-                    .thenAccept(completedItem -> scheme.bindItem(character, completedItem, consumer));
+            final CompletableFuture<Void> future = BukkitFuture.from(ItemUtil.toItemStack(itemSection, player), plugin)
+                    .thenAcceptBukkit(completedItem -> {
+                        scheme.bindItem(character, completedItem, consumer);
+                    })
+                    .getFuture();
 
             futuresItems.add(future);
         }
@@ -107,13 +110,11 @@ public class GuiHelper {
                         continue;
                     }
 
-                    final CompletableFuture<Void> future = quest.getGuiItem(activeQuest, player).thenAccept(itemStack -> {
-                        runTaskOnBukkitThread(() -> fastInv.setItem(
-                                slot,
-                                itemStack,
-                                inventoryClickEvent -> Bukkit.getPluginManager().callEvent(new QuestInventoryClickEvent(inventoryClickEvent, activeQuest))
-                        ));
-                    });
+                    final CompletableFuture<Void> future = BukkitFuture.from(quest.getGuiItem(activeQuest, player), plugin)
+                                    .thenAcceptBukkit((item) -> {
+                                        fastInv.setItem(slot, item, event -> Bukkit.getPluginManager().callEvent(new QuestInventoryClickEvent(event, activeQuest)));
+                                        plugin.debug("SERVICE ITEM RECEIVED BINDING IT : " + quest.getId());
+                                    }).getFuture();
 
                     futures.add(future);
 

@@ -4,6 +4,7 @@ import fr.mrmicky.fastinv.FastInv;
 import fr.mrmicky.fastinv.FastInvManager;
 import fr.mrmicky.fastinv.InventoryScheme;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.util.BukkitFuture;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,7 +12,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -43,17 +43,18 @@ public class GuiHandler {
         final InventoryScheme scheme = new InventoryScheme();
         masks.forEach(scheme::mask);
 
-        final List<CompletableFuture<Void>> futures = new ArrayList<>();
-        futures.add(guiHelper.handleItems(section, scheme, fastInv, player));
-        futures.add(guiHelper.handleServices(section, fastInv, player));
+        final CompletableFuture<Void> itemsFuture = guiHelper.handleItems(section, scheme, fastInv, player).whenComplete((unused, throwable) -> plugin.debug("HANDLE ITEMS -> DONE"));
+        final CompletableFuture<Void> serviceFuture = itemsFuture.thenCompose(unused -> guiHelper.handleServices(section, fastInv, player)).whenComplete((unused, throwable) -> plugin.debug("HANDLE SERVICES -> DONE"));
 
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenApply(ignored -> fastInv);
+        return BukkitFuture.from(serviceFuture.thenApply(unused -> fastInv), plugin).getFuture();
     }
 
     public void openMenu(Player player) {
-        getGuiOf(player).thenAccept(fastInv -> {
+        getGuiOf(player).whenComplete((fastInv, throwable) -> {
 
-            if(fastInv == null) {
+            plugin.debug("FAST INV RECEIVED, OPENING IT...");
+
+            if(fastInv == null || throwable != null) {
                 player.sendMessage(ChatColor.RED + "An error occurred while opening the inventory.");
                 return;
             }
