@@ -1,11 +1,14 @@
 package fr.robotv2.bukkit.quest.requirements;
 
+import com.google.common.base.Enums;
 import fr.robotv2.bukkit.quest.Quest;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 
 public class EntityQuestRequirement extends QuestRequirement<EntityType> {
 
@@ -24,7 +27,8 @@ public class EntityQuestRequirement extends QuestRequirement<EntityType> {
 
         for(String entityString : entityStrings) {
 
-            final EntityType entityType = EntityType.fromName(entityString);
+            final EntityType entityType = Optional.ofNullable(Enums.getIfPresent(EntityType.class, entityString).orNull())
+                    .orElseGet(() -> EntityType.fromName(entityString.toUpperCase(Locale.ROOT)));
 
             if(entityType == null) {
                 throw new IllegalArgumentException(String.format("%s is not a valid entity type.", entityString));
