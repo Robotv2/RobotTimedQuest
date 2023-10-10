@@ -1,6 +1,7 @@
 package fr.robotv2.bukkit.data;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.enums.Messages;
 import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.OrmData;
 import fr.robotv2.common.data.impl.ActiveQuest;
@@ -79,7 +80,10 @@ public class PlayerDataInitListeners implements Listener {
             final int newQuest = plugin.getQuestManager().fillPlayer(questPlayer);
 
             plugin.getLogger().info(String.format(questPlayer.getActiveQuests().size() + " quest(s) has been loaded successfully for the player %s (" + newQuest + " new).", player.getName()));
-            player.sendMessage(ChatColor.GREEN + "Your quest(s) have been loaded successfully.");
+            Messages.QUEST_LOADED_SUCCESSFULLY.toTranslatableMessage()
+                    .prefix()
+                    .color()
+                    .send(player);
         });
     }
 
