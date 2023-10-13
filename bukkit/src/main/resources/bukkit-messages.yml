@@ -1,2 +1,4 @@
 prefix: "&a&lRTQ &8|  "
 quest_loaded_successfully: "&aYour quest(s) have been loaded successfully."
+cosmetics_enabled: "&a%cosmetics% is now &lENABLED"
+cosmetics_disabled: "&c%cosmetics% is now &lDISABLED"
