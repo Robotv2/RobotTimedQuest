@@ -4,6 +4,7 @@ import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.events.VillagerTradeEvent;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
+import fr.robotv2.bukkit.util.item.InventoryUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,7 +15,7 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantInventory;
 
-public class VillagerTradeListener extends QuestProgressionEnhancer<Material> {
+public class VillagerTradeListener extends QuestProgressionEnhancer<Material> implements InventoryUtil {
 
     public VillagerTradeListener(RTQBukkitPlugin plugin) {
         super(plugin);
@@ -40,13 +41,17 @@ public class VillagerTradeListener extends QuestProgressionEnhancer<Material> {
         }
 
         if(event.getSlotType() == InventoryType.SlotType.RESULT && merchantInventory.getSelectedRecipe() != null) {
-            Bukkit.getPluginManager().callEvent(new VillagerTradeEvent(player, merchantInventory, merchantInventory.getSelectedRecipe(), stack));
+            final int itemAmount = this.getAmountFromInventoryAction(player, stack, event.getAction(), event.getSlotType());
+            Bukkit.getPluginManager().callEvent(new VillagerTradeEvent(player, merchantInventory, merchantInventory.getSelectedRecipe(), stack, itemAmount));
         }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void onTrade(VillagerTradeEvent event) {
+
         final ItemStack result = event.getResult();
+        getPlugin().debug("VILLAGER TRADE EVENT -> %d", result.getAmount());
+
         this.incrementProgression(event.getPlayer(), QuestType.VILLAGER_TRADE, result.getType(), event, result.getAmount());
     }
 }

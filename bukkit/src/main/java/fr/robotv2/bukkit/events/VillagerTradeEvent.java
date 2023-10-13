@@ -20,12 +20,14 @@ public class VillagerTradeEvent extends Event {
     private final MerchantInventory merchantInventory;
     private final MerchantRecipe recipe;
     private final ItemStack result;
+    private final int itemAmount;
 
-    public VillagerTradeEvent(@NotNull Player player, @NotNull MerchantInventory merchantInventory, @NotNull MerchantRecipe recipe, @NotNull ItemStack result) {
+    public VillagerTradeEvent(@NotNull Player player, @NotNull MerchantInventory merchantInventory, @NotNull MerchantRecipe recipe, @NotNull ItemStack result, int itemAmount) {
         this.player = player;
         this.merchantInventory = merchantInventory;
         this.recipe = recipe;
         this.result = result;
+        this.itemAmount = itemAmount;
     }
 
     @NotNull
