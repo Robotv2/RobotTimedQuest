@@ -31,7 +31,7 @@ public class ActiveQuest implements Serializable {
     @DatabaseField(columnName = "next_reset")
     private long nextReset;
 
-    private transient boolean dirty = false;
+    private transient volatile boolean dirty = false;
 
     public ActiveQuest() {
         // Empty constructor. Necessary for orm-lite to work.
