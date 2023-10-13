@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.enums.Messages;
 import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.StringListProcessor;
@@ -18,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @CommandAlias("rtq|robottimedquest")
@@ -120,7 +122,12 @@ public class BukkitMainCommand extends BaseCommand {
 
         final Player player = (Player) sender;
         final boolean isDisabled = plugin.getCosmeticUtil().toggleDisabled(player.getUniqueId(), type);
-        final String message = isDisabled ? ChatColor.RED + "%s is now DISABLED" : ChatColor.GREEN + "%s is now ENABLED";
+
+        final Messages message = isDisabled ? Messages.COSMETICS_DISABLED : Messages.COSMETICS_ENABLED;
+        final Messages.TranslatableMessage translatableMessage = message.toTranslatableMessage()
+                .prefix()
+                .replace("%cosmetics%", type.name().toLowerCase(Locale.ROOT))
+                .color();
 
         if(type == CosmeticUtil.CosmeticType.BOSS_BAR) {
             if (isDisabled) {
@@ -128,6 +135,6 @@ public class BukkitMainCommand extends BaseCommand {
             }
         }
 
-        player.sendMessage(String.format(message, type.name()));
+        translatableMessage.send(player);
     }
 }
