@@ -13,19 +13,24 @@ public interface InventoryUtil {
     /*
     Return the amount of item that can be placed in the inventory.
     */
-    default int canTakeItem(Inventory inventory, ItemStack stack, int amount) {
+    default int availableToTake(Inventory inventory, ItemStack stack, int amountToAdd) {
+        int availableSlots = getAvailableSlots(inventory, stack);
+        return Math.min(availableSlots, amountToAdd);
+    }
+
+    default int getAvailableSlots(Inventory inventory, ItemStack stack) {
 
         int availableSlots = 0;
 
-        for (ItemStack inventoryItem : inventory.getStorageContents()) {
-            if (inventoryItem == null || inventoryItem.getType() == Material.AIR) {
+        for(ItemStack inventoryItem : inventory.getStorageContents()) {
+            if(inventoryItem == null || inventoryItem.getType() == Material.AIR) {
                 availableSlots += stack.getMaxStackSize();
-            } else if (inventoryItem.isSimilar(stack)) {
+            } else if(inventoryItem.isSimilar(stack)) {
                 availableSlots += stack.getMaxStackSize() - inventoryItem.getAmount();
             }
         }
 
-        return Math.min(availableSlots, amount);
+        return availableSlots;
     }
 
     default int getAmountFromInventoryAction(Player initiator, ItemStack itemStack, InventoryAction action, InventoryType.SlotType slotType) {
@@ -69,7 +74,7 @@ public interface InventoryUtil {
                 break;
 
             case MOVE_TO_OTHER_INVENTORY:
-                amount = this.canTakeItem(initiator.getInventory(), itemStack, itemStack.getAmount());
+                amount = this.availableToTake(initiator.getInventory(), itemStack, itemStack.getAmount());
                 break;
 
             case SWAP_WITH_CURSOR:
