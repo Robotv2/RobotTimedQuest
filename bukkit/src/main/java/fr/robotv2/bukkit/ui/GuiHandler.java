@@ -43,8 +43,8 @@ public class GuiHandler {
         final InventoryScheme scheme = new InventoryScheme();
         masks.forEach(scheme::mask);
 
-        final CompletableFuture<Void> itemsFuture = guiHelper.handleItems(section, scheme, fastInv, player).whenComplete((unused, throwable) -> plugin.debug("HANDLE ITEMS -> DONE"));
-        final CompletableFuture<Void> serviceFuture = itemsFuture.thenCompose(unused -> guiHelper.handleServices(section, fastInv, player)).whenComplete((unused, throwable) -> plugin.debug("HANDLE SERVICES -> DONE"));
+        final CompletableFuture<Void> itemsFuture = guiHelper.handleItems(section, scheme, fastInv, player);
+        final CompletableFuture<Void> serviceFuture = itemsFuture.thenCompose(unused -> guiHelper.handleServices(section, fastInv, player));
 
         return BukkitFuture.from(serviceFuture.thenApply(unused -> fastInv), plugin).getFuture();
     }
