@@ -11,7 +11,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.inventory.ComplexRecipe;
-import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 public class PlayerCraftListener extends QuestProgressionEnhancer<Material> implements InventoryUtil {
@@ -26,7 +25,6 @@ public class PlayerCraftListener extends QuestProgressionEnhancer<Material> impl
     public void onCraft(CraftItemEvent event) {
 
         final Player player = (Player) event.getWhoClicked();
-        final CraftingInventory craftingInventory = event.getInventory();
 
         if(event.getRecipe() instanceof ComplexRecipe) {
             final String key = ((ComplexRecipe) event.getRecipe()).getKey().getKey();
@@ -44,25 +42,7 @@ public class PlayerCraftListener extends QuestProgressionEnhancer<Material> impl
         final InventoryAction action = event.getAction();
         int amount;
 
-        if(action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-            int amountCraftable = Integer.MAX_VALUE;
-
-            for (ItemStack itemStack : craftingInventory.getMatrix()) {
-                if (itemStack != null && itemStack.getType() != Material.AIR){
-                    amountCraftable = Math.min(amountCraftable, itemStack.getAmount() / result.getAmount());
-                }
-            }
-
-            result.setAmount(amountCraftable);
-            amount = this.canTakeItem(player.getInventory(), result, amountCraftable);
-        } else {
-            amount = this.getAmountFromInventoryAction(player, result, action, event.getSlotType());
-        }
-
-        if(amount == 0) {
-            return;
-        }
-
+        amount = this.getAmountFromInventoryAction(player, result, action, event.getSlotType());
         this.incrementProgression(player, QuestType.CRAFT, result.getType(), event, amount);
     }
 
