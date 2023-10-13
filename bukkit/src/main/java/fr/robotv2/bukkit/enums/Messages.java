@@ -11,6 +11,8 @@ public enum Messages {
 
     PREFIX("prefix"),
     QUEST_LOADED_SUCCESSFULLY("quest_loaded_successfully"),
+    COSMETICS_ENABLED("cosmetics_enabled"),
+    COSMETICS_DISABLED("cosmetics_disabled"),
     ;
 
     private final String path;
