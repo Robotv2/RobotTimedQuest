@@ -16,8 +16,12 @@ public class PlaceholderUtil {
         return Hooks.PLACEHOLDER_API.isInitialized() ? PlaceholderAPIHook.parsePlaceholders(offlinePlayer, input) : input;
     }
 
-    public static InternalPlaceholder<OfflinePlayer> PLAYER_PLACEHOLDER = ((value, input) -> input
-            .replace("%player%", value != null && value.getName() != null ? value.getName() : "UNKNOWN")
+    public static InternalPlaceholder<OfflinePlayer> PLAYER_PLACEHOLDER = ((value, input) -> {
+        input = input.replace("%player%", value != null && value.getName() != null ? value.getName() : "UNKNOWN");
+        input = parsePlaceholders(value, input);
+        return input;
+    }
+
     );
 
     public static InternalPlaceholder<Quest> QUEST_PLACEHOLDER = ((value, input) -> input
