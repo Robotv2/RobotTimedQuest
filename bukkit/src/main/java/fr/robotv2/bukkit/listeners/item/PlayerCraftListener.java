@@ -33,6 +33,7 @@ public class PlayerCraftListener extends QuestProgressionEnhancer<Material> impl
             }
         }
 
+        final ItemStack[] matrix = event.getInventory().getMatrix();
         final ItemStack result = event.getRecipe().getResult().clone();
 
         if(result.getType() == Material.AIR) {
@@ -40,9 +41,33 @@ public class PlayerCraftListener extends QuestProgressionEnhancer<Material> impl
         }
 
         final InventoryAction action = event.getAction();
-        int amount;
+        int amount = 0;
 
-        amount = this.getAmountFromInventoryAction(player, result, action, event.getSlotType());
+        if(action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+
+            final int producedItemAmount = result.getAmount();
+
+            getPlugin().debug("CRAFT -> produced item amount %d", producedItemAmount);
+
+            int smallestNumber = Integer.MAX_VALUE;
+
+            for (ItemStack itemStack : matrix) {
+                if (itemStack != null) {
+                    int itemAmount = itemStack.getAmount();
+                    smallestNumber = Math.min(itemAmount, smallestNumber);
+                }
+            }
+
+            if(smallestNumber == Integer.MAX_VALUE) {
+                return;
+            }
+
+            amount = this.availableToTake(player.getInventory(), result, (smallestNumber * producedItemAmount));
+        } else {
+            amount = this.getAmountFromInventoryAction(player, result, action, event.getSlotType());
+        }
+
+        getPlugin().debug("CRAFT -> %d", amount);
         this.incrementProgression(player, QuestType.CRAFT, result.getType(), event, amount);
     }
 
