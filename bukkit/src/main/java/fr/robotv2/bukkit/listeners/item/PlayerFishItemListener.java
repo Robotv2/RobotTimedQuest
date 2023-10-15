@@ -17,7 +17,7 @@ public class PlayerFishItemListener extends QuestProgressionEnhancer<Material> {
         super(plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onFishItem(PlayerFishEvent event) {
 
         if(event.getState() != PlayerFishEvent.State.CAUGHT_FISH) {
