@@ -6,10 +6,9 @@ import org.bukkit.Statistic;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerStatisticIncrementEvent;
 
-public class PlayerJumpInBiomeListener extends CustomQuestProgressionEnhancer<Biome> implements Listener {
+public class PlayerJumpInBiomeListener extends CustomQuestProgressionEnhancer<Biome> {
 
     public PlayerJumpInBiomeListener() {
         RobotTimedQuestAPI.registerCustomType(new JumpCustomType());
