@@ -118,7 +118,7 @@ public class ItemStackSectionCreator {
             Stream<String> stream = lore.stream();
 
             if(player != null) {
-                stream = stream.map(line -> PlaceholderUtil.withPlayerPlaceholders(player, line));
+                stream = stream.map(line -> PlaceholderUtil.PLAYER_PLACEHOLDER.parse(player, line));
             }
 
             meta.setLore(stream.map(ColorUtil::color).collect(Collectors.toList()));
