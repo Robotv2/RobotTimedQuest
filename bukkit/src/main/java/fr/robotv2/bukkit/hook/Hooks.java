@@ -1,5 +1,6 @@
 package fr.robotv2.bukkit.hook;
 
+import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.placeholderapi.PlaceholderAPIHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +12,8 @@ public enum Hooks {
     ITEM_ADDER("ItemAdder"),
     ORAXEN("Oraxen"),
     MYTHIC_MOB("MythicMob"),
-    ELITE_MOB("EliteMobs")
+    ELITE_MOB("EliteMobs"),
+    PYRO_FISHING_PRO("PyroFishingPro"),
     ;
 
     private final String pluginName;
@@ -24,33 +26,31 @@ public enum Hooks {
     public static void loadHooks(JavaPlugin plugin) {
 
         if(Hooks.PLACEHOLDER_API.isPluginEnabled() && PlaceholderAPIHook.initialize()) {
-            plugin.getLogger().info("HOOK - PlaceholderAPI successfully hooked into the plugin.");
             Hooks.PLACEHOLDER_API.setInitialized();
         }
 
         if(Hooks.VAULT.isPluginEnabled() && VaultHook.initialize(plugin)) {
-            plugin.getLogger().info("HOOK - Vault has been successfully hooked into the plugin.");
             Hooks.VAULT.setInitialized();
         }
 
         if(Hooks.ITEM_ADDER.isPluginEnabled()) {
-            plugin.getLogger().info("HOOK - Item Adder has been successfully hooked into this plugin.");
             Hooks.ITEM_ADDER.setInitialized();
         }
 
         if(Hooks.ORAXEN.isPluginEnabled()) {
-            plugin.getLogger().info("HOOK - Oraxen has been successfully hooked into this plugin.");
             Hooks.ORAXEN.setInitialized();
         }
 
         if(Hooks.MYTHIC_MOB.isPluginEnabled() && MythicMobHook.initialize(plugin)) {
-            plugin.getLogger().info("HOOK - MythicMob has been successfully hooked into this plugin.");
             Hooks.MYTHIC_MOB.setInitialized();
         }
 
         if(Hooks.ELITE_MOB.isPluginEnabled()) {
-            plugin.getLogger().info("HOOK - EliteMobs has been successfully hooked into this plugin.");
             Hooks.ELITE_MOB.setInitialized();
+        }
+
+        if(Hooks.PYRO_FISHING_PRO.isPluginEnabled()) {
+            Hooks.PYRO_FISHING_PRO.setInitialized();
         }
     }
 
@@ -63,6 +63,7 @@ public enum Hooks {
     }
 
     private void setInitialized() {
+        RTQBukkitPlugin.getPluginLogger().info("HOOK - " + pluginName + " has been successfully hooked into this plugin.");
         this.initialized = true;
     }
 }

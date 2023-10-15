@@ -15,7 +15,7 @@ public class PlayerPickupItemListener extends QuestProgressionEnhancer<Material>
         super(plugin);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPick(EntityPickupItemEvent event) {
 
         if(!(event.getEntity() instanceof Player)) {
