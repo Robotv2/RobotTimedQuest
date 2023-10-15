@@ -46,11 +46,8 @@ public class BukkitResetPublisher implements ResetPublisher {
             service.calculateNextExecution();
         }
 
-        Bukkit.getOnlinePlayers()
-                .stream()
-                .map(player -> QuestPlayer.getQuestPlayer(player.getUniqueId()))
-                .filter(Objects::nonNull)
-                .forEach(questPlayer -> plugin.getQuestManager().fillPlayer(questPlayer, resetId));
+        QuestPlayer.getRegistered()
+                        .forEach(questPlayer -> plugin.getQuestManager().fillPlayer(questPlayer, resetId));
     }
 
     @Override
