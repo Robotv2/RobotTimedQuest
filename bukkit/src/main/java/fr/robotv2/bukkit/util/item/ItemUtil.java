@@ -6,10 +6,13 @@ import fr.robotv2.bukkit.hook.ItemAdderHook;
 import fr.robotv2.bukkit.hook.OraxenHook;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -28,6 +31,7 @@ public class ItemUtil {
     }
 
     public static boolean checkName(String name, ItemStack comparator) {
+
         final Optional<ItemMeta> optional = getMetaSafe(comparator);
 
         if(optional.isPresent() && optional.get().hasDisplayName()) {
@@ -45,6 +49,32 @@ public class ItemUtil {
         }
 
         return false;
+    }
+
+    public static void printDataContainer(ItemStack stack) {
+
+        getMetaSafe(stack).ifPresentOrElse(meta -> {
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
+            for(NamespacedKey key : container.getKeys()) {
+
+                String value;
+
+                try {
+                    value = container.get(key, PersistentDataType.STRING);
+                } catch (IllegalArgumentException ignored) {
+                    try {
+                        Integer intValue = container.get(key, PersistentDataType.INTEGER);
+                        value = intValue != null ? intValue.toString() : "NULL INT";
+                    } catch (IllegalArgumentException ignored2) {
+                        Double doubleValue = container.get(key, PersistentDataType.DOUBLE);
+                        value = doubleValue != null ? doubleValue.toString() : "NULL DOUBLE";
+                    }
+                }
+
+
+                RTQBukkitPlugin.getInstance().debug("DATA CONTAINER -> key: %s -> value: %s", key, value);
+            }
+        }, () -> RTQBukkitPlugin.getInstance().debug("DATA CONTIANER -> NO META FOUND FOR %s", stack.getType()));
     }
 
     public static CompletableFuture<ItemStack> toItemStack(ConfigurationSection parent) {
@@ -87,7 +117,7 @@ public class ItemUtil {
         if(parent.isSet("head_texture")) {
             return HeadUtil.createSkull(parent.getString("head_texture"));
         } else if(parent.isSet("head_owner")) {
-            final String headOwner = PlaceholderUtil.withPlayerPlaceholders(player, parent.getString("head_owner"));
+            final String headOwner = PlaceholderUtil.PLAYER_PLACEHOLDER.parse(player, parent.getString("head_owner"));
             return HeadUtil.getPlayerHead(headOwner);
         } else {
             return null;
