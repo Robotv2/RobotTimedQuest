@@ -1,6 +1,7 @@
 package fr.robotv2.bukkit.hook.placeholderapi;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.hook.placeholderapi.expansion.ClipPlaceholder;
 import fr.robotv2.placeholderannotation.PlaceholderAnnotationProcessor;
 import fr.robotv2.placeholderannotation.util.PAPDebug;
 import me.clip.placeholderapi.PlaceholderAPI;
