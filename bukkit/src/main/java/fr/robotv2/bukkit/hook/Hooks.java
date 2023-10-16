@@ -1,7 +1,10 @@
 package fr.robotv2.bukkit.hook;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.hook.mythicmob.MythicMobHook;
 import fr.robotv2.bukkit.hook.placeholderapi.PlaceholderAPIHook;
+import fr.robotv2.bukkit.hook.pyrofishpro.PyroFishProHook;
+import fr.robotv2.bukkit.hook.vault.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -49,7 +52,7 @@ public enum Hooks {
             Hooks.ELITE_MOB.setInitialized();
         }
 
-        if(Hooks.PYRO_FISHING_PRO.isPluginEnabled()) {
+        if(Hooks.PYRO_FISHING_PRO.isPluginEnabled() && PyroFishProHook.initialize(plugin)) {
             Hooks.PYRO_FISHING_PRO.setInitialized();
         }
     }

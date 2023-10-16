@@ -3,6 +3,8 @@ package fr.robotv2.bukkit.hook.pyrofishpro;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import fr.robotv2.bukkit.RobotTimedQuestAPI;
+import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroFishTier;
+import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishProListener;
 import fr.robotv2.bukkit.hook.pyrofishpro.type.PyroFishType;
 import fr.robotv2.bukkit.util.item.ItemUtil;
 import org.bukkit.NamespacedKey;
@@ -20,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class PyroFishProHook {
 
     private final static Cache<UUID, Boolean> FISH_CACHE = CacheBuilder.newBuilder()
-            .expireAfterWrite(2, TimeUnit.SECONDS)
+            .expireAfterWrite(3500, TimeUnit.MILLISECONDS)
             .build();
 
     public static final String PYRO_KEY_PREFIX = "pyrofishingpro";
@@ -30,6 +32,7 @@ public class PyroFishProHook {
     public static boolean initialize(JavaPlugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(new PyroFishProListener(), plugin);
         RobotTimedQuestAPI.registerCustomType(new PyroFishType());
+        RobotTimedQuestAPI.registerCondition("is_pyro_tier", IsPyroFishTier.class);
         return true;
     }
 

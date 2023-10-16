@@ -102,8 +102,6 @@ public class RTQBukkitPlugin extends JavaPlugin {
             this.setupDefaultFilesQuest();
         }
 
-        this.conditionManager.closeRegistration();
-
         this.setupFiles();
         this.setupListeners();
 
@@ -121,11 +119,11 @@ public class RTQBukkitPlugin extends JavaPlugin {
         this.customTypeManager = new CustomTypeManager();
         this.cosmeticUtil = new CosmeticUtil();
 
+        Hooks.loadHooks(this);
+
         this.setupDatabase();
         this.setupQuests();
         this.setupCommandHandlers();
-
-        Hooks.loadHooks(this);
 
         Bukkit.getScheduler().runTaskTimer(this,
                 () -> this.databaseManager.savePlayers(true),
@@ -325,6 +323,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
     }
 
     private void setupQuests() {
+        this.conditionManager.closeRegistration();
         getQuestManager().clearQuests();
         getConfig().getStringList("quest-files")
                 .forEach(questPath -> getQuestManager().loadQuests(questPath));

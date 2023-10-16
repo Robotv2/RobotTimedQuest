@@ -78,10 +78,9 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
                 continue;
             }
 
-            if(!quest.getConditions().isEmpty() // Check if conditions are empty.
-                    && !this.allConditionsMatch(quest.getConditions(), player, event, type)) // Does all the conditions are met ?
+            if(!this.allConditionsMatch(quest.getConditions(), player, event, quest.getType(), quest.getCustomType()))
             {
-                continue;
+                return false;
             }
 
             questAffected++;
@@ -108,8 +107,7 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
             return false;
         }
 
-        if(!quest.getConditions().isEmpty() // Check if conditions are empty.
-                && !this.allConditionsMatch(quest.getConditions(), player, event, quest.getType())) // Does all the conditions are met ?
+        if(!this.allConditionsMatch(quest.getConditions(), player, event, quest.getType(), quest.getCustomType()))
         {
             return false;
         }
@@ -138,9 +136,14 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
         }
     }
 
-    protected boolean allConditionsMatch(List<Condition> conditions, Player player, Event event, QuestType type) {
+    protected boolean allConditionsMatch(List<Condition> conditions, Player player, Event event, QuestType type, @Nullable String customType) {
+
+        if(conditions.isEmpty()) {
+            return true;
+        }
+
         return conditions.stream()
                 .filter(condition -> condition.referencedType().contains(type))
-                .allMatch(condition -> condition.matchCondition(player, type, event));
+                .allMatch(condition -> condition.matchCondition(player, type, event, customType));
     }
 }
