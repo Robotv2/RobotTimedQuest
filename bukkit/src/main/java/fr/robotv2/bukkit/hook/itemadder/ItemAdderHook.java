@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.hook;
+package fr.robotv2.bukkit.hook.itemadder;
 
 import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomEntity;

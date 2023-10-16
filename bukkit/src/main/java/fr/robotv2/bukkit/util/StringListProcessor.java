@@ -3,7 +3,7 @@ package fr.robotv2.bukkit.util;
 import com.google.common.base.Enums;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
-import fr.robotv2.bukkit.hook.VaultHook;
+import fr.robotv2.bukkit.hook.vault.VaultHook;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.text.ColorUtil;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;

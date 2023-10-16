@@ -2,6 +2,8 @@ package fr.robotv2.bukkit.listeners.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
+import fr.robotv2.bukkit.hook.Hooks;
+import fr.robotv2.bukkit.hook.pyrofishpro.PyroFishProHook;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -32,7 +34,12 @@ public class PlayerFishItemListener extends QuestProgressionEnhancer<Material> {
         }
 
         if(entity instanceof Item) {
+
             this.incrementProgression(player, QuestType.FISH_ITEM, ((Item) entity).getItemStack().getType(), event, 1);
+
+            if(Hooks.PYRO_FISHING_PRO.isInitialized()) {
+                PyroFishProHook.setHasFishedRecently(player.getUniqueId());
+            }
         }
     }
 }

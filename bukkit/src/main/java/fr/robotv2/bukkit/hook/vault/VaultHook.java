@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.hook;
+package fr.robotv2.bukkit.hook.vault;
 
 import net.milkbowl.vault.economy.Economy;
 import org.apache.commons.lang.Validate;

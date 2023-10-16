@@ -2,8 +2,8 @@ package fr.robotv2.bukkit.util.item;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.hook.Hooks;
-import fr.robotv2.bukkit.hook.ItemAdderHook;
-import fr.robotv2.bukkit.hook.OraxenHook;
+import fr.robotv2.bukkit.hook.itemadder.ItemAdderHook;
+import fr.robotv2.bukkit.hook.oraxen.OraxenHook;
 import fr.robotv2.bukkit.util.text.PlaceholderUtil;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;

@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.hook;
+package fr.robotv2.bukkit.hook.mythicmob;
 
 import io.lumine.mythic.bukkit.MythicBukkit;
 import io.lumine.mythic.core.mobs.ActiveMob;

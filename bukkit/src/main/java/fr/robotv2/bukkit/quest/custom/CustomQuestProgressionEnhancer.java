@@ -58,8 +58,7 @@ public abstract class CustomQuestProgressionEnhancer<T> extends QuestProgression
                 continue;
             }
 
-            if(!quest.getConditions().isEmpty() // Check if conditions are empty.
-                    && !this.allConditionsMatch(quest.getConditions(), player, event, quest.getType())) // Does all the conditions are met ?
+            if(!this.allConditionsMatch(quest.getConditions(), player, event, quest.getType(), quest.getCustomType()))
             {
                 return false;
             }

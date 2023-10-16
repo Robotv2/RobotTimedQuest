@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.hook.placeholderapi;
+package fr.robotv2.bukkit.hook.placeholderapi.expansion;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.quest.Quest;

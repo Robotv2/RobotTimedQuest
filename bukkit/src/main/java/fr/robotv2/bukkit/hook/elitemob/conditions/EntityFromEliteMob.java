@@ -1,7 +1,7 @@
-package fr.robotv2.bukkit.quest.conditions.impl.external;
+package fr.robotv2.bukkit.hook.elitemob.conditions;
 
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.hook.EliteMobHook;
+import fr.robotv2.bukkit.hook.elitemob.EliteMobHook;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.conditions.Conditions;
@@ -13,12 +13,12 @@ import org.bukkit.event.Event;
 import java.util.EnumSet;
 import java.util.Optional;
 
-public class EntityFromEliteMobNpc implements Condition {
+public class EntityFromEliteMob implements Condition {
 
-    private final boolean fromEliteMobNpc;
+    private final boolean fromEliteMob;
 
-    public EntityFromEliteMobNpc(ConfigurationSection parent, String key) {
-        this.fromEliteMobNpc = parent.getBoolean(key);
+    public EntityFromEliteMob(ConfigurationSection parent, String key) {
+        this.fromEliteMob = parent.getBoolean(key);
     }
 
     @Override
@@ -26,8 +26,8 @@ public class EntityFromEliteMobNpc implements Condition {
         final Optional<Entity> optional = Conditions.getEntityFor(type, event);
         return Conditions.simpleConditionChecker(
                 optional,
-                entity -> Hooks.ELITE_MOB.isInitialized() && EliteMobHook.isEliteMobNpc(entity)
-        ) == fromEliteMobNpc;
+                entity -> Hooks.ELITE_MOB.isInitialized() && EliteMobHook.isEliteMobEntity(entity)
+        ) == fromEliteMob;
     }
 
     @Override

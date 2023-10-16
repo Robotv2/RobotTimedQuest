@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.hook;
+package fr.robotv2.bukkit.hook.oraxen;
 
 import io.th0rgal.oraxen.api.OraxenBlocks;
 import io.th0rgal.oraxen.api.OraxenItems;

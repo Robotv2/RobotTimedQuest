@@ -1,5 +1,6 @@
-package fr.robotv2.bukkit.hook.pyrofishpro;
+package fr.robotv2.bukkit.hook.pyrofishpro.listeners;
 
+import fr.robotv2.bukkit.hook.pyrofishpro.PyroFishProHook;
 import fr.robotv2.bukkit.quest.custom.CustomQuestProgressionEnhancer;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -37,6 +38,6 @@ public class PyroFishProListener extends CustomQuestProgressionEnhancer<String> 
             return;
         }
 
-        this.trigger(player, "PYRO_FISH", String.valueOf(pyroFish.fishnumber), event, 1);
+        this.trigger(player, "PYRO_FISH", (pyroFish.tier + ":" + pyroFish.fishnumber), event, 1);
     }
 }

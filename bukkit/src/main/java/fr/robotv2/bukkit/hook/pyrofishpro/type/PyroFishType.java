@@ -20,6 +20,6 @@ public class PyroFishType implements CustomType {
 
     @Override
     public @Nullable QuestRequirement<?> toQuestRequirement(Quest quest) {
-        return new StringQuestRequirement(quest);
+        return new StringQuestRequirement(quest, true);
     }
 }
