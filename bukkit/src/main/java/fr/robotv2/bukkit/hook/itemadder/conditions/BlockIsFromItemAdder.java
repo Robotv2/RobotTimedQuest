@@ -1,8 +1,8 @@
-package fr.robotv2.bukkit.quest.conditions.impl.external;
+package fr.robotv2.bukkit.hook.itemadder.conditions;
 
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.hook.Hooks;
-import fr.robotv2.bukkit.hook.ItemAdderHook;
+import fr.robotv2.bukkit.hook.itemadder.ItemAdderHook;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.conditions.Conditions;
 import org.bukkit.block.Block;

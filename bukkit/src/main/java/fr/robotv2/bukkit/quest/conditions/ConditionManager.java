@@ -1,10 +1,16 @@
 package fr.robotv2.bukkit.quest.conditions;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.hook.elitemob.conditions.EntityFromEliteMob;
+import fr.robotv2.bukkit.hook.elitemob.conditions.EntityFromEliteMobNpc;
+import fr.robotv2.bukkit.hook.itemadder.conditions.BlockIsFromItemAdder;
+import fr.robotv2.bukkit.hook.itemadder.conditions.ItemIsFromItemAdder;
+import fr.robotv2.bukkit.hook.mythicmob.conditions.EntityFromMythicMob;
+import fr.robotv2.bukkit.hook.oraxen.conditions.BlockIsFromOraxen;
+import fr.robotv2.bukkit.hook.oraxen.conditions.ItemIsFromOraxen;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.IsCustomEntity;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.SheepColorCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.VillagerCondition;
-import fr.robotv2.bukkit.quest.conditions.impl.external.*;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.EnchantCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.IsCustomItem;
 import fr.robotv2.bukkit.quest.conditions.impl.itemstack.PotionCondition;

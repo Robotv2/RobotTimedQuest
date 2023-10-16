@@ -1,4 +1,4 @@
-package fr.robotv2.bukkit.hook;
+package fr.robotv2.bukkit.hook.elitemob;
 
 import com.magmaguy.elitemobs.entitytracker.EntityTracker;
 import com.magmaguy.elitemobs.mobconstructor.EliteEntity;

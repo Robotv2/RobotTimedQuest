@@ -1,8 +1,8 @@
-package fr.robotv2.bukkit.quest.conditions.impl.external;
+package fr.robotv2.bukkit.hook.mythicmob.conditions;
 
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.hook.Hooks;
-import fr.robotv2.bukkit.hook.MythicMobHook;
+import fr.robotv2.bukkit.hook.mythicmob.MythicMobHook;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.conditions.Conditions;
 import org.bukkit.configuration.ConfigurationSection;
