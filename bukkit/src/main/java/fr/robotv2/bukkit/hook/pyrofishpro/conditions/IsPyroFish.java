@@ -53,7 +53,7 @@ public class IsPyroFish implements Condition {
 
         RTQBukkitPlugin.getInstance().debug("Fish's id : %s", fishId);
 
-        return all || fishList.contains((wrapper.tier + ":" + wrapper.fishnumber));
+        return all || fishList.contains(fishId);
     }
 
     @Override
