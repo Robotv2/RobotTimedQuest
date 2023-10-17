@@ -3,9 +3,9 @@ package fr.robotv2.bukkit.listeners.quest;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.events.quest.BulkQuestDoneEvent;
 import fr.robotv2.bukkit.util.StringListProcessor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.entity.Player;
 
 import java.util.List;
 

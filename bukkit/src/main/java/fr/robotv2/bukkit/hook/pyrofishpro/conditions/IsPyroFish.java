@@ -5,7 +5,6 @@ import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.hook.pyrofishpro.PyroFishProHook;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.conditions.Conditions;
-import fr.robotv2.bukkit.util.item.ItemUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

@@ -1,8 +1,8 @@
 package fr.robotv2.bukkit.hook.elitemob.conditions;
 
 import fr.robotv2.bukkit.enums.QuestType;
-import fr.robotv2.bukkit.hook.elitemob.EliteMobHook;
 import fr.robotv2.bukkit.hook.Hooks;
+import fr.robotv2.bukkit.hook.elitemob.EliteMobHook;
 import fr.robotv2.bukkit.quest.conditions.Condition;
 import fr.robotv2.bukkit.quest.conditions.Conditions;
 import org.bukkit.configuration.ConfigurationSection;

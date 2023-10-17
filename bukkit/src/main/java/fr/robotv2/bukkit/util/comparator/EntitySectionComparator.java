@@ -1,8 +1,8 @@
 package fr.robotv2.bukkit.util.comparator;
 
 import com.google.common.base.Enums;
-import fr.robotv2.bukkit.hook.elitemob.EliteMobHook;
 import fr.robotv2.bukkit.hook.Hooks;
+import fr.robotv2.bukkit.hook.elitemob.EliteMobHook;
 import fr.robotv2.bukkit.hook.mythicmob.MythicMobHook;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
