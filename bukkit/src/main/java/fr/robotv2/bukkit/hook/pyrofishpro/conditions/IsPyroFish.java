@@ -25,8 +25,8 @@ public class IsPyroFish implements Condition {
             this.all = parent.getBoolean(key);
             this.fishList = Collections.emptyList();
         } else if(parent.isList(key)) {
-            this.all = false;
             this.fishList = parent.getStringList(key);
+            this.all = fishList.isEmpty();
         } else {
             this.all = false;
             this.fishList = Collections.emptyList();
