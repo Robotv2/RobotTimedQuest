@@ -3,11 +3,13 @@ package fr.robotv2.bukkit.hook.pyrofishpro;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import fr.robotv2.bukkit.RobotTimedQuestAPI;
-import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroFishTier;
+import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroFish;
+import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroTier;
 import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishProListener;
 import fr.robotv2.bukkit.hook.pyrofishpro.type.PyroFishType;
 import fr.robotv2.bukkit.util.item.ItemUtil;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.FishHook;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -21,8 +23,9 @@ import java.util.concurrent.TimeUnit;
 
 public class PyroFishProHook {
 
-    private final static Cache<UUID, Boolean> FISH_CACHE = CacheBuilder.newBuilder()
+    private final static Cache<UUID, FishHook> FISH_CACHE = CacheBuilder.newBuilder()
             .expireAfterWrite(3500, TimeUnit.MILLISECONDS)
+            .expireAfterAccess(1000, TimeUnit.MILLISECONDS)
             .build();
 
     public static final String PYRO_KEY_PREFIX = "pyrofishingpro";
@@ -32,7 +35,8 @@ public class PyroFishProHook {
     public static boolean initialize(JavaPlugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(new PyroFishProListener(), plugin);
         RobotTimedQuestAPI.registerCustomType(new PyroFishType());
-        RobotTimedQuestAPI.registerCondition("is_pyro_tier", IsPyroFishTier.class);
+        RobotTimedQuestAPI.registerCondition("is_pyro_tier", IsPyroTier.class);
+        RobotTimedQuestAPI.registerCondition("is_pyro_fish", IsPyroFish.class);
         return true;
     }
 
@@ -44,8 +48,8 @@ public class PyroFishProHook {
 
         public PyroFishWrapper(ItemStack fish) {
             final PersistentDataContainer container = Objects.requireNonNull(fish.getItemMeta()).getPersistentDataContainer();
-            this.tier = container.get(new NamespacedKey(PYRO_KEY_PREFIX, "fishnumber"), PersistentDataType.STRING);
-            this.fishnumber = container.get(new NamespacedKey(PYRO_KEY_PREFIX, "tier"), PersistentDataType.INTEGER);
+            this.tier = container.get(new NamespacedKey(PYRO_KEY_PREFIX, "tier"), PersistentDataType.STRING);
+            this.fishnumber = container.get(new NamespacedKey(PYRO_KEY_PREFIX, "fishnumber"), PersistentDataType.INTEGER);
             this.price = container.get(new NamespacedKey(PYRO_KEY_PREFIX, "price"), PersistentDataType.DOUBLE);
         }
     }
@@ -57,19 +61,21 @@ public class PyroFishProHook {
             return false;
         }
 
+        final NamespacedKey key = new NamespacedKey(PYRO_KEY_PREFIX, "tier");
+
         final PersistentDataContainer container = optional.get().getPersistentDataContainer();
-        return container.has(new NamespacedKey(PYRO_KEY_PREFIX, "fishnumber"), PersistentDataType.STRING);
+        return container.has(key, PersistentDataType.STRING);
     }
 
     public static PyroFishWrapper toWrapper(ItemStack fish) {
         return isPyroFish(fish) ? new PyroFishWrapper(fish) : null;
     }
 
-    public static boolean hasFishedRecently(UUID playerId) {
-        return FISH_CACHE.getIfPresent(playerId) != null;
+    public static FishHook getRecentHook(UUID playerId) {
+        return FISH_CACHE.getIfPresent(playerId);
     }
 
-    public static void setHasFishedRecently(UUID playerId) {
-        FISH_CACHE.put(playerId, true);
+    public static void setRecentHook(UUID playerId, FishHook hook) {
+        FISH_CACHE.put(playerId, hook);
     }
 }

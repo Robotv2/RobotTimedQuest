@@ -38,7 +38,7 @@ public class PlayerFishItemListener extends QuestProgressionEnhancer<Material> {
             this.incrementProgression(player, QuestType.FISH_ITEM, ((Item) entity).getItemStack().getType(), event, 1);
 
             if(Hooks.PYRO_FISHING_PRO.isInitialized()) {
-                PyroFishProHook.setHasFishedRecently(player.getUniqueId());
+                PyroFishProHook.setRecentHook(player.getUniqueId(), event.getHook());
             }
         }
     }

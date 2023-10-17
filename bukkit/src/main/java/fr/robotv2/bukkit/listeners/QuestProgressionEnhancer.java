@@ -36,16 +36,16 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
         return this.plugin.getGlitchChecker();
     }
 
-    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target) {
+    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable Object target) {
         return this.incrementProgression(player, type, target, null, 1);
     }
 
-    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target, @Nullable Event event) {
+    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable Object target, @Nullable Event event) {
         return this.incrementProgression(player, type, target, event, 1);
     }
 
     public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type,
-                                     @Nullable T target, @Nullable Event event, int amount) {
+                                     @Nullable Object target, @Nullable Event event, int amount) {
 
         if(type != QuestType.LOCATION) {
             plugin.debug(type.name() + " has been triggered by " + player.getName() + ".");
@@ -90,7 +90,7 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
         return questAffected != 0;
     }
 
-    public boolean incrementProgressionFor(Player player, ActiveQuest activeQuest, T target, Event event, int amount) {
+    public boolean incrementProgressionFor(Player player, ActiveQuest activeQuest, Object target, Event event, int amount) {
 
         if(activeQuest.hasEnded() || activeQuest.isDone()) {
             return false;
@@ -144,6 +144,6 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
 
         return conditions.stream()
                 .filter(condition -> condition.referencedType().contains(type))
-                .allMatch(condition -> condition.matchCondition(player, type, event, customType));
+                .allMatch(condition -> customType != null ? condition.matchCondition(player, type, event, customType) : condition.matchCondition(player, type, event));
     }
 }
