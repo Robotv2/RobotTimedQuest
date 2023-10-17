@@ -20,7 +20,7 @@ public class EntityQuestRequirement extends QuestRequirement<EntityType> {
 
         final List<String> entityStrings = quest.getSection().getStringList("required_targets");
 
-        if(entityStrings.contains("*")) {
+        if(entityStrings.isEmpty() || entityStrings.contains("*")) {
             all = true;
             return;
         }

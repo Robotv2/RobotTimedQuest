@@ -24,7 +24,7 @@ public class StringQuestRequirement extends QuestRequirement<String> {
                 .map(target -> isCaseSensitive ? target : target.toUpperCase())
                 .collect(Collectors.toList());
 
-        this.isAllTargets = targetList.contains("*");
+        this.isAllTargets = targetList.isEmpty() || targetList.contains("*");
         this.isCaseSensitive = isCaseSensitive;
     }
 

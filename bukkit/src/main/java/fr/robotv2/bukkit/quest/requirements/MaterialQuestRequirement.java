@@ -17,7 +17,7 @@ public class MaterialQuestRequirement extends QuestRequirement<Material> {
 
         final List<String> materialStrings = quest.getSection().getStringList("required_targets");
 
-        if(materialStrings.contains("*")) {
+        if(materialStrings.isEmpty() || materialStrings.contains("*")) {
             all = true;
             return;
         }
