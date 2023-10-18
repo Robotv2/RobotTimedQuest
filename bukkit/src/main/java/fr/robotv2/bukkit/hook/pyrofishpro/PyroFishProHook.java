@@ -3,6 +3,7 @@ package fr.robotv2.bukkit.hook.pyrofishpro;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import fr.robotv2.bukkit.RobotTimedQuestAPI;
+import fr.robotv2.bukkit.hook.Hook;
 import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroFish;
 import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroTier;
 import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishProListener;
@@ -21,7 +22,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-public class PyroFishProHook {
+public class PyroFishProHook implements Hook {
 
     private final static Cache<UUID, FishHook> FISH_CACHE = CacheBuilder.newBuilder()
             .expireAfterWrite(3500, TimeUnit.MILLISECONDS)
@@ -29,16 +30,6 @@ public class PyroFishProHook {
             .build();
 
     public static final String PYRO_KEY_PREFIX = "pyrofishingpro";
-
-    private PyroFishProHook() { }
-
-    public static boolean initialize(JavaPlugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new PyroFishProListener(), plugin);
-        RobotTimedQuestAPI.registerCustomType(new PyroFishType());
-        RobotTimedQuestAPI.registerCondition("is_pyro_tier", IsPyroTier.class);
-        RobotTimedQuestAPI.registerCondition("is_pyro_fish", IsPyroFish.class);
-        return true;
-    }
 
     public static class PyroFishWrapper {
 
@@ -52,6 +43,18 @@ public class PyroFishProHook {
             this.fishnumber = container.get(new NamespacedKey(PYRO_KEY_PREFIX, "fishnumber"), PersistentDataType.INTEGER);
             this.price = container.get(new NamespacedKey(PYRO_KEY_PREFIX, "price"), PersistentDataType.DOUBLE);
         }
+    }
+
+    public boolean initialize(JavaPlugin plugin) {
+        plugin.getServer().getPluginManager().registerEvents(new PyroFishProListener(), plugin);
+        RobotTimedQuestAPI.registerCustomType(new PyroFishType());
+        return true;
+    }
+
+    @Override
+    public void loadConditions() {
+        registerCondition("is_pyro_tier", IsPyroTier.class);
+        registerCondition("is_pyro_fish", IsPyroFish.class);
     }
 
     public static boolean isPyroFish(ItemStack fish) {

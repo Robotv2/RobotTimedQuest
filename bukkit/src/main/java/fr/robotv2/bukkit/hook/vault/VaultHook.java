@@ -1,18 +1,17 @@
 package fr.robotv2.bukkit.hook.vault;
 
+import fr.robotv2.bukkit.hook.Hook;
 import net.milkbowl.vault.economy.Economy;
 import org.apache.commons.lang.Validate;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class VaultHook {
+public class VaultHook implements Hook {
 
     private static Economy eco = null;
 
-    private VaultHook() { }
-
-    public static boolean initialize(JavaPlugin plugin) {
+    public boolean initialize(JavaPlugin plugin) {
 
         if (plugin.getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
@@ -26,6 +25,11 @@ public class VaultHook {
 
         eco = rsp.getProvider();
         return true;
+    }
+
+    @Override
+    public void loadConditions() {
+
     }
 
     public static boolean isInitialized() {
