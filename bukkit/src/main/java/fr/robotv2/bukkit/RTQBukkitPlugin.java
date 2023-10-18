@@ -334,7 +334,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         final PluginManager pm = getServer().getPluginManager();
 
         // DATA & SYSTEM
-        pm.registerEvents((this.playerDataInitListeners = new PlayerDataInitListeners(this)), this);
+        pm.registerEvents(this.playerDataInitListeners = new PlayerDataInitListeners(this), this);
         pm.registerEvents(new SystemListeners(), this);
         pm.registerEvents(new GlitchChecker(this), this);
 
