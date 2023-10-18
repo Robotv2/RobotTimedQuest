@@ -2,10 +2,13 @@ package fr.robotv2.bukkit.hook.pyrofishpro;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.RobotTimedQuestAPI;
 import fr.robotv2.bukkit.hook.Hook;
 import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroFish;
 import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroTier;
+import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishCustomListener;
+import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishListener;
 import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishProEventCaller;
 import fr.robotv2.bukkit.hook.pyrofishpro.type.PyroFishType;
 import fr.robotv2.bukkit.util.item.ItemUtil;
@@ -15,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Objects;
@@ -46,7 +50,10 @@ public class PyroFishProHook implements Hook {
     }
 
     public boolean initialize(JavaPlugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new PyroFishProEventCaller(), plugin);
+        final PluginManager pm = plugin.getServer().getPluginManager();
+        pm.registerEvents(new PyroFishProEventCaller(), plugin);
+        pm.registerEvents(new PyroFishListener(RTQBukkitPlugin.getInstance()), plugin);
+        pm.registerEvents(new PyroFishCustomListener(), plugin);
         RobotTimedQuestAPI.registerCustomType(new PyroFishType());
         return true;
     }
