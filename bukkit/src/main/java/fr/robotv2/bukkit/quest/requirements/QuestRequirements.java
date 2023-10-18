@@ -26,6 +26,7 @@ public class QuestRequirements {
         registerRequirement(EntityType.class, EntityQuestRequirement::new);
         registerRequirement(Location.class, LocationQuestRequirement::new);
         registerRequirement(Biome.class, BiomeRequirement::new);
+        registerRequirement(String.class, quest -> new StringQuestRequirement(quest, true));
     }
 
     public static void registerRequirement(Class<?> clazz, Function<Quest, QuestRequirement<?>> function) {
