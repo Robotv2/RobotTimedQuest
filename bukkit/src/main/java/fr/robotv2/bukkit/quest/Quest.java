@@ -227,7 +227,8 @@ public class Quest {
     }
 
     public boolean isTarget(Object object) {
-        return getQuestRequirement() == null
+        return object == null ||
+                getQuestRequirement() == null
                 || getQuestRequirement().isTarget0(object);
     }
 
