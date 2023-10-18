@@ -49,9 +49,6 @@ public class IsPyroFish implements Condition {
         }
 
         final String fishId = (wrapper.tier + ":" + wrapper.fishnumber);
-
-        RTQBukkitPlugin.getInstance().debug("Fish's id : %s", fishId);
-
         return all || fishList.contains(fishId);
     }
 
