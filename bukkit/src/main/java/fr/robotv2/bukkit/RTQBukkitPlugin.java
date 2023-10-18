@@ -352,6 +352,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         pm.registerEvents(new EntityShearListener(this), this);
         pm.registerEvents(new EntityTameListener(this), this);
         pm.registerEvents(new VillagerTradeListener(this), this);
+        pm.registerEvents(new EntityMilkListener(this), this);
 
         // ITEM
         pm.registerEvents(new PlayerBrewListener(this), this);
