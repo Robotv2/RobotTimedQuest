@@ -60,9 +60,7 @@ public class GuiHelper {
             final Consumer<InventoryClickEvent> consumer = actions.isEmpty() ? null : (ignored) -> new StringListProcessor().process(player, actions);
 
             final CompletableFuture<Void> future = BukkitFuture.from(ItemUtil.toItemStack(itemSection, player), plugin)
-                    .thenAcceptBukkit(completedItem -> {
-                        scheme.bindItem(character, completedItem, consumer);
-                    })
+                    .thenAcceptBukkit(completedItem -> scheme.bindItem(character, completedItem, consumer))
                     .getFuture();
 
             futuresItems.add(future);
