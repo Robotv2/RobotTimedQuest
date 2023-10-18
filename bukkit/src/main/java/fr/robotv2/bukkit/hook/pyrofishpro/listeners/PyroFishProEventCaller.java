@@ -12,7 +12,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PyroFishProListener extends CustomQuestProgressionEnhancer<String> {
+public class PyroFishProEventCaller extends CustomQuestProgressionEnhancer<String> {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPyroFishPickup(EntityPickupItemEvent event) {

@@ -6,7 +6,7 @@ import fr.robotv2.bukkit.RobotTimedQuestAPI;
 import fr.robotv2.bukkit.hook.Hook;
 import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroFish;
 import fr.robotv2.bukkit.hook.pyrofishpro.conditions.IsPyroTier;
-import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishProListener;
+import fr.robotv2.bukkit.hook.pyrofishpro.listeners.PyroFishProEventCaller;
 import fr.robotv2.bukkit.hook.pyrofishpro.type.PyroFishType;
 import fr.robotv2.bukkit.util.item.ItemUtil;
 import org.bukkit.NamespacedKey;
@@ -46,7 +46,7 @@ public class PyroFishProHook implements Hook {
     }
 
     public boolean initialize(JavaPlugin plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new PyroFishProListener(), plugin);
+        plugin.getServer().getPluginManager().registerEvents(new PyroFishProEventCaller(), plugin);
         RobotTimedQuestAPI.registerCustomType(new PyroFishType());
         return true;
     }
