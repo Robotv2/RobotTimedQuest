@@ -8,7 +8,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public class EntityMilkListener extends QuestProgressionEnhancer<EntityType> {
@@ -20,9 +19,9 @@ public class EntityMilkListener extends QuestProgressionEnhancer<EntityType> {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerBucketFill(PlayerInteractEntityEvent event) {
 
-        final ItemStack itemInHand = event.getPlayer().getInventory().getItem(EquipmentSlot.HAND);
+        final ItemStack itemInHand = event.getPlayer().getInventory().getItem(event.getHand());
 
-        if(itemInHand.getType() != Material.MILK_BUCKET) {
+        if(itemInHand.getType() != Material.BUCKET) {
             return;
         }
 
