@@ -17,41 +17,34 @@ import java.util.stream.Stream;
 
 public enum Hooks {
 
-    PLACEHOLDER_API("PlaceholderAPI", PlaceholderAPIHook.class, PlaceholderAPIHook::new),
-    VAULT("Vault", VaultHook.class, VaultHook::new),
-    ITEM_ADDER("ItemAdder", ItemAdderHook.class, ItemAdderHook::new),
-    ORAXEN("Oraxen", OraxenHook.class, OraxenHook::new),
-    MYTHIC_MOB("MythicMob", MythicMobHook.class, MythicMobHook::new),
-    ELITE_MOB("EliteMobs", EliteMobHook.class, EliteMobHook::new),
-    PYRO_FISHING_PRO("PyroFishingPro", PyroFishProHook.class, PyroFishProHook::new),
+    VAULT("Vault", VaultHook::new),
+    ITEM_ADDER("ItemAdder", ItemAdderHook::new),
+    ORAXEN("Oraxen", OraxenHook::new),
+    MYTHIC_MOB("MythicMob", MythicMobHook::new),
+    ELITE_MOB("EliteMobs", EliteMobHook::new),
+    PYRO_FISHING_PRO("PyroFishingPro", PyroFishProHook::new),
+    PLACEHOLDER_API("PlaceholderAPI", PlaceholderAPIHook::new),
     ;
 
     private final Supplier<Hook> hookSupplier;
-    private final Class<? extends Hook> hookClass;
 
     private final String pluginName;
     private Hook hook;
 
-    Hooks(String pluginName, Class<? extends Hook> hookClass, Supplier<Hook> hookSupplier) {
+    Hooks(String pluginName, Supplier<Hook> hookSupplier) {
         this.pluginName = pluginName;
-        this.hookClass = hookClass;
         this.hookSupplier = hookSupplier;
     }
 
     public static void loadHooks(JavaPlugin plugin) {
-        Stream.of(Hooks.values()).filter(Hooks::isPluginEnabled)
+        Stream.of(Hooks.values()).filter(pluginHook -> {
+            RTQBukkitPlugin.getInstance().debug("Is plugin %s enabled ? %s", pluginHook.pluginName, String.valueOf(pluginHook.isPluginEnabled()));
+            return pluginHook.isPluginEnabled();
+                })
                 .forEach(pluginHook -> {
                     RTQBukkitPlugin.getInstance().debug("Loading hook for " + pluginHook.pluginName);
                     pluginHook.load(plugin);
                 });
-    }
-
-    public static <T extends Hook> T getHookInstance(Hooks hooks) {
-        return getHookInstance(hooks, (Class<T>) hooks.hookClass);
-    }
-
-    public static <T extends Hook> T getHookInstance(Hooks hooks, Class<T> clazz) {
-        return clazz.cast(hooks.hook);
     }
 
     public boolean isPluginEnabled() {
