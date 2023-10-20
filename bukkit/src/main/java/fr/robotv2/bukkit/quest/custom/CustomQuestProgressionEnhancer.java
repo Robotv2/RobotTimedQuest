@@ -62,7 +62,7 @@ public abstract class CustomQuestProgressionEnhancer<T> extends QuestProgression
 
             if(!this.allConditionsMatch(quest.getConditions(), player, event, quest.getType(), quest.getCustomType()))
             {
-                return false;
+                continue;
             }
 
             result = true;
