@@ -133,6 +133,34 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
         }
     }
 
+    @Placeholder(identifier = "until")
+    @RequireOnlinePlayer
+    public String onTimeUntil(String resetId, @Optional String param) {
+
+        final ResetService service = plugin.getBukkitResetServiceRepo().getService(resetId);
+
+        if(service == null) {
+            return null;
+        }
+
+        if(param == null) {
+            return DateUtil.getTimeUntilFormatted(service);
+        }
+
+        final long[] extraction = DateUtil.extract(service);
+
+        switch (param.toLowerCase()) {
+            case "day":
+                return String.valueOf(extraction[0]);
+            case "hour":
+                return String.valueOf(extraction[1]);
+            case "minute":
+                return String.valueOf(extraction[2]);
+            default:
+                return null;
+        }
+    }
+
     // %robottimedquest_time_DAILY_until%
     @Placeholder(identifier = "time")
     @RequireOnlinePlayer

@@ -1,13 +1,6 @@
 package fr.robotv2.bukkit.quest.conditions;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
-import fr.robotv2.bukkit.hook.elitemob.conditions.EntityFromEliteMob;
-import fr.robotv2.bukkit.hook.elitemob.conditions.EntityFromEliteMobNpc;
-import fr.robotv2.bukkit.hook.itemadder.conditions.BlockIsFromItemAdder;
-import fr.robotv2.bukkit.hook.itemadder.conditions.ItemIsFromItemAdder;
-import fr.robotv2.bukkit.hook.mythicmob.conditions.EntityFromMythicMob;
-import fr.robotv2.bukkit.hook.oraxen.conditions.BlockIsFromOraxen;
-import fr.robotv2.bukkit.hook.oraxen.conditions.ItemIsFromOraxen;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.IsCustomEntity;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.SheepColorCondition;
 import fr.robotv2.bukkit.quest.conditions.impl.entity.VillagerCondition;
@@ -70,17 +63,6 @@ public class ConditionManager {
         registerCondition("is_custom_entity", IsCustomEntity.class);
         registerCondition("sheep_color", SheepColorCondition.class);
         registerCondition("required_villager", VillagerCondition.class);
-
-        //EXTERNAL
-        registerCondition("is_block_from_itemadder", BlockIsFromItemAdder.class);
-        registerCondition("is_block_from_oraxen", BlockIsFromOraxen.class);
-
-        registerCondition("is_item_from_itemadder", ItemIsFromItemAdder.class);
-        registerCondition("is_item_from_oraxen", ItemIsFromOraxen.class);
-
-        registerCondition("is_entity_from_mythicmob", EntityFromMythicMob.class);
-        registerCondition("is_entity_from_elitemob", EntityFromEliteMob.class);
-        registerCondition("is_npc_from_elitemob", EntityFromEliteMobNpc.class);
     }
 
     private boolean checkConditionClass(Class<? extends Condition> conditionClazz) {
@@ -96,7 +78,7 @@ public class ConditionManager {
         final Class<? extends Condition> conditionClazz = conditions.get(key);
 
         if(conditionClazz == null) {
-            throw new NullPointerException("key is not a valid condition. Maybe it isn't registered ?");
+            throw new NullPointerException(key + " is not a valid condition. Maybe it isn't registered ?");
         }
 
         try {

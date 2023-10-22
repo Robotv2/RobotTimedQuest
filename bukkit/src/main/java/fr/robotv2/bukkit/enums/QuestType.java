@@ -28,10 +28,11 @@ public enum QuestType {
     LAUNCH(true, EntityType.class),
     LOCATION(false, Location.class),
     VILLAGER_TRADE(true, Material.class),
+    MILKING(true, EntityType.class),
 
     GATHER_ITEM(true, Material.class),
     CARVE(true, Material.class),
-    PLAYER_DEATH(true, null),
+    PLAYER_DEATH(true, String.class),
     WALK(true, null),
     SWIM(true, null),
     STAY_ONLINE(true, null),

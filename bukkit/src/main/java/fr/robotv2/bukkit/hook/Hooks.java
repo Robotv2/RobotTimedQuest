@@ -1,60 +1,50 @@
 package fr.robotv2.bukkit.hook;
 
 import fr.robotv2.bukkit.RTQBukkitPlugin;
+import fr.robotv2.bukkit.hook.elitemob.EliteMobHook;
+import fr.robotv2.bukkit.hook.itemadder.ItemAdderHook;
 import fr.robotv2.bukkit.hook.mythicmob.MythicMobHook;
+import fr.robotv2.bukkit.hook.oraxen.OraxenHook;
 import fr.robotv2.bukkit.hook.placeholderapi.PlaceholderAPIHook;
 import fr.robotv2.bukkit.hook.pyrofishpro.PyroFishProHook;
 import fr.robotv2.bukkit.hook.vault.VaultHook;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.stream.Stream;
+
 public enum Hooks {
 
-    PLACEHOLDER_API("PlaceholderAPI"),
-    VAULT("Vault"),
-    ITEM_ADDER("ItemAdder"),
-    ORAXEN("Oraxen"),
-    MYTHIC_MOB("MythicMob"),
-    ELITE_MOB("EliteMobs"),
-    PYRO_FISHING_PRO("PyroFishingPro"),
+    VAULT("Vault", VaultHook::new),
+    ITEM_ADDER("ItemAdder", ItemAdderHook::new),
+    ORAXEN("Oraxen", OraxenHook::new),
+    MYTHIC_MOB("MythicMob", MythicMobHook::new),
+    ELITE_MOB("EliteMobs", EliteMobHook::new),
+    PYRO_FISHING_PRO("PyroFishingPro", PyroFishProHook::new),
+    PLACEHOLDER_API("PlaceholderAPI", PlaceholderAPIHook::new),
     ;
 
-    private final String pluginName;
-    private boolean initialized = false;
+    private final Supplier<Hook> hookSupplier;
 
-    Hooks(String pluginName) {
+    private final String pluginName;
+    private Hook hook;
+
+    Hooks(String pluginName, Supplier<Hook> hookSupplier) {
         this.pluginName = pluginName;
+        this.hookSupplier = hookSupplier;
     }
 
     public static void loadHooks(JavaPlugin plugin) {
-
-        if(Hooks.PLACEHOLDER_API.isPluginEnabled() && PlaceholderAPIHook.initialize()) {
-            Hooks.PLACEHOLDER_API.setInitialized();
-        }
-
-        if(Hooks.VAULT.isPluginEnabled() && VaultHook.initialize(plugin)) {
-            Hooks.VAULT.setInitialized();
-        }
-
-        if(Hooks.ITEM_ADDER.isPluginEnabled()) {
-            Hooks.ITEM_ADDER.setInitialized();
-        }
-
-        if(Hooks.ORAXEN.isPluginEnabled()) {
-            Hooks.ORAXEN.setInitialized();
-        }
-
-        if(Hooks.MYTHIC_MOB.isPluginEnabled() && MythicMobHook.initialize(plugin)) {
-            Hooks.MYTHIC_MOB.setInitialized();
-        }
-
-        if(Hooks.ELITE_MOB.isPluginEnabled()) {
-            Hooks.ELITE_MOB.setInitialized();
-        }
-
-        if(Hooks.PYRO_FISHING_PRO.isPluginEnabled() && PyroFishProHook.initialize(plugin)) {
-            Hooks.PYRO_FISHING_PRO.setInitialized();
-        }
+        Stream.of(Hooks.values()).filter(pluginHook -> {
+            RTQBukkitPlugin.getInstance().debug("Is plugin %s enabled ? %s", pluginHook.pluginName, String.valueOf(pluginHook.isPluginEnabled()));
+            return pluginHook.isPluginEnabled();
+                })
+                .forEach(pluginHook -> {
+                    RTQBukkitPlugin.getInstance().debug("Loading hook for " + pluginHook.pluginName);
+                    pluginHook.load(plugin);
+                });
     }
 
     public boolean isPluginEnabled() {
@@ -62,11 +52,24 @@ public enum Hooks {
     }
 
     public boolean isInitialized() {
-        return this.initialized;
+        return this.hook != null;
     }
 
-    private void setInitialized() {
+    private void load(JavaPlugin plugin) {
+
+        try {
+            final Hook supplied = hookSupplier.get();
+            if (supplied.initialize(plugin)) {
+                setInitialized(supplied);
+            }
+        } catch (Exception exception) {
+            plugin.getLogger().log(Level.WARNING, "An error occurred while hooking into: " + pluginName, exception);
+        }
+    }
+
+    private void setInitialized(Hook hook) {
         RTQBukkitPlugin.getPluginLogger().info("HOOK - " + pluginName + " has been successfully hooked into this plugin.");
-        this.initialized = true;
+        this.hook = hook;
+        hook.loadConditions();
     }
 }

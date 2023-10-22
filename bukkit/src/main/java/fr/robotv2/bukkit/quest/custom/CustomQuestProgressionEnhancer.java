@@ -18,15 +18,15 @@ public abstract class CustomQuestProgressionEnhancer<T> extends QuestProgression
         super(RTQ_PLUGIN);
     }
 
-    public boolean trigger(Player player, String name, Object target) {
+    public boolean trigger(Player player, String name, T target) {
         return this.trigger(player, name, target, 1);
     }
 
-    public boolean trigger(Player player, String name, Object target, int amount) {
+    public boolean trigger(Player player, String name, T target, int amount) {
         return this.trigger(player, name, target, null, amount);
     }
 
-    public boolean trigger(Player player, String name, Object target, Event event, int amount) {
+    public boolean trigger(Player player, String name, T target, Event event, int amount) {
 
         RTQ_PLUGIN.debug("Custom type '%s' has been triggered by %s", name, player.getName());
 
@@ -62,7 +62,7 @@ public abstract class CustomQuestProgressionEnhancer<T> extends QuestProgression
 
             if(!this.allConditionsMatch(quest.getConditions(), player, event, quest.getType(), quest.getCustomType()))
             {
-                return false;
+                continue;
             }
 
             result = true;

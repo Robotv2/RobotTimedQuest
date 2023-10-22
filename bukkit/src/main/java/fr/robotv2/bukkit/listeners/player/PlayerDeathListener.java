@@ -5,9 +5,10 @@ import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.listeners.QuestProgressionEnhancer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
-public class PlayerDeathListener extends QuestProgressionEnhancer<Void> {
+public class PlayerDeathListener extends QuestProgressionEnhancer<String> {
 
     public PlayerDeathListener(RTQBukkitPlugin plugin) {
         super(plugin);
@@ -15,6 +16,10 @@ public class PlayerDeathListener extends QuestProgressionEnhancer<Void> {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
-        this.incrementProgression(event.getEntity(), QuestType.PLAYER_DEATH, null, event, 1);
+
+        final EntityDamageEvent entityDamageEvent = event.getEntity().getLastDamageCause();
+        final EntityDamageEvent.DamageCause cause = entityDamageEvent != null ? entityDamageEvent.getCause() : EntityDamageEvent.DamageCause.CUSTOM;
+
+        this.incrementProgression(event.getEntity(), QuestType.PLAYER_DEATH, cause.name(), event, 1);
     }
 }

@@ -28,6 +28,6 @@ quest-gui:
       - 31
       - 34
   messages:
+    quest_done: '&aYou have successfully done this quest.'
     quest_progression: '#64CCC5Progress: #176B87%quest_progression%&8/#176B87%quest_required%'
     quest_not_done: '#BB2525This quest is not done yet.'
-    quest_done: '&aYou have successfully done this quest.'

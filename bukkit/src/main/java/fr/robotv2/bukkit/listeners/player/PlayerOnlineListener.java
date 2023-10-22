@@ -49,7 +49,6 @@ public class PlayerOnlineListener extends QuestProgressionEnhancer<Void> {
         }
 
         final long delay = pair.snd - System.currentTimeMillis();
-        getPlugin().debug("ONLINE -> schedule for in " + Duration.ofMillis(delay).toSeconds() + " second(s)");
 
         service.schedule(() -> {
 

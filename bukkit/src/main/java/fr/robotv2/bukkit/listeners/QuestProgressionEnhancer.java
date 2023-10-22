@@ -36,16 +36,16 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
         return this.plugin.getGlitchChecker();
     }
 
-    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable Object target) {
+    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target) {
         return this.incrementProgression(player, type, target, null, 1);
     }
 
-    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable Object target, @Nullable Event event) {
+    public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type, @Nullable T target, @Nullable Event event) {
         return this.incrementProgression(player, type, target, event, 1);
     }
 
     public boolean incrementProgression(@NotNull Player player, @NotNull QuestType type,
-                                     @Nullable Object target, @Nullable Event event, int amount) {
+                                     @Nullable T target, @Nullable Event event, int amount) {
 
         if(type != QuestType.LOCATION) {
             plugin.debug(type.name() + " has been triggered by " + player.getName() + ".");
@@ -80,7 +80,7 @@ public abstract class QuestProgressionEnhancer<T> implements Listener {
 
             if(!this.allConditionsMatch(quest.getConditions(), player, event, quest.getType(), quest.getCustomType()))
             {
-                return false;
+                continue;
             }
 
             questAffected++;

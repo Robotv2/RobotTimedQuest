@@ -3,13 +3,15 @@ package fr.robotv2.bukkit.hook.itemadder;
 import dev.lone.itemsadder.api.CustomBlock;
 import dev.lone.itemsadder.api.CustomEntity;
 import dev.lone.itemsadder.api.CustomStack;
+import fr.robotv2.bukkit.hook.Hook;
+import fr.robotv2.bukkit.hook.itemadder.conditions.BlockIsFromItemAdder;
+import fr.robotv2.bukkit.hook.itemadder.conditions.ItemIsFromItemAdder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
-public class ItemAdderHook {
-
-    private ItemAdderHook() { }
+public class ItemAdderHook implements Hook {
 
     public static boolean isValidItemRegistry(String namespaceID) {
         return CustomStack.isInRegistry(namespaceID);
@@ -87,5 +89,21 @@ public class ItemAdderHook {
         }
 
         return CustomStack.getInstance(namespaceID).getItemStack();
+    }
+
+    @Override
+    public boolean initialize(JavaPlugin plugin) {
+        try {
+            Class.forName("dev.lone.itemsadder.api.CustomBlock");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void loadConditions() {
+        registerCondition("is_item_from_itemadder", ItemIsFromItemAdder.class);
+        registerCondition("is_block_from_itemadder", BlockIsFromItemAdder.class);
     }
 }

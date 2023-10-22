@@ -1,18 +1,18 @@
 package fr.robotv2.bukkit.hook.pyrofishpro.listeners;
 
-import fr.robotv2.bukkit.enums.QuestType;
+import fr.robotv2.bukkit.events.PyroFishCaughtEvent;
 import fr.robotv2.bukkit.hook.pyrofishpro.PyroFishProHook;
 import fr.robotv2.bukkit.quest.custom.CustomQuestProgressionEnhancer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PyroFishProListener extends CustomQuestProgressionEnhancer<String> {
+public class PyroFishProEventCaller extends CustomQuestProgressionEnhancer<String> {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPyroFishPickup(EntityPickupItemEvent event) {
@@ -41,15 +41,6 @@ public class PyroFishProListener extends CustomQuestProgressionEnhancer<String> 
             return;
         }
 
-        final PlayerFishEvent playerFishEvent = new PlayerFishEvent(player, item, hook, PlayerFishEvent.State.CAUGHT_FISH);
-
-        this.trigger(player, "PYRO_FISH", (pyroFish.tier + ":" + pyroFish.fishnumber), event, 1);
-        this.incrementProgression(
-                player,
-                QuestType.FISH_ITEM,
-                item.getItemStack().getType(),
-                playerFishEvent,
-                item.getItemStack().getAmount()
-        );
+        Bukkit.getServer().getPluginManager().callEvent(new PyroFishCaughtEvent(player, item, pyroFish, hook));
     }
 }

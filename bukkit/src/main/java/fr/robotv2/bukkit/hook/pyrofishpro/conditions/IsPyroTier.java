@@ -16,13 +16,15 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class IsPyroTier implements Condition {
 
     private final List<String> tierList;
 
     public IsPyroTier(ConfigurationSection parent, String key) {
-        this.tierList = parent.getStringList(key);
+        this.tierList = parent.getStringList(key)
+                .stream().map(String::toUpperCase).collect(Collectors.toList());
     }
 
     @Override
@@ -40,9 +42,7 @@ public class IsPyroTier implements Condition {
             return false;
         }
 
-        RTQBukkitPlugin.getInstance().debug("PYRO TIER -> %s", wrapper.tier);
-
-        return tierList.contains(wrapper.tier);
+        return tierList.contains(wrapper.tier.toUpperCase());
     }
 
     @Override
@@ -64,6 +64,6 @@ public class IsPyroTier implements Condition {
 
     @Override
     public EnumSet<QuestType> referencedType() {
-        return EnumSet.of(QuestType.CUSTOM);
+        return EnumSet.of(QuestType.CUSTOM, QuestType.FISH_ITEM);
     }
 }

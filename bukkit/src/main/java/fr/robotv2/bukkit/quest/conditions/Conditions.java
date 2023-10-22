@@ -44,7 +44,8 @@ public class Conditions {
             QuestType.KILL, // EntityDeathEvent
             QuestType.SHEAR, // PlayerShearEntityEvent
             QuestType.TAME, // EntityTameEvent
-            QuestType.VILLAGER_TRADE // VillagerTradeEvent
+            QuestType.VILLAGER_TRADE, // VillagerTradeEvent
+            QuestType.MILKING
     );
 
     public static final EnumSet<QuestType> ITEMSTACK_RELATED_TYPES = EnumSet.of(
@@ -86,6 +87,9 @@ public class Conditions {
                 break;
             case VILLAGER_TRADE:
                 entity = Conditions.processEventFunction(VillagerTradeEvent.class, event, (VillagerTradeEvent::getVillager));
+                break;
+            case MILKING:
+                entity = Conditions.processEventFunction(PlayerInteractEntityEvent.class, event, (PlayerInteractEntityEvent::getRightClicked));
                 break;
             default:
                 break;
