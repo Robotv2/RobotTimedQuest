@@ -1,20 +1,19 @@
-package fr.robotv2.bungeecord.listeners;
+package fr.robotv2.common.proxy;
 
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import fr.robotv2.bungeecord.RTQBungeePlugin;
 import fr.robotv2.common.channel.ChannelConstant;
 import fr.robotv2.common.data.RedisConnector;
 
 import java.util.Locale;
 import java.util.UUID;
 
-public class BungeeRedisMessenger implements RedisConnector.AbstractMessenger {
+public class ProxyRedisMessenger implements RedisConnector.AbstractMessenger {
 
-    private final RTQBungeePlugin plugin;
+    private final ProxyResetPublisher publisher;
 
-    public BungeeRedisMessenger(RTQBungeePlugin plugin) {
-        this.plugin = plugin;
+    public ProxyRedisMessenger(ProxyResetPublisher publisher) {
+        this.publisher = publisher;
     }
 
     @Override
@@ -27,18 +26,18 @@ public class BungeeRedisMessenger implements RedisConnector.AbstractMessenger {
         final ByteArrayDataInput input = ByteStreams.newDataInput(bytes);
         final String sub = input.readUTF();
 
-        switch (sub.toLowerCase(Locale.ROOT)) {
+        switch (sub.toUpperCase(Locale.ROOT)) {
 
             case "BUNGEECORD_PLAYER_RESET_ALL": {
                 final UUID uuid = UUID.fromString(input.readUTF());
-                plugin.getBungeeResetPublisher().reset(uuid, null);
+                publisher.reset(uuid, null);
                 break;
             }
 
             case "BUNGEECORD_PLAYER_RESET_ID": {
                 final UUID uuid = UUID.fromString(input.readUTF());
                 final String resetId = input.readUTF();
-                plugin.getBungeeResetPublisher().reset(uuid, resetId);
+                publisher.reset(uuid, resetId);
                 break;
             }
         }

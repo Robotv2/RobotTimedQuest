@@ -4,6 +4,7 @@ import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import fr.robotv2.common.config.RConfiguration;
 import fr.robotv2.common.data.DatabaseCredentials;
 
 import java.sql.SQLException;
@@ -27,6 +28,17 @@ public class MySqlCredentials implements DatabaseCredentials {
     private final boolean ssl;
 
     private HikariDataSource hikariDataSource;
+
+    public MySqlCredentials(RConfiguration configuration) {
+        this(
+                configuration.getString("storage.mysql-credentials.host"),
+                configuration.getString("storage.mysql-credentials.port"),
+                configuration.getString("storage.mysql-credentials.database"),
+                configuration.getString("storage.mysql-credentials.username"),
+                configuration.getString("storage.mysql-credentials.password"),
+                configuration.getBoolean("storage.mysql-credentials.useSSL", false)
+        );
+    }
 
     public MySqlCredentials(String host, String port, String database, String username, String password, boolean ssl) {
         this.host = host;

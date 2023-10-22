@@ -2,6 +2,7 @@ package fr.robotv2.common.data;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
+import fr.robotv2.common.config.RConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import redis.clients.jedis.*;
@@ -15,6 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /*
@@ -35,11 +37,21 @@ public class RedisConnector {
     private AbstractMessenger messenger = null;
     private PubSubListener listener = null;
 
+    public RedisConnector(RConfiguration configuration) {
+        this(
+                configuration.getString("options.redis_address", "127.0.0.1"),
+                configuration.getInt("options.redis_port", 6379),
+                configuration.getString("options.redis_password")
+        );
+    }
+
     public RedisConnector(@NotNull String address, int port, @Nullable String password) {
         this(new HostAndPort(address, port), password);
     }
 
     public RedisConnector(@NotNull HostAndPort hostAndPort, @Nullable String password) {
+
+        redisLogger.log(Level.INFO, "Try to connect to '" + hostAndPort + "' ...");
 
         final JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxTotal(16);
