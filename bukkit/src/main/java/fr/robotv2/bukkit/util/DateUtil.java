@@ -30,16 +30,28 @@ public class DateUtil {
     }
 
     public static String getTimeUntilFormatted(ResetService service) {
-        final Duration duration = Duration.ofMillis(DateUtil.getTimeUntil(service));
 
+        final long[] extraction = extract(service);
+
+        if(extraction[0] == 0) {
+            return String.format("%dh%dmin(s)", extraction[1], extraction[2]);
+        } else {
+            return String.format("%dd%dh%dmin(s)", extraction[0], extraction[1], extraction[2]);
+        }
+    }
+
+    public static long[] extract(ResetService service) {
+        final long[] extraction = new long[3];
+
+        final Duration duration = Duration.ofMillis(DateUtil.getTimeUntil(service));
         final long days = duration.toDays();
         final long hours = duration.minusDays(days).toHours();
-        final long minutes = duration.minusDays(days).minusHours(hours).toMinutes();
+        final long minutes = duration.minusHours(hours).toMinutes();
 
-        if(days == 0) {
-            return String.format("%dh%dmin(s)", hours, minutes);
-        } else {
-            return String.format("%dd%dh%dmin(s)", days, hours, minutes);
-        }
+        extraction[0] = days;
+        extraction[1] = hours;
+        extraction[2] = minutes;
+
+        return extraction;
     }
 }
