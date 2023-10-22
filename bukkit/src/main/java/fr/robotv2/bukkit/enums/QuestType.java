@@ -6,9 +6,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.Arrays;
 
 public enum QuestType {
 
@@ -43,16 +41,9 @@ public enum QuestType {
     ;
 
     public static final QuestType[] VALUES = QuestType.values();
-    private static final Map<String, QuestType> BY_NAME = new HashMap<>();
 
     private final boolean isNumerical;
     private final Class<?> requiredClazz;
-
-    static {
-        for(QuestType questType : VALUES) {
-            BY_NAME.put(questType.name(), questType);
-        }
-    }
 
     QuestType(boolean isNumerical, Class<?> requiredClazz) {
         this.isNumerical = isNumerical;
@@ -71,6 +62,9 @@ public enum QuestType {
     @Nullable
     public static QuestType getByName(@Nullable String questType) {
         if(questType == null) return null;
-        return BY_NAME.get(questType.toUpperCase(Locale.ROOT));
+        return Arrays.stream(VALUES)
+                .filter(type -> type.name().equalsIgnoreCase(questType))
+                .findFirst()
+                .orElse(null);
     }
 }
