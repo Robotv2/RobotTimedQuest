@@ -1,6 +1,8 @@
 package fr.robotv2.bukkit.config;
 
 import fr.robotv2.common.config.ConfigFile;
+import fr.robotv2.common.config.RConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -9,9 +11,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 
-public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
+public class BukkitConfigFile implements ConfigFile<YamlConfiguration>, RConfiguration {
 
     private final Plugin plugin;
     private final String fileName;
@@ -131,5 +136,76 @@ public class BukkitConfigFile implements ConfigFile<YamlConfiguration> {
         }
 
         return modified;
+    }
+
+    @Override
+    public String getString(String path) {
+        return getConfiguration().getString(path);
+    }
+
+    @Override
+    public int getInt(String path) {
+        return getConfiguration().getInt(path);
+    }
+
+    @Override
+    public double getDouble(String path) {
+        return getConfiguration().getDouble(path);
+    }
+
+    @Override
+    public long getLong(String path) {
+        return getConfiguration().getLong(path);
+    }
+
+    @Override
+    public boolean getBoolean(String path) {
+        return getConfiguration().getBoolean(path);
+    }
+
+    @Override
+    public List<String> getStringList(String path) {
+        return getConfiguration().getStringList(path);
+    }
+
+    @Override
+    public String getString(String path, String def) {
+        return getConfiguration().getString(path, def);
+    }
+
+    @Override
+    public int getInt(String path, int def) {
+        return getConfiguration().getInt(path, def);
+    }
+
+    @Override
+    public double getDouble(String path, double def) {
+        return getConfiguration().getDouble(path, def);
+    }
+
+    @Override
+    public long getLong(String path, long def) {
+        return getConfiguration().getLong(path, def);
+    }
+
+    @Override
+    public boolean getBoolean(String path, boolean def) {
+        return getConfiguration().getBoolean(path, def);
+    }
+
+    @Override
+    public List<String> getStringList(String path, List<String> def) {
+        return getConfiguration().isSet(path) ? getConfiguration().getStringList(path) : def;
+    }
+
+    @Override
+    public Collection<String> getKeys() {
+        return getConfiguration().getKeys(false);
+    }
+
+    @Override
+    public Collection<String> getKeys(String path) {
+        final ConfigurationSection section = getConfiguration().getConfigurationSection(path);
+        return section != null ? section.getKeys(false) : Collections.emptyList();
     }
 }

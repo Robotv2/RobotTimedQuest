@@ -1,5 +1,6 @@
 package fr.robotv2.common.reset;
 
+import fr.robotv2.common.config.RConfiguration;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
@@ -52,4 +53,19 @@ public abstract class AbstractResetServiceRepo {
     }
 
     public abstract void registerServices();
+
+    public void registerServices0(RConfiguration configuration) {
+
+        stopServices();
+        clearServices();
+
+        final String timeZoneString = configuration.getString("options.time-zone", "default");
+        final TimeZone timeZone = timeZoneString.equalsIgnoreCase("default") ? TimeZone.getDefault() : TimeZone.getTimeZone(timeZoneString);
+
+        for(String serviceId : configuration.getKeys("services")) {
+            final String cronSyntax = configuration.getString("services." + serviceId);
+            final ResetService service = new ResetService(serviceId, cronSyntax, timeZone);
+            this.registerService(service);
+        }
+    }
 }
