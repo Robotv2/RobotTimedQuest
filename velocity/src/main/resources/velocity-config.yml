@@ -1,0 +1,14 @@
+file-version: 1
+
+options:
+  redis_address: 127.0.0.1
+  redis_port: 6379
+
+storage:
+  mysql-credentials:
+    host: your-host
+    port: your-port
+    database: your-database
+    username: your-username
+    password: your-password
+    useSSL: false

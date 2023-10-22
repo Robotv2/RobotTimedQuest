@@ -1,0 +1,9 @@
+file-version: 1
+
+options:
+  time-zone: default
+
+services:
+  DAILY: "0 0 * * *"
+  WEEKLY: "0 0 * * 1"
+  MONTHLY: "0 0 1 * *"

@@ -31,5 +31,6 @@
         <module>bungeecord</module>
         <module>common</module>
         <module>dist</module>
+        <module>velocity</module>
     </modules>
 </project>
