@@ -72,7 +72,6 @@ public class PyroFishProHook implements Hook {
         }
 
         final NamespacedKey key = new NamespacedKey(PYRO_KEY_PREFIX, "tier");
-
         final PersistentDataContainer container = optional.get().getPersistentDataContainer();
         return container.has(key, PersistentDataType.STRING);
     }

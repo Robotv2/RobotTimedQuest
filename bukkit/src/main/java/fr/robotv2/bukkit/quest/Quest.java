@@ -47,11 +47,10 @@ public class Quest {
     private String headOwner;
 
     private final String resetId;
-    private final QuestType type;
-    private final String customType;
-
     private final List<String> rewards;
 
+    private final QuestType type;
+    private final String customType;
     private QuestRequirement<?> questRequirement = null;
     private final List<Condition> conditions = new ArrayList<>();
 
@@ -217,7 +216,7 @@ public class Quest {
 
     private void loadConditions(@NotNull ConfigurationSection conditionSection) {
         for(String key : conditionSection.getKeys(false)) {
-            final Optional<Condition> optional = PLUGIN.getConditionManager().toInstance(key, conditionSection);
+            final Optional<Condition> optional = PLUGIN.getConditionManager().toInstance(conditionSection, key);
             optional.ifPresent(conditions::add);
         }
     }

@@ -1,7 +1,6 @@
 package fr.robotv2.velocity.config;
 
 import com.google.inject.Inject;
-import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
@@ -11,21 +10,18 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import fr.robotv2.common.config.ConfigFile;
-import fr.robotv2.common.config.RConfiguration;
 import fr.robotv2.velocity.RTQVelocityPlugin;
 import org.slf4j.Logger;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class VelocityConfigFile implements ConfigFile<YamlDocument>, RConfiguration {
+public class VelocityConfigFile implements ConfigFile<YamlDocument> {
 
     @Inject
     private ProxyServer server;
@@ -58,7 +54,9 @@ public class VelocityConfigFile implements ConfigFile<YamlDocument>, RConfigurat
 
             if(!file.exists()) {
                 try(InputStream inputStream = plugin.getClass().getResourceAsStream("/" + fileName)) {
-                    Files.copy(inputStream, file.toPath());
+                    if(inputStream != null) {
+                        Files.copy(inputStream, file.toPath());
+                    }
                 }
             }
 

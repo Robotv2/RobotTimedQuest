@@ -20,5 +20,4 @@ public class PlaceholderAPIHook0 {
     public static String parsePlaceholders(OfflinePlayer offlinePlayer, String input) {
         return PlaceholderAPI.setPlaceholders(offlinePlayer, input);
     }
-
 }

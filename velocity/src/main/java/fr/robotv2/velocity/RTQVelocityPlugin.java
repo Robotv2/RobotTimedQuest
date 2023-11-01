@@ -8,7 +8,6 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fr.robotv2.common.channel.ChannelConstant;
-import fr.robotv2.common.config.RConfiguration;
 import fr.robotv2.common.data.DatabaseCredentials;
 import fr.robotv2.common.data.DatabaseManager;
 import fr.robotv2.common.data.RedisConnector;

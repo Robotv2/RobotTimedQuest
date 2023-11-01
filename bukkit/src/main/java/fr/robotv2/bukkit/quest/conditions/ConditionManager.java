@@ -74,7 +74,7 @@ public class ConditionManager {
         }
     }
 
-    public Optional<Condition> toInstance(String key, ConfigurationSection parent) {
+    public Optional<Condition> toInstance(ConfigurationSection parent, String key) {
         final Class<? extends Condition> conditionClazz = conditions.get(key);
 
         if(conditionClazz == null) {
