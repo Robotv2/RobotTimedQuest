@@ -41,16 +41,18 @@ public class DateUtil {
     }
 
     public static long[] extract(ResetService service) {
-        final long[] extraction = new long[3];
+        final long[] extraction = new long[4];
 
         final Duration duration = Duration.ofMillis(DateUtil.getTimeUntil(service));
         final long days = duration.toDays();
         final long hours = duration.minusDays(days).toHours();
         final long minutes = duration.minusHours(hours).toMinutes();
+        final long seconds = duration.minusMinutes(minutes).getSeconds();
 
         extraction[0] = days;
         extraction[1] = hours;
         extraction[2] = minutes;
+        extraction[3] = seconds;
 
         return extraction;
     }

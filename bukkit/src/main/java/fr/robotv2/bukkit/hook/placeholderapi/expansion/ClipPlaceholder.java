@@ -152,10 +152,15 @@ public class ClipPlaceholder extends BasePlaceholderExpansion {
         switch (param.toLowerCase()) {
             case "day":
                 return String.valueOf(extraction[0]);
+                // ({robottimedquest_until_DAILY_hour} * 60 * 60 * 24)
             case "hour":
                 return String.valueOf(extraction[1]);
+                // ({robottimedquest_until_DAILY_hour} * 60 * 60)
             case "minute":
                 return String.valueOf(extraction[2]);
+                // ({robottimedquest_until_DAILY_minute} * 60)
+            case "second":
+                return String.valueOf(extraction[3]);
             default:
                 return null;
         }
