@@ -2,6 +2,7 @@ package fr.robotv2.bukkit.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.Messages;
 import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
@@ -113,15 +114,28 @@ public class BukkitMainCommand extends BaseCommand {
 
     @Subcommand("toggle")
     @CommandPermission("robottimedquest.command.toggle")
-    public void onToggle(CommandSender sender, CosmeticUtil.CosmeticType type) {
+    public void onToggle(CommandSender sender, CosmeticUtil.CosmeticType type, @Optional OnlinePlayer onlineTarget) {
 
-        if(!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "Can't do that from console.");
+        if(!(sender instanceof Player) && onlineTarget == null) {
+            sender.sendMessage(ChatColor.RED + "can't do that from console.");
             return;
         }
 
-        final Player player = (Player) sender;
-        final boolean isDisabled = plugin.getCosmeticUtil().toggleDisabled(player.getUniqueId(), type);
+        boolean isTargeted = false;
+        Player target;
+
+        // Determine the target player
+        if (onlineTarget != null && sender.hasPermission("robottimedquest.command.toggle.others")) {
+            target = onlineTarget.player;
+            isTargeted = true;
+        } else if(sender instanceof Player) {
+            target = (Player) sender;
+        } else {
+            sender.sendMessage(ChatColor.RED + "can't do that from console.");
+            return;
+        }
+
+        final boolean isDisabled = plugin.getCosmeticUtil().toggleDisabled(target.getUniqueId(), type);
 
         final Messages message = isDisabled ? Messages.COSMETICS_DISABLED : Messages.COSMETICS_ENABLED;
         final Messages.TranslatableMessage translatableMessage = message.toTranslatableMessage()
@@ -131,10 +145,12 @@ public class BukkitMainCommand extends BaseCommand {
 
         if(type == CosmeticUtil.CosmeticType.BOSS_BAR) {
             if (isDisabled) {
-                BossBarUtil.hide(player);
+                BossBarUtil.hide(target);
             }
         }
 
-        translatableMessage.send(player);
+        if(!isTargeted) {
+            translatableMessage.send(target);
+        }
     }
 }
