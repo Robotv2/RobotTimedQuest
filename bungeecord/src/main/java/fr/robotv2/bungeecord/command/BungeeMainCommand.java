@@ -25,7 +25,6 @@ public class BungeeMainCommand extends Command {
         }
 
         final String sub = args[0].toLowerCase(Locale.ROOT);
-
         if(!sender.hasPermission("robottimedquest.command." + sub)) {
             sender.sendMessage(ChatColor.RED + "You don't have the required permission to use this command.");
             return;
