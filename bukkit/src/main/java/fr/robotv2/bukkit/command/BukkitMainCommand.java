@@ -5,6 +5,7 @@ import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.Messages;
+import fr.robotv2.bukkit.events.quest.BulkQuestDoneEvent;
 import fr.robotv2.bukkit.events.quest.QuestDoneEvent;
 import fr.robotv2.bukkit.quest.Quest;
 import fr.robotv2.bukkit.util.StringListProcessor;
@@ -110,6 +111,10 @@ public class BukkitMainCommand extends BaseCommand {
 
         activeQuest.setDone(true);
         Bukkit.getPluginManager().callEvent(new QuestDoneEvent(activeQuest));
+
+        if(questPlayer.getActiveQuests(resetId).stream().allMatch(ActiveQuest::isDone)) {
+            Bukkit.getPluginManager().callEvent(new BulkQuestDoneEvent(activeQuest, player, resetId));
+        }
     }
 
     @Subcommand("toggle")
