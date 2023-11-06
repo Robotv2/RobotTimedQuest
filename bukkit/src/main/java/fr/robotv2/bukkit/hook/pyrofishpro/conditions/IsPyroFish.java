@@ -1,6 +1,5 @@
 package fr.robotv2.bukkit.hook.pyrofishpro.conditions;
 
-import fr.robotv2.bukkit.RTQBukkitPlugin;
 import fr.robotv2.bukkit.enums.QuestType;
 import fr.robotv2.bukkit.hook.pyrofishpro.PyroFishProHook;
 import fr.robotv2.bukkit.quest.conditions.Condition;
