@@ -1,7 +1,12 @@
 package fr.robotv2.common.data.impl;
 
+import com.j256.ormlite.field.SqlType;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
+import com.j256.ormlite.stmt.StatementBuilder;
+import com.j256.ormlite.support.CompiledStatement;
 import com.j256.ormlite.support.ConnectionSource;
+import com.j256.ormlite.support.DatabaseConnection;
+import com.j256.ormlite.support.DatabaseResults;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.robotv2.common.config.RConfiguration;
@@ -11,6 +16,26 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
 public class MySqlCredentials implements DatabaseCredentials {
+
+    public static boolean columnExists(ConnectionSource source, String tableName, String columnName) throws SQLException {
+        final String statement = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME = ?";
+        final CompiledStatement compiledStatement = source.getReadOnlyConnection(tableName).compileStatement(
+                statement,
+                StatementBuilder.StatementType.SELECT,
+                null,
+                DatabaseConnection.DEFAULT_RESULT_FLAGS,
+                true
+        );
+
+        compiledStatement.setObject(0, tableName, SqlType.STRING);
+        compiledStatement.setObject(1, columnName, SqlType.STRING);
+
+        final DatabaseResults results = compiledStatement.runQuery(null);
+        final boolean columnExists = results.next();
+        compiledStatement.closeQuietly();
+
+        return columnExists;
+    }
 
     // https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
     private static final int MAXIMUM_POOL_SIZE = (Runtime.getRuntime().availableProcessors() * 2) + 1;

@@ -43,6 +43,10 @@
                             <pattern>co.aikar</pattern>
                             <shadedPattern>fr.robotv2.bukkit.aikar</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>com.jeff_media.customblockdata</pattern>
+                            <shadedPattern>fr.robotv2.bukkit.customblockdata</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -103,6 +107,7 @@
 
     <!-- Dependencies -->
     <dependencies>
+
         <!-- SpigotAPI Dependency -->
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -152,6 +157,13 @@
             <groupId>com.github.Robotv2</groupId>
             <artifactId>FastInv</artifactId>
             <version>75dea8599c</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jeff-media</groupId>
+            <artifactId>custom-block-data</artifactId>
+            <version>2.2.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -231,6 +243,5 @@
             <version>8.4.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </project>

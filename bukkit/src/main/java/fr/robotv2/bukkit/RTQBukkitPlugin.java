@@ -10,6 +10,7 @@ import fr.robotv2.bukkit.data.BukkitDatabaseManager;
 import fr.robotv2.bukkit.data.PlayerDataInitListeners;
 import fr.robotv2.bukkit.hook.Hooks;
 import fr.robotv2.bukkit.listeners.GlitchChecker;
+import fr.robotv2.bukkit.listeners.GlitchCheckerListener;
 import fr.robotv2.bukkit.listeners.SystemListeners;
 import fr.robotv2.bukkit.listeners.block.BlockBreakListener;
 import fr.robotv2.bukkit.listeners.block.BlockPlaceListener;
@@ -336,7 +337,7 @@ public class RTQBukkitPlugin extends JavaPlugin {
         // DATA & SYSTEM
         pm.registerEvents(this.playerDataInitListeners = new PlayerDataInitListeners(this), this);
         pm.registerEvents(new SystemListeners(), this);
-        pm.registerEvents(new GlitchChecker(this), this);
+        pm.registerEvents(new GlitchCheckerListener(this), this);
 
         // BLOCK
         pm.registerEvents(new BlockBreakListener(this), this);
