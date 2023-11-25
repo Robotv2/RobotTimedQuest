@@ -20,14 +20,14 @@ import java.util.Optional;
 
 public class PotionCondition implements Condition {
 
-    private final boolean upgraded;
-    private final boolean extended;
+    private final Boolean upgraded;
+    private final Boolean extended;
 
     private final EnumSet<PotionType> types = EnumSet.noneOf(PotionType.class);
 
     public PotionCondition(ConfigurationSection parent, String key) {
-        this.upgraded = parent.getBoolean(key + ".required_upgraded", false);
-        this.extended = parent.getBoolean(key + ".required_extended", false);
+        this.upgraded = parent.isSet(key + ".required_upgraded") ? parent.getBoolean(key + ".required_upgraded") : null;
+        this.extended = parent.isSet(key + ".required_extended") ? parent.getBoolean(key + ".required_extended") : null;
 
         for(String typeString : parent.getStringList(key + ".required_types")) {
             final PotionType type = Enums.getIfPresent(PotionType.class, typeString).orNull();
@@ -62,12 +62,16 @@ public class PotionCondition implements Condition {
             return false;
         }
 
-        if(upgraded && !potionData.isUpgraded()) {
-            return false;
+        if(upgraded != null) {
+            if(upgraded != potionData.isUpgraded()) {
+                return false;
+            }
         }
 
-        if(extended && !potionData.isExtended()) {
-            return false;
+        if(extended != null) {
+            if(extended != potionData.isExtended()) {
+                return false;
+            }
         }
 
         return true;
