@@ -45,6 +45,10 @@
               <pattern>co.aikar</pattern>
               <shadedPattern>fr.robotv2.bukkit.aikar</shadedPattern>
             </relocation>
+            <relocation>
+              <pattern>com.jeff_media.customblockdata</pattern>
+              <shadedPattern>fr.robotv2.bukkit.customblockdata</shadedPattern>
+            </relocation>
           </relocations>
         </configuration>
       </plugin>
