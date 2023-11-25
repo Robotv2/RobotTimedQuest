@@ -31,6 +31,11 @@ public class ActiveQuest implements Serializable {
     @DatabaseField(columnName = "next_reset")
     private long nextReset;
 
+    /**
+    @DatabaseField(columnName = "quest_data", dataType = DataType.SERIALIZABLE)
+    private HashMap<String, Object> questData;
+    */
+
     private transient volatile boolean dirty = false;
 
     public ActiveQuest() {

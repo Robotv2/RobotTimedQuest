@@ -11,7 +11,10 @@ import com.j256.ormlite.table.TableInfo;
 import com.j256.ormlite.table.TableUtils;
 import fr.robotv2.common.data.impl.MySqlCredentials;
 import fr.robotv2.common.data.impl.SqlLiteCredentials;
+import fr.robotv2.common.util.OrmUtil;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Collections;
@@ -21,10 +24,13 @@ import java.util.function.Function;
 
 public class OrmData<D, ID> {
 
+    private final static Logger ORM_LOGGER = LoggerFactory.getLogger("ORM");
+
     private Dao<D, ID> dao;
     private ConnectionSource source;
 
     public void initialize(@NotNull ConnectionSource source, @NotNull Class<D> clazz, boolean checkColumns) throws SQLException {
+
         this.source = source;
         this.dao = DaoManager.createDao(source, clazz);
         TableUtils.createTableIfNotExists(source, clazz);
@@ -108,18 +114,24 @@ public class OrmData<D, ID> {
 
         for (FieldType field : tableInfo.getFieldTypes()) {
 
-            final String columnName = field.getFieldName();
+            final String columnName = OrmUtil.convertToPythonString(field.getFieldName());
+            ORM_LOGGER.info("Checking column '" + columnName + "'...");
 
             // Check if the column exists
             if (!this.columnExists(tableName, columnName)) {
 
+                ORM_LOGGER.info("Column " + columnName + " does not exist ! Updating...");
+
                 String columnDefinition = field.getColumnDefinition();
+
                 if (columnDefinition == null) {
                     columnDefinition = field.getDataPersister().getSqlType() + " " + (field.isCanBeNull() ? "NULL" : "NOT NULL");
                 }
 
                 final String addColumnSQL = "ALTER TABLE " + tableName + " ADD COLUMN " + columnName + " " + columnDefinition;
                 getDao().executeRaw(addColumnSQL);
+
+                ORM_LOGGER.info("Column " + columnName + " has been added successfully.");
             }
         }
     }

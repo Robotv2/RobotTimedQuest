@@ -21,7 +21,7 @@ public class DatabaseManager {
     public DatabaseManager(DatabaseCredentials credentials) throws SQLException {
         this.databaseCredentials = credentials;
         this.source = credentials.createConnectionSource();
-        this.activeQuestOrmData.initialize(source, ActiveQuest.class);
+        this.activeQuestOrmData.initialize(source, ActiveQuest.class, false);
     }
 
     public void closeConnection() {
