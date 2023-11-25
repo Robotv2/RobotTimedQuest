@@ -18,7 +18,7 @@ public class GlitchChecker {
     private static final String DUMMY_VALUE = "DUMMY";
 
     static {
-        METADATA_KEY = new NamespacedKey(RTQBukkitPlugin.getInstance(), "robot_timed_quest:marked");
+        METADATA_KEY = new NamespacedKey(RTQBukkitPlugin.getInstance(), "robot_timed_quest_marked");
     }
 
     private final RTQBukkitPlugin plugin;
