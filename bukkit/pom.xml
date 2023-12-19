@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.robotv2</groupId>
         <artifactId>RobotTimedQuest</artifactId>
-        <version>0.8.8.3-SNAPSHOT</version>
+        <version>0.8.8.4-SNAPSHOT</version>
     </parent>
 
     <!-- Artifact Information -->
@@ -241,6 +241,14 @@
             <groupId>com.magmaguy</groupId>
             <artifactId>EliteMobs</artifactId>
             <version>8.4.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- PYRO FISH PRO-->
+        <dependency>
+            <groupId>me.arsmagica</groupId>
+            <artifactId>PyroFishingPro</artifactId>
+            <version>4.8.28</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
